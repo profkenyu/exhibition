@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>2026: a digital odyssey — 심연의 방정식</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Space+Mono:wght@400&family=Inter:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
     --bg:#020305;
@@ -21,6 +21,14 @@ html,body{
     background:black;
     color:var(--fg);
     font-family:'Inter','Noto Sans KR',sans-serif;
+}
+/* Helvetica / Univers Bold 폰트 스택 — 작품 타이틀 전용 */
+@font-face {
+    font-family:'HelveticaNeue-Title';
+    src: local('Helvetica Neue Bold'), local('HelveticaNeue-Bold'),
+         local('Univers Bold'), local('Univers-Bold'),
+         local('Helvetica Bold'), local('Helvetica-Bold');
+    font-weight:700;
 }
 canvas{
     position:fixed; inset:0;
@@ -41,6 +49,8 @@ canvas{
     scroll-snap-align:start;
     display:flex; align-items:flex-end;
     padding:clamp(30px,7vw,120px);
+    /* 모바일 홈 인디케이터 / 주소창 겹침 방지 */
+    padding-bottom:max(clamp(40px,8vw,120px), calc(env(safe-area-inset-bottom) + 40px));
 }
 .scene::before{
     content:"";
@@ -60,8 +70,13 @@ canvas{
     margin-bottom:16px; text-transform:uppercase;
 }
 h1{
-    font-size:clamp(40px,6vw,90px);
-    line-height:1.02; font-weight:300; letter-spacing:-.04em;
+    font-size:clamp(34px,5.2vw,82px);
+    line-height:1.02;
+    font-family:'Helvetica Neue','HelveticaNeue',
+                'Univers Bold','Univers-Bold',
+                'Arial Black','Helvetica','Arial',sans-serif;
+    font-weight:700;
+    letter-spacing:-.03em;
     cursor:pointer;
     display:inline-block;
     transition:color 0.3s ease;
@@ -78,6 +93,14 @@ h1:hover{
     margin-top:26px; color:#adb7c7;
     line-height:1.95; max-width:620px;
     font-size:clamp(13px,1vw,16px);
+}
+.formula{
+    margin-top:14px; color:rgba(145,200,255,.65);
+    font-family:'DM Mono','Space Mono',monospace;
+    font-size:clamp(11px,.85vw,13.5px);
+    letter-spacing:.06em;
+    line-height:1.75;
+    max-width:620px;
 }
 .meta{
     margin-top:32px; display:flex;
@@ -140,10 +163,10 @@ h1:hover{
 }
 .dot{
     width:10px; height:10px; border-radius:50%;
-    background:rgba(255,255,255,.18);
+    background:rgba(145,200,255,.18);
     transition:all .4s ease; cursor:pointer;
 }
-.dot.active{ background:white; transform:scale(1.7); }
+.dot.active{ background:rgba(145,200,255,.85); transform:scale(1.7); }
 #opening{
     position:fixed; inset:0;
     background:black; z-index:88888;
@@ -172,23 +195,49 @@ h1:hover{
     letter-spacing:.3em; text-transform:uppercase; font-size:12px;
 }
 #enterBtn{
-    margin-top:60px; padding:14px 28px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.15);
-    color:white; cursor:pointer;
-    letter-spacing:.24em; text-transform:uppercase;
-    transition:all .4s ease;
-    font-size:12px; font-family:'Inter','Noto Sans KR',sans-serif;
+    margin-top:60px; padding:8px 20px;
+    background:#9a9a9a;
+    border:none;
+    color:#111; cursor:pointer;
+    letter-spacing:.22em; text-transform:uppercase;
+    transition:all .35s ease;
+    font-size:10px; font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:500;
 }
-#enterBtn:hover{ background:white; color:black; }
+#enterBtn:hover{ background:#b8b8b8; color:#000; }
 @media(max-width:768px){
-    .scene{ align-items:center; padding:36px; }
-    h1{ font-size:44px; }
-    .poetic{ font-size:18px; }
+    /* dvh 사용: 모바일 브라우저 주소창 높이를 제외한 실제 뷰포트 */
+    #museum{ height:100dvh; }
+    .scene{
+        height:100dvh;
+        align-items:flex-end;
+        padding:24px 28px;
+        /* 상단 버튼 + 하단 홈 인디케이터 모두 회피 */
+        padding-top:max(60px, calc(env(safe-area-inset-top) + 52px));
+        padding-bottom:max(52px, calc(env(safe-area-inset-bottom) + 36px));
+    }
+    h1{ font-size:clamp(30px,8.5vw,44px); letter-spacing:-.02em; }
+    .poetic{ font-size:16px; margin-top:16px; }
+    .desc{ font-size:12px; margin-top:18px; }
+    .formula{ font-size:10px; margin-top:10px; }
+    .meta{ margin-top:20px; gap:8px; }
+    .tag{ padding:7px 10px; font-size:10px; }
     #nav-dots{ display:none; }
-    #fixed-top-left{ top:16px; left:16px; }
+    #fixed-top-left{ top:max(16px, env(safe-area-inset-top)); left:16px; }
     #title-ui{ display:none; }
     #all-works-btn{ padding:5px 10px; font-size:9px; letter-spacing:.12em; }
+}
+
+/* 태블릿 (769px – 1024px): 하단 safe area 보정 */
+@media(min-width:769px) and (max-width:1024px){
+    #museum{ height:100dvh; }
+    .scene{
+        height:100dvh;
+        padding:clamp(40px,6vw,80px);
+        padding-bottom:max(60px, calc(env(safe-area-inset-bottom) + 48px));
+    }
+    h1{ font-size:clamp(36px,5vw,60px); }
+    .poetic{ font-size:clamp(16px,2.2vw,22px); }
 }
 </style>
 </head>
@@ -201,7 +250,7 @@ h1:hover{
         <h2>2026:<br>a digital odyssey</h2>
         <div class="subtitle">심연의 방정식 / Equations of the Abyss</div>
         <p>Kim Gunwoo — 19th Solo Exhibition</p>
-        <button id="enterBtn">ENTER THE ABYSS</button>
+        <button id="enterBtn">DEPART</button>
     </div>
 </div>
 
@@ -214,26 +263,26 @@ h1:hover{
 <div id="museum"></div>
 
 <div id="fixed-top-left">
-    <a href="all/index.html" id="all-works-btn">List</a>
+    <a href="all/index.html" id="all-works-btn">List HP</a>
 </div>
 
 <script>
 const works = [
-  { id:"Freeshow.",        title:"RGB Galaxy Engine",         poetic:"우주는 하나의 빛에서 시작된다.",             desc:"세 개의 나선 팔이 회전하며 형성하는 실시간 은하 시뮬레이션. r = √i×1.6 · θ = i×0.013 + arm×2π/3",               file:"01-Freeshow.html",          tags:["Galaxy","WebGL","GLSL Bloom"] },
-  { id:"Prologue.",        title:"Hyperbolic Nebula",         poetic:"성운은 계산되는 안개이다.",                   desc:"분형 브라운 운동 기반의 실시간 성운 생성 시스템. z = sinh(u)·cosh(v) − tanh(r)",                               file:"02-Prologue.html",          tags:["fBm","Nebula","GLSL"] },
-  { id:"Act I, Scene 1.",  title:"Riemann Dreams",            poetic:"증명되지 않은 우주가 흔들린다.",              desc:"리만 제타 함수 기반 입자 중력 인터랙션. θ = i×0.045 + sin(p)×2 · r = √i×0.55 + p×0.08",                      file:"03-Riemann_dream.html",     tags:["Riemann","Prime","Interactive"] },
-  { id:"Act I, Scene 2.",  title:"Quantum Singularity",       poetic:"특이점은 중심이 아니라 붕괴이다.",            desc:"황금각 기반 입자 공간과 비선형 시간 왜곡 구조. θ = p·2π/137.507 · r = √p×12",                                file:"04-Quantum_sing.html",      tags:["Singularity","Fermat","Quantum"] },
-  { id:"Act II.",          title:"Dual Galaxy",               poetic:"두 개의 중력장이 서로를 뒤틀기 시작한다.",   desc:"쌍성계 기반 이중 은하 충돌 시뮬레이션. r = √i · θ = i×0.013 + arm×2π/2",                                     file:"05-Dual_Galaxy.html",       tags:["Binary","Orbit","Blackhole"] },
-  { id:"Act III, Scene 1.",title:"Lambert Nebula: Essential", poetic:"빛은 회전하면서 확산된다.",                   desc:"Lambert W 함수 기반 광학 성운 구조. W₀(x) · FogExp2(density=0.0025)",                                         file:"06-Lambert_Essential.html", tags:["Lambert W","Optics","Nebula"] },
-  { id:"Act III, Scene 2.",title:"Lambert Nebula: Archive",   poetic:"가산되는 빛은 심연이 된다.",                  desc:"W₀ × W₋₁ 이중 분지 기반 아카이브 우주 구조. Additive Blending · Core Pulse",                                  file:"07-Lambert_Archive.html",   tags:["W₀ × W₋₁","Archive","Light"] },
-  { id:"Act III, Scene 3.",title:"Lambert Nebula",            poetic:"사운드는 공간을 조각한다.",                   desc:"Web Audio API 기반 오디오 반응형 우주 시스템. W₀(x) ∪ W₋₁(x) · Microphone Input",                           file:"08-Lambert_nebu.html",      tags:["Audio","Reactive","WebAudio"] },
-  { id:"Act IV, Scene 1.", title:"Bessel Bloom",              poetic:"파동은 충돌하며 꽃처럼 피어난다.",           desc:"베셀 함수 기반 파동 간섭 구조. J₀(x) ≈ √(2/πx)·cos(x−π/4) · z = Σ J₀(dₙ·0.7 − 3t)",                     file:"09-Bessel_bloom.html",      tags:["Wave","Bessel","Interference"] },
-  { id:"Act IV, Scene 2.", title:"Lorenz Butterfly",          poetic:"카오스는 질서의 또 다른 이름이다.",          desc:"Lorenz attractor 기반 카오스 시뮬레이션. ẋ = σ(y−x) · ẏ = x(ρ−z)−y · ż = xy−βz",                        file:"10-Lorenz_butt.html",       tags:["Chaos","Lorenz","Attractor"] },
-  { id:"Act V, Scene 1.",  title:"Odyssey: Essential",        poetic:"별들은 관측자의 시점을 따라 이동한다.",       desc:"케플러 궤도 기반 블랙홀 강착 원반 시뮬레이션. v(r) = 35.0/r · Photon Ring",                                   file:"11-Odyssey_Essential.html", tags:["Odyssey","Keplerian","Blackhole"] },
-  { id:"Act V, Scene 2.",  title:"Odyssey: Archive",          poetic:"기억된 우주가 끝없이 확장된다.",              desc:"슈바르츠실트-커 혼합 계량 기반 420,000 particle 우주 공간. MRs = 2GM/c²",                                     file:"12-Odyssey_Archive.html",   tags:["Schwarzschild","Kerr","Particles"] },
-  { id:"Act V, Scene 3.",  title:"Event Horizon",             poetic:"빛조차 돌아오지 못하는 경계.",               desc:"케플러 회전 및 중력 렌즈 왜곡 기반 블랙홀 구조. ω ∝ r⁻³ᐟ² · Drag to Drift Gaze",                          file:"13-Event_Horizon.html",     tags:["Blackhole","Relativity","Lensing"] },
-  { id:"Act VI.",          title:"Black Hole Voyage",         poetic:"붕괴는 가장 거대한 음악이다.",               desc:"오디오 반응형 블랙홀 여덟 악장 붕괴 시뮬레이션. WebGL Raymarching · RK4 Geodesic",                            file:"14-Black_Voyage.html",      tags:["Audio","Collapse","Voyage"] },
-  { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그. ds² = −(1−rs/ρ²)dt² + 포톤 링 필라멘트",                          file:"15-Epilogue.html",          tags:["Kerr","Plasma","Epilogue"] }
+  { id:"Freeshow.",        title:"RGB Galaxy Engine",         poetic:"우주는 하나의 빛에서 시작된다.",             desc:"세 개의 나선 팔이 회전하며 형성하는 실시간 은하 시뮬레이션.",                                                  formula:"r = √i × 1.6 · θ = i × 0.013 + arm × 2π/3",                                                file:"01-Freeshow.html",          tags:["Galaxy","WebGL","GLSL Bloom"] },
+  { id:"Prologue.",        title:"Hyperbolic Nebula",         poetic:"성운은 계산되는 안개이다.",                   desc:"분형 브라운 운동 기반의 실시간 성운 생성 시스템.",                                                             formula:"z = sinh(u)·cosh(v) − tanh(r)",                                                              file:"02-Prologue.html",          tags:["fBm","Nebula","GLSL"] },
+  { id:"Act I, Scene 1.",  title:"Riemann Dreams",            poetic:"증명되지 않은 우주가 흔들린다.",              desc:"리만 제타 함수 기반 입자 중력 인터랙션.",                                                                     formula:"θ = i × 0.045 + sin(p) × 2 · r = √i × 0.55 + p × 0.08",                                    file:"03-Riemann_dream.html",     tags:["Riemann","Prime","Interactive"] },
+  { id:"Act I, Scene 2.",  title:"Quantum Singularity",       poetic:"특이점은 중심이 아니라 붕괴이다.",            desc:"황금각 기반 입자 공간과 비선형 시간 왜곡 구조.",                                                              formula:"θ = p · 2π/137.507 · r = √p × 12",                                                          file:"04-Quantum_sing.html",      tags:["Singularity","Fermat","Quantum"] },
+  { id:"Act II.",          title:"Dual Galaxy",               poetic:"두 개의 중력장이 서로를 뒤틀기 시작한다.",   desc:"쌍성계 기반 이중 은하 충돌 시뮬레이션.",                                                                     formula:"r = √i · θ = i × 0.013 + arm × 2π/2",                                                       file:"05-Dual_Galaxy.html",       tags:["Binary","Orbit","Blackhole"] },
+  { id:"Act III, Scene 1.",title:"Lambert Nebula: Essential", poetic:"빛은 회전하면서 확산된다.",                   desc:"Lambert W 함수 기반 광학 성운 구조.",                                                                        formula:"W₀(x) · FogExp2(density = 0.0025)",                                                          file:"06-Lambert_Essential.html", tags:["Lambert W","Optics","Nebula"] },
+  { id:"Act III, Scene 2.",title:"Lambert Nebula: Archive",   poetic:"가산되는 빛은 심연이 된다.",                  desc:"W₀ × W₋₁ 이중 분지 기반 아카이브 우주 구조.",                                                               formula:"W₀ × W₋₁ · Additive Blending · Core Pulse",                                                  file:"07-Lambert_Archive.html",   tags:["W₀ × W₋₁","Archive","Light"] },
+  { id:"Act III, Scene 3.",title:"Lambert Nebula",            poetic:"사운드는 공간을 조각한다.",                   desc:"Web Audio API 기반 오디오 반응형 우주 시스템.",                                                              formula:"W₀(x) ∪ W₋₁(x) · Microphone Input",                                                         file:"08-Lambert_nebu.html",      tags:["Audio","Reactive","WebAudio"] },
+  { id:"Act IV, Scene 1.", title:"Bessel Bloom",              poetic:"파동은 충돌하며 꽃처럼 피어난다.",           desc:"베셀 함수 기반 파동 간섭 구조.",                                                                             formula:"J₀(x) ≈ √(2/πx) · cos(x − π/4) · z = Σ J₀(dₙ · 0.7 − 3t)",                               file:"09-Bessel_bloom.html",      tags:["Wave","Bessel","Interference"] },
+  { id:"Act IV, Scene 2.", title:"Lorenz Butterfly",          poetic:"카오스는 질서의 또 다른 이름이다.",          desc:"Lorenz attractor 기반 카오스 시뮬레이션.",                                                                   formula:"ẋ = σ(y − x) · ẏ = x(ρ − z) − y · ż = xy − βz",                                           file:"10-Lorenz_butt.html",       tags:["Chaos","Lorenz","Attractor"] },
+  { id:"Act V, Scene 1.",  title:"Odyssey: Essential",        poetic:"별들은 관측자의 시점을 따라 이동한다.",       desc:"케플러 궤도 기반 블랙홀 강착 원반 시뮬레이션.",                                                              formula:"v(r) = 35.0 / r · Photon Ring",                                                              file:"11-Odyssey_Essential.html", tags:["Odyssey","Keplerian","Blackhole"] },
+  { id:"Act V, Scene 2.",  title:"Odyssey: Archive",          poetic:"기억된 우주가 끝없이 확장된다.",              desc:"슈바르츠실트-커 혼합 계량 기반 420,000 particle 우주 공간.",                                                 formula:"MRs = 2GM/c²",                                                                               file:"12-Odyssey_Archive.html",   tags:["Schwarzschild","Kerr","Particles"] },
+  { id:"Act V, Scene 3.",  title:"Event Horizon",             poetic:"빛조차 돌아오지 못하는 경계.",               desc:"케플러 회전 및 중력 렌즈 왜곡 기반 블랙홀 구조.",                                                           formula:"ω ∝ r⁻³ᐟ² · Drag to Drift Gaze",                                                            file:"13-Event_Horizon.html",     tags:["Blackhole","Relativity","Lensing"] },
+  { id:"Act VI.",          title:"Black Hole Voyage",         poetic:"붕괴는 가장 거대한 음악이다.",               desc:"오디오 반응형 블랙홀 8악장 붕괴 시뮬레이션.",                                                               formula:"WebGL Raymarching · RK4 Geodesic",                                                           file:"14-Black_Voyage.html",      tags:["Audio","Collapse","Voyage"] },
+  { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그.",                                                                 formula:"ds² = −(1 − rs/ρ²)dt² · 포톤 링 필라멘트",                                                  file:"15-Epilogue.html",          tags:["Kerr","Plasma","Epilogue"] }
 ];
 
 // ─── opening 처리 ──────────────────────────────────────────────
@@ -270,6 +319,7 @@ works.forEach((w, index) => {
             <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
             <div class="poetic">${w.poetic}</div>
             <div class="desc">${w.desc}</div>
+            <div class="formula">${w.formula}</div>
             <div class="meta">
                 ${w.tags.map(t => `<div class="tag">${t}</div>`).join('')}
             </div>
