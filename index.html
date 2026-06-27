@@ -62,6 +62,12 @@ canvas{
 h1{
     font-size:clamp(40px,6vw,90px);
     line-height:1.02; font-weight:300; letter-spacing:-.04em;
+    cursor:pointer;
+    display:inline-block;
+    transition:color 0.3s ease;
+}
+h1:hover{
+    color:var(--accent);
 }
 .poetic{
     margin-top:24px;
@@ -83,15 +89,6 @@ h1{
     background:rgba(255,255,255,.03);
     font-size:11px; letter-spacing:.14em; text-transform:uppercase;
 }
-.enter{
-    margin-top:42px;
-    display:inline-flex; align-items:center; gap:12px;
-    color:white; text-decoration:none;
-    font-size:12px; letter-spacing:.22em; text-transform:uppercase;
-    cursor:pointer;
-}
-.enter::after{ content:"→"; transition:transform .4s ease; }
-.enter:hover::after{ transform:translateX(8px); }
 #transition-layer{
     position:fixed; inset:0;
     background:black; opacity:0;
@@ -100,14 +97,14 @@ h1{
 }
 #transition-layer.active{ opacity:1; pointer-events:all; }
 #title-ui{
-    position:fixed; top:22px; left:26px;
+    position:fixed; top:22px; left:110px;
     z-index:500; font-size:11px;
     color:rgba(255,255,255,.55);
     letter-spacing:.22em; text-transform:uppercase;
     pointer-events:none;
 }
-#fixed-top-right{
-    position:fixed; top:22px; right:26px;
+#fixed-top-left{
+    position:fixed; top:16px; left:22px;
     z-index:99999; pointer-events:auto;
 }
 #all-works-btn{
@@ -184,7 +181,8 @@ h1{
     h1{ font-size:44px; }
     .poetic{ font-size:18px; }
     #nav-dots{ display:none; }
-    #fixed-top-right{ top:16px; right:16px; }
+    #fixed-top-left{ top:16px; left:16px; }
+    #title-ui{ display:none; }
     #all-works-btn{ padding:5px 10px; font-size:9px; letter-spacing:.12em; }
 }
 </style>
@@ -210,7 +208,7 @@ h1{
 <div id="nav-dots"></div>
 <div id="museum"></div>
 
-<div id="fixed-top-right">
+<div id="fixed-top-left">
     <a href="all/index.html" id="all-works-btn">List</a>
 </div>
 
@@ -255,15 +253,12 @@ works.forEach((w, index) => {
     section.innerHTML = `
         <div class="content">
             <div class="scene-id">${w.id}</div>
-            <h1>${w.title}</h1>
+            <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
             <div class="poetic">${w.poetic}</div>
             <div class="desc">${w.desc}</div>
             <div class="meta">
                 ${w.tags.map(t => `<div class="tag">${t}</div>`).join('')}
             </div>
-            <a href="${w.file}" class="enter" data-index="${index}" data-file="${w.file}">
-                Enter Scene
-            </a>
         </div>`;
     museum.appendChild(section);
 
@@ -286,9 +281,9 @@ museum.addEventListener('scroll', () => {
     progress.style.height = pct + '%';
 });
 
-document.querySelectorAll('.enter').forEach(btn => {
+// 타이틀 클릭 시 트랜지션 및 페이지 이동 처리
+document.querySelectorAll('.title-link').forEach(btn => {
     btn.addEventListener('click', e => {
-        e.preventDefault();
         const file  = btn.dataset.file;
         const layer = document.getElementById('transition-layer');
         layer.classList.add('active');
