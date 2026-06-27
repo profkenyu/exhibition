@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>2026: A DIGITAL ODYSSEY — 심연의 방정식</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-
 <style>
-
 :root{
     --bg:#020305;
     --fg:#f3f5f8;
@@ -18,9 +14,7 @@
     --line:rgba(255,255,255,.08);
     --accent:#91c8ff;
 }
-
 *{ margin:0; padding:0; box-sizing:border-box; }
-
 html,body{
     width:100%; height:100%;
     overflow:hidden;
@@ -28,14 +22,11 @@ html,body{
     color:var(--fg);
     font-family:'Inter','Noto Sans KR',sans-serif;
 }
-
 canvas{
     position:fixed; inset:0;
     width:100%; height:100%;
     z-index:0;
 }
-
-/* ── Museum scroll container ── */
 #museum{
     position:relative; z-index:2;
     width:100%; height:100vh;
@@ -44,7 +35,6 @@ canvas{
     scrollbar-width:none;
 }
 #museum::-webkit-scrollbar{ display:none; }
-
 .scene{
     position:relative;
     width:100%; height:100vh;
@@ -52,7 +42,6 @@ canvas{
     display:flex; align-items:flex-end;
     padding:clamp(30px,7vw,120px);
 }
-
 .scene::before{
     content:"";
     position:absolute; inset:0;
@@ -61,47 +50,39 @@ canvas{
         linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,.3));
     z-index:0;
 }
-
 .content{
     position:relative; z-index:3;
     max-width:780px;
 }
-
 .scene-id{
     color:var(--accent);
     font-size:12px; letter-spacing:.28em;
     margin-bottom:16px; text-transform:uppercase;
 }
-
 h1{
     font-size:clamp(40px,6vw,90px);
     line-height:1.02; font-weight:300; letter-spacing:-.04em;
 }
-
 .poetic{
     margin-top:24px;
     font-size:clamp(18px,2vw,30px);
     line-height:1.7; font-weight:300;
 }
-
 .desc{
     margin-top:26px; color:#adb7c7;
     line-height:1.95; max-width:620px;
     font-size:clamp(13px,1vw,16px);
 }
-
 .meta{
     margin-top:32px; display:flex;
     flex-wrap:wrap; gap:10px;
 }
-
 .tag{
     padding:9px 12px;
     border:1px solid rgba(255,255,255,.1);
     background:rgba(255,255,255,.03);
     font-size:11px; letter-spacing:.14em; text-transform:uppercase;
 }
-
 .enter{
     margin-top:42px;
     display:inline-flex; align-items:center; gap:12px;
@@ -111,72 +92,82 @@ h1{
 }
 .enter::after{ content:"→"; transition:transform .4s ease; }
 .enter:hover::after{ transform:translateX(8px); }
-
-/* ── Transition layer ── */
 #transition-layer{
     position:fixed; inset:0;
     background:black; opacity:0;
-    pointer-events:none; z-index:20;
+    pointer-events:none; z-index:9999;
     transition:opacity 1s ease;
 }
 #transition-layer.active{ opacity:1; pointer-events:all; }
-
-/* ── Fixed UI ── */
 #title-ui{
     position:fixed; top:22px; left:26px;
-    z-index:10; font-size:11px;
+    z-index:500; font-size:11px;
     color:rgba(255,255,255,.55);
     letter-spacing:.22em; text-transform:uppercase;
+    pointer-events:none;
 }
-
+#fixed-top-right{
+    position:fixed; top:22px; right:26px;
+    z-index:99999; pointer-events:auto;
+}
+#all-works-btn{
+    font-size:11px;
+    color:rgba(255,255,255,.85);
+    letter-spacing:.22em; text-transform:uppercase;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.35);
+    padding:9px 20px;
+    background:rgba(2,3,5,0.9);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    transition:all .25s ease-in-out;
+    display:inline-block;
+    font-weight:500;
+}
+#all-works-btn:hover{
+    color:black;
+    border-color:white;
+    background:white;
+}
 #progress{
     position:fixed; top:0; left:0;
     width:2px; height:0;
-    background:white; z-index:12;
+    background:white; z-index:502;
     transition:height .3s ease;
 }
-
 #nav-dots{
     position:fixed; right:24px; top:50%;
     transform:translateY(-50%);
-    z-index:10; display:flex;
+    z-index:500; display:flex;
     flex-direction:column; gap:14px;
 }
-
 .dot{
     width:10px; height:10px; border-radius:50%;
     background:rgba(255,255,255,.18);
     transition:all .4s ease; cursor:pointer;
 }
 .dot.active{ background:white; transform:scale(1.7); }
-
-/* ── Opening screen ── */
 #opening{
     position:fixed; inset:0;
-    background:black; z-index:40;
+    background:black; z-index:88888;
     display:flex; align-items:center; justify-content:center;
     transition:opacity 2s ease;
 }
 #opening.hidden{ opacity:0; pointer-events:none; }
-
 .open-inner{ text-align:center; }
-
 .open-inner h2{
     font-size:clamp(40px,7vw,100px);
     font-weight:300; line-height:1.06; letter-spacing:.08em;
 }
-
 .open-inner .subtitle{
     margin-top:16px;
     color:rgba(255,255,255,.35);
     letter-spacing:.2em; font-size:13px;
 }
-
 .open-inner p{
     margin-top:26px; color:rgba(255,255,255,.5);
     letter-spacing:.3em; text-transform:uppercase; font-size:12px;
 }
-
 #enterBtn{
     margin-top:60px; padding:14px 28px;
     background:rgba(255,255,255,.06);
@@ -187,17 +178,16 @@ h1{
     font-size:12px; font-family:'Inter','Noto Sans KR',sans-serif;
 }
 #enterBtn:hover{ background:white; color:black; }
-
 @media(max-width:768px){
     .scene{ align-items:center; padding:36px; }
     h1{ font-size:44px; }
     .poetic{ font-size:18px; }
-    #nav-dots{ right:12px; }
+    #nav-dots{ display:none; }
+    #fixed-top-right{ top:16px; right:16px; }
+    #all-works-btn{ padding:7px 14px; font-size:10px; }
 }
-
 </style>
 </head>
-
 <body>
 
 <canvas id="space"></canvas>
@@ -219,8 +209,11 @@ h1{
 <div id="nav-dots"></div>
 <div id="museum"></div>
 
-<script>
+<div id="fixed-top-right">
+    <a href="all/index.html" id="all-works-btn">All works</a>
+</div>
 
+<script>
 const works = [
   { id:"Freeshow.",        title:"RGB Galaxy Engine",         poetic:"우주는 하나의 빛에서 시작된다.",             desc:"세 개의 나선 팔이 회전하며 형성하는 실시간 은하 시뮬레이션. r = √i×1.6 · θ = i×0.013 + arm×2π/3",               file:"01-Freeshow.html",          tags:["Galaxy","WebGL","GLSL Bloom"] },
   { id:"Prologue.",        title:"Hyperbolic Nebula",         poetic:"성운은 계산되는 안개이다.",                   desc:"분형 브라운 운동 기반의 실시간 성운 생성 시스템. z = sinh(u)·cosh(v) − tanh(r)",                               file:"02-Prologue.html",          tags:["fBm","Nebula","GLSL"] },
@@ -239,19 +232,10 @@ const works = [
   { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그. ds² = −(1−rs/ρ²)dt² + 포톤 링 필라멘트",                          file:"15-Epilogue.html",          tags:["Kerr","Plasma","Epilogue"] }
 ];
 
-/* ────────────────────────────────────────────
-   복귀 처리: 작품에서 돌아올 때 보던 섹션 복원
-   작품 → BACK(history.back()) → index.html?
-   브라우저가 scrollRestoration으로 스크롤을 복원.
-   opening 화면은 이미 봤으면 건너뜀.
-──────────────────────────────────────────── */
-
-// sessionStorage에 opening 시청 여부 기록
 const hasEntered = sessionStorage.getItem('odyssey_entered');
 const opening    = document.getElementById('opening');
 
 if (hasEntered) {
-    // 작품에서 돌아온 경우 → opening 즉시 숨김
     opening.style.transition = 'none';
     opening.classList.add('hidden');
 }
@@ -261,13 +245,10 @@ document.getElementById('enterBtn').addEventListener('click', () => {
     opening.classList.add('hidden');
 });
 
-/* ── Museum 섹션 빌드 ── */
-
 const museum  = document.getElementById('museum');
 const navDots = document.getElementById('nav-dots');
 
 works.forEach((w, index) => {
-
     const section = document.createElement('section');
     section.className = 'scene';
     section.innerHTML = `
@@ -292,10 +273,7 @@ works.forEach((w, index) => {
         museum.scrollTo({ top: index * window.innerHeight, behavior: 'smooth' });
     });
     navDots.appendChild(dot);
-
 });
-
-/* ── 스크롤 동기화 ── */
 
 const dots     = document.querySelectorAll('.dot');
 const progress = document.getElementById('progress');
@@ -307,8 +285,6 @@ museum.addEventListener('scroll', () => {
     progress.style.height = pct + '%';
 });
 
-/* ── Enter Scene: 페이드 후 작품으로 이동 ── */
-
 document.querySelectorAll('.enter').forEach(btn => {
     btn.addEventListener('click', e => {
         e.preventDefault();
@@ -318,8 +294,6 @@ document.querySelectorAll('.enter').forEach(btn => {
         setTimeout(() => { window.location.href = file; }, 900);
     });
 });
-
-/* ── Space Background ── */
 
 const bgCanvas = document.getElementById('space');
 const bgCtx    = bgCanvas.getContext('2d');
@@ -363,7 +337,6 @@ function renderBg() {
     requestAnimationFrame(renderBg);
 }
 renderBg();
-
 </script>
 </body>
 </html>
