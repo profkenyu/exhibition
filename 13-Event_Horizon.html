@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Act V, Scene 3.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap');
+:root{--crimson:#c0152a;--bg:#000002;}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'DM Mono',monospace;touch-action:none;}
+canvas{display:block;width:100%;height:100%;}
+#flash{position:fixed;inset:0;background:radial-gradient(circle at center,rgba(255,225,205,1) 0%,rgba(192,21,42,.55) 32%,rgba(0,0,2,0) 72%);opacity:0;pointer-events:none;mix-blend-mode:screen;z-index:5;transition:opacity .4s ease-out;}
+#title{position:fixed;top:24px;left:24px;color:rgba(255,255,255,0.95);letter-spacing:.25em;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;pointer-events:none;z-index:10;right:120px;text-shadow:0 2px 4px rgba(0,0,0,0.8);}
+#title span{display:block;font-size:28px;font-weight:200;margin-bottom:6px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.9);}
+#title .accent{color:#ff334b;font-weight:bold;}
+#coord{position:fixed;bottom:24px;left:24px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,0.8);z-index:10;background:rgba(0,0,0,0.5);padding:6px 12px;border-radius:4px;backdrop-filter:blur(4px);}
+#coord .lbl{color:rgba(255,255,255,0.5);margin-right:.6em}
+#coord .val{color:#fff;font-weight:bold;}
+#coord .phase{color:#ff334b;font-weight:bold;}
+#back-btn{position:fixed;top:24px;right:24px;color:#fff;text-decoration:none;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.25em;border:1px solid rgba(255,255,255,0.8);padding:10px 20px;border-radius:4px;z-index:10;transition:all .3s ease;background:rgba(0,0,0,0.6);font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.5);}
+#back-btn:hover{color:#fff;background:var(--crimson);border-color:var(--crimson);box-shadow:0 0 12px var(--crimson);}
+@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#coord{bottom:20px;left:20px;font-size:9px;padding:4px 8px;}#back-btn{top:20px;right:20px;padding:8px 14px;font-size:11px}}
+</style>
+</head>
+<body>
+<div id="flash"></div>
+<div id="title">
+<span>EVENT HORIZON</span>
+ω ∝ r⁻³ᐟ² &nbsp;·&nbsp; Keplerian Rotation &amp; Gravitational Lensing &nbsp;·&nbsp; Drag to Drift Gaze
+</div>
+<div id="coord">
+<span class="lbl">R / Rs</span><span class="val" id="radius-label">—</span>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<span class="lbl">PHASE</span><span class="phase" id="phase-label">—</span>
+</div>
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const RS=60.0;
+const PHOTON_R=90.0;
+const ISCO=170.0;
+const DISK_OUTER=950.0;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,60000);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+const renderTarget=new THREE.WebGLRenderTarget(innerWidth,innerHeight,{depthBuffer:true,colorSpace:THREE.SRGBColorSpace});
+const postScene=new THREE.Scene();
+const postCamera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+const postMaterial=new THREE.ShaderMaterial({
+uniforms:{tScene:{value:renderTarget.texture},uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},uTime:{value:0},uMouse:{value:new THREE.Vector2(0.5,0.5)},uProximity:{value:0}},
+vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}`,
+fragmentShader:`uniform sampler2D tScene;uniform vec2 uResolution;uniform float uTime;uniform vec2 uMouse;uniform float uProximity;varying vec2 vUv;void main(){vec2 uv=vUv;vec2 center=uMouse;vec2 aspect=vec2(uResolution.x/uResolution.y,1.0);vec2 dir=uv-center;float dist=length(dir*aspect);float r_g=0.085+uProximity*0.24;vec3 color;if(dist<r_g){color=vec3(0.0);}else{float offset=(r_g*r_g)/(dist-r_g*0.35);vec2 lensedUv=center+normalize(dir)*offset;float ringFactor=smoothstep(r_g*1.8,r_g,dist);vec2 ca=normalize(dir)*ringFactor*0.0035;float rC=texture2D(tScene,lensedUv+ca).r;float gC=texture2D(tScene,lensedUv).g;float bC=texture2D(tScene,lensedUv-ca).b;color=vec3(rC,gC,bC);float pulse=0.85+0.15*sin(uTime*0.6);float ring=exp(-pow((dist-r_g*1.05)*36.0,2.0))*(0.45+uProximity*1.7)*pulse;color+=vec3(1.0,0.45,0.32)*ring;}vec2 p=vUv-0.5;color+=vec3(0.012,0.005,0.012)*(1.0-length(p));color=pow(color,vec3(0.92-uProximity*0.06));gl_FragColor=vec4(color,1.0);}`
+});
+postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),postMaterial));
+const KEPLER_VERTEX=`attribute vec3 aInfo;attribute vec3 aColor;uniform float uTime;uniform float uPixelRatio;uniform float uSizeMul;uniform vec3 uCameraPos;varying vec3 vColor;varying float vDistance;varying float vBeam;void main(){float r=aInfo.x;float omega=900.0/pow(r,1.5);float theta=aInfo.y+omega*uTime;vec3 p;p.x=cos(theta)*r;p.z=sin(theta)*r;p.y=position.y;vec3 velDir=normalize(vec3(-sin(theta),0.0,cos(theta)));vec3 worldPos=(modelMatrix*vec4(p,1.0)).xyz;vec3 toCam=normalize(uCameraPos-worldPos);vBeam=dot(velDir,toCam);vColor=aColor;vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;vDistance=-mv.z;gl_Position.z-=0.001;gl_PointSize=min(70.0,(1.0+aInfo.z*1.7)*uSizeMul*uPixelRatio*(600.0/vDistance));}`;
+const KEPLER_FRAGMENT=`varying vec3 vColor;varying float vDistance;varying float vBeam;void main(){vec2 pt=gl_PointCoord-0.5;float d=length(pt);if(d>0.5)discard;float core=smoothstep(0.5,0.0,d);float halo=exp(-d*6.0);float boost=clamp(1.0+vBeam*1.9,0.12,3.4);vec3 shift=mix(vec3(0.5,0.04,0.1),vec3(1.0,0.96,0.88),clamp(vBeam*0.5+0.5,0.0,1.0));vec3 col=mix(vColor,shift,0.45)*boost;float atten=min(1.0,1300.0/vDistance);gl_FragColor=vec4(col*(0.8+halo*1.2),(core*0.24+halo*0.085)*atten);}`;
+function diskColor(ratio){
+const stops=[[0.00,[1.00,0.97,0.88]],[0.15,[1.00,0.55,0.25]],[0.40,[0.78,0.10,0.17]],[0.70,[0.45,0.03,0.07]],[1.00,[0.12,0.02,0.05]]];
+for(let i=0;i<stops.length-1;i++){
+const [r0,c0]=stops[i],[r1,c1]=stops[i+1];
+if(ratio>=r0&&ratio<=r1){const f=(ratio-r0)/(r1-r0);return [c0[0]+(c1[0]-c0[0])*f,c0[1]+(c1[1]-c0[1])*f,c0[2]+(c1[2]-c0[2])*f];}
+}
+return stops[stops.length-1][1];
+}
+const DISK_COUNT=150000;
+const diskGeo=new THREE.BufferGeometry();
+const dPos=new Float32Array(DISK_COUNT*3);
+const dColor=new Float32Array(DISK_COUNT*3);
+const dInfo=new Float32Array(DISK_COUNT*3);
+for(let i=0;i<DISK_COUNT;i++){
+const r=ISCO+Math.pow(Math.random(),1.8)*(DISK_OUTER-ISCO);
+const theta=Math.random()*Math.PI*2;
+const rand=Math.random();
+const thickness=3.0+(r-ISCO)*0.045;
+dPos[i*3]=Math.cos(theta)*r;dPos[i*3+1]=(rand-0.5)*thickness;dPos[i*3+2]=Math.sin(theta)*r;
+dInfo[i*3]=r;dInfo[i*3+1]=theta;dInfo[i*3+2]=rand;
+const c=diskColor((r-ISCO)/(DISK_OUTER-ISCO));
+dColor[i*3]=c[0];dColor[i*3+1]=c[1];dColor[i*3+2]=c[2];
+}
+diskGeo.setAttribute('position',new THREE.BufferAttribute(dPos,3));
+diskGeo.setAttribute('aColor',new THREE.BufferAttribute(dColor,3));
+diskGeo.setAttribute('aInfo',new THREE.BufferAttribute(dInfo,3));
+const diskMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.0},uCameraPos:{value:new THREE.Vector3()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
+const accretionDisk=new THREE.Points(diskGeo,diskMaterial);
+scene.add(accretionDisk);
+const SPOKES=14;
+const PER_SPOKE=1400;
+const TRACER_COUNT=SPOKES*PER_SPOKE;
+const tGeo=new THREE.BufferGeometry();
+const tPos=new Float32Array(TRACER_COUNT*3);
+const tColor=new Float32Array(TRACER_COUNT*3);
+const tInfo=new Float32Array(TRACER_COUNT*3);
+let ti=0;
+for(let s=0;s<SPOKES;s++){
+const theta0=(s/SPOKES)*Math.PI*2;
+for(let j=0;j<PER_SPOKE;j++){
+const f=j/PER_SPOKE;const r=ISCO+f*(DISK_OUTER-ISCO);const jitter=(Math.random()-0.5)*0.04;const rand=Math.random();const thickness=2.0+(r-ISCO)*0.03;
+tPos[ti*3]=Math.cos(theta0)*r;tPos[ti*3+1]=(rand-0.5)*thickness;tPos[ti*3+2]=Math.sin(theta0)*r;
+tInfo[ti*3]=r;tInfo[ti*3+1]=theta0+jitter;tInfo[ti*3+2]=rand;
+const c=diskColor((r-ISCO)/(DISK_OUTER-ISCO));
+tColor[ti*3]=Math.min(1.0,c[0]*0.6+0.5);tColor[ti*3+1]=Math.min(1.0,c[1]*0.6+0.06);tColor[ti*3+2]=Math.min(1.0,c[2]*0.6+0.12);
+ti++;
+}
+}
+tGeo.setAttribute('position',new THREE.BufferAttribute(tPos,3));
+tGeo.setAttribute('aColor',new THREE.BufferAttribute(tColor,3));
+tGeo.setAttribute('aInfo',new THREE.BufferAttribute(tInfo,3));
+const tracerMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.8},uCameraPos:{value:new THREE.Vector3()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
+const tracers=new THREE.Points(tGeo,tracerMaterial);
+scene.add(tracers);
+const JET_COUNT=6000;
+const jetGeo=new THREE.BufferGeometry();
+const jPos=new Float32Array(JET_COUNT*3);
+const jOffset=new Float32Array(JET_COUNT);
+const jSide=new Float32Array(JET_COUNT);
+const jRand=new Float32Array(JET_COUNT);
+for(let i=0;i<JET_COUNT;i++){
+jPos[i*3]=0;jPos[i*3+1]=0;jPos[i*3+2]=0;
+jOffset[i]=Math.random();jSide[i]=i<JET_COUNT/2?1.0:-1.0;jRand[i]=Math.random();
+}
+jetGeo.setAttribute('position',new THREE.BufferAttribute(jPos,3));
+jetGeo.setAttribute('aOffset',new THREE.BufferAttribute(jOffset,1));
+jetGeo.setAttribute('aSide',new THREE.BufferAttribute(jSide,1));
+jetGeo.setAttribute('aRand',new THREE.BufferAttribute(jRand,1));
+const jetMaterial=new THREE.ShaderMaterial({
+uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`attribute float aOffset;attribute float aSide;attribute float aRand;uniform float uTime;uniform float uPixelRatio;varying float vAlpha;varying float vRand;void main(){float len=2400.0;float speed=0.06+aRand*0.04;float travel=mod(aOffset+uTime*speed,1.0);float dist=travel*len;float ang=aRand*6.2831+uTime*0.05;float spreadR=dist*0.045+4.0;vec3 p;p.x=cos(ang)*spreadR;p.z=sin(ang)*spreadR;p.y=aSide*(dist+40.0);vAlpha=(1.0-travel)*0.8;vRand=aRand;vec4 mv=modelViewMatrix*vec4(p,1.0);float distC=-mv.z;gl_Position=projectionMatrix*mv;gl_PointSize=min(40.0,(1.2+aRand*1.4)*uPixelRatio*(500.0/max(distC,1.0)));}`,
+fragmentShader:`varying float vAlpha;varying float vRand;void main(){vec2 pt=gl_PointCoord-0.5;float d=length(pt);if(d>0.5)discard;float halo=exp(-d*5.0);vec3 col=mix(vec3(0.8,0.1,0.15),vec3(1.0,0.92,0.85),vRand);gl_FragColor=vec4(col,halo*vAlpha*0.5);}`
+});
+const jet=new THREE.Points(jetGeo,jetMaterial);
+scene.add(jet);
+const BG_COUNT=40000;
+const backgroundGeo=new THREE.BufferGeometry();
+const bgPos=new Float32Array(BG_COUNT*3);
+const bgSeed=new Float32Array(BG_COUNT);
+for(let i=0;i<BG_COUNT;i++){
+const radius=7000+Math.random()*18000;const u=Math.random();const v=Math.random();const theta=u*Math.PI*2;const phi=Math.acos(2.0*v-1.0);
+bgPos[i*3]=radius * Math.sin(phi)*Math.cos(theta);bgPos[i*3+1]=radius*Math.cos(phi);bgPos[i*3+2]=radius*Math.sin(phi)*Math.sin(theta);
+bgSeed[i]=Math.random();
+}
+backgroundGeo.setAttribute('position',new THREE.BufferAttribute(bgPos,3));
+backgroundGeo.setAttribute('aSeed',new THREE.BufferAttribute(bgSeed,1));
+const bgMaterial=new THREE.ShaderMaterial({
+uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`attribute float aSeed;uniform float uTime;uniform float uPixelRatio;varying float vAlpha;void main(){gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);vAlpha=0.3+0.6*sin(uTime*(0.8+aSeed)+aSeed*30.0);gl_PointSize=(0.8+aSeed*1.5)*uPixelRatio;}`,
+fragmentShader:`varying float vAlpha;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;gl_FragColor=vec4(vec3(0.85,0.92,1.0),smoothstep(0.5,0.0,d)*vAlpha);}`
+});
+const backgroundStars=new THREE.Points(backgroundGeo,bgMaterial);
+scene.add(backgroundStars);
+const clock=new THREE.Clock();const pointer=new THREE.Vector2();const target=new THREE.Vector2();
+let isTargeting=false;let prevR=800;
+const ease=(c,t,a)=>c+(t-c)*a;
+addEventListener('pointermove',e=>{
+if(isTargeting){target.x+=(e.clientX/innerWidth-0.5)*1.2;target.y+=(e.clientY/innerHeight-0.5)*0.7;}
+else{target.x=(e.clientX/innerWidth-0.5)*0.5;target.y=(e.clientY/innerHeight-0.5)*0.25;}
+});
+addEventListener('pointerdown',()=>{isTargeting=true;});
+addEventListener('pointerup',()=>{isTargeting=false;});
+const flashEl=document.getElementById('flash');const radiusLabel=document.getElementById('radius-label');const phaseLabel=document.getElementById('phase-label');
+function animate(){
+requestAnimationFrame(animate);
+const t=clock.getElapsedTime();
+pointer.x=ease(pointer.x,target.x,0.03);pointer.y=ease(pointer.y,target.y,0.03);
+const r=735+Math.sin(t*0.045)*550+Math.sin(t*0.123+1.7)*85;const theta=t*0.045+pointer.x*0.4;const phi=Math.sin(t*0.033)*0.5+pointer.y*0.2;
+camera.position.set(r*Math.cos(phi)*Math.cos(theta),r*Math.sin(phi),r*Math.cos(phi)*Math.sin(theta));
+camera.lookAt(0,0,0);
+const proximity=THREE.MathUtils.clamp(1-(r-PHOTON_R)/(560-PHOTON_R),0,1);
+diskMaterial.uniforms.uTime.value=t;diskMaterial.uniforms.uCameraPos.value.copy(camera.position);
+tracerMaterial.uniforms.uTime.value=t;tracerMaterial.uniforms.uCameraPos.value.copy(camera.position);
+jetMaterial.uniforms.uTime.value=t;bgMaterial.uniforms.uTime.value=t;
+renderer.setRenderTarget(renderTarget);renderer.render(scene,camera);renderer.setRenderTarget(null);
+const screenPos=new THREE.Vector3(0,0,0).project(camera);
+postMaterial.uniforms.uTime.value=t;postMaterial.uniforms.uMouse.value.set((screenPos.x+1)*0.5,(screenPos.y+1)*0.5);postMaterial.uniforms.uProximity.value=proximity;
+renderer.render(postScene,postCamera);
+flashEl.style.opacity=Math.pow(proximity,3.5)*0.55;
+radiusLabel.textContent=(r/RS).toFixed(2);
+const dr=r-prevR;let phase;
+if(proximity>0.78)phase='HORIZON SKIM';else if(dr<0)phase='APPROACH';else phase='DEPARTURE';
+phaseLabel.textContent=phase;prevR=r;
+}
+animate();
+addEventListener('resize',()=>{
+camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderTarget.setSize(innerWidth,innerHeight);
+postMaterial.uniforms.uResolution.value.set(innerWidth,innerHeight);
+const pr=renderer.getPixelRatio();diskMaterial.uniforms.uPixelRatio.value=pr;tracerMaterial.uniforms.uPixelRatio.value=pr;jetMaterial.uniforms.uPixelRatio.value=pr;bgMaterial.uniforms.uPixelRatio.value=pr;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Act III, Scene 1.</title>
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#010106;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+}
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    right:120px;
+    z-index:10;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #title {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #title span {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #title {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    #back-btn {
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="title">
+<span>LAMBERT NEBULA: ESSENTIAL</span>
+W₀(x) · FogExp2(density=0.0025) · Move Mouse 
+</div>
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+
+<script type="module">
+
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+
+scene.fog = new THREE.FogExp2(0x020208, 0.0025);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 3000);
+camera.position.z = 240;
+
+const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+function W0(x){
+    let w = Math.log(1+x);
+    for(let i=0;i<10;i++){
+        const e = Math.exp(w);
+        const f = w*e - x;
+        w -= f/(e*(w+1));
+    }
+    return w;
+}
+
+const MOBILE = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const COUNT = MOBILE ? 45000 : 95000;
+
+const geo = new THREE.BufferGeometry();
+const pos = new Float32Array(COUNT*3);
+const col = new Float32Array(COUNT*3);
+
+for(let i=0;i<COUNT;i++){
+    const x = Math.random()*5;
+    const r = W0(x+0.01)*28;
+    const angle = Math.random()*120;
+    const spread = 20 + Math.random()*80;
+
+    pos[i*3] = Math.cos(angle)*r*spread*0.1;
+    pos[i*3+1] = (Math.random()-0.5)*300;
+    pos[i*3+2] = Math.sin(angle)*r*spread*0.1;
+
+    const glow = 0.5 + Math.random()*0.5;
+
+    if(Math.random()>0.5){
+        col[i*3]   = 1.0*glow;
+        col[i*3+1] = 0.45*glow;
+        col[i*3+2] = 0.2*glow;
+    }else{
+        col[i*3]   = 0.2*glow;
+        col[i*3+1] = 0.7*glow;
+        col[i*3+2] = 1.0*glow;
+    }
+}
+
+geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color', new THREE.BufferAttribute(col,3));
+
+const nebula = new THREE.Points(
+    geo,
+    new THREE.PointsMaterial({
+        size:MOBILE ? 1.3 : 1.0,
+        vertexColors:true,
+        transparent:true,
+        opacity:.85,
+        blending: THREE.AdditiveBlending
+    })
+);
+scene.add(nebula);
+
+const starsGeo = new THREE.BufferGeometry();
+const starsPos = new Float32Array(15000*3);
+
+for(let i=0; i<15000; i++){
+    starsPos[i*3] = (Math.random()-0.5)*2500;
+    starsPos[i*3+1] = (Math.random()-0.5)*2500;
+    starsPos[i*3+2] = (Math.random()-0.5)*2500;
+}
+
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos,3));
+
+const stars = new THREE.Points(
+    starsGeo,
+    new THREE.PointsMaterial({
+        size:1,
+        color:0xffffff,
+        transparent:true,
+        opacity:.6
+    })
+);
+scene.add(stars);
+
+let targetRX = 0;
+let targetRY = 0;
+
+window.addEventListener('pointermove', e=>{
+    targetRY = (e.clientX/window.innerWidth-.5) *1.4;
+    targetRX = (e.clientY/window.innerHeight-.5) *0.8;
+});
+
+let time = 0;
+
+function animate(){
+    requestAnimationFrame(animate);
+    time += 0.003;
+
+    nebula.rotation.y += 0.0006;
+    nebula.rotation.z += 0.00015;
+    stars.rotation.y -= 0.00005;
+
+    scene.rotation.x += (targetRX-scene.rotation.x) *0.02;
+    scene.rotation.y += (targetRY-scene.rotation.y) *0.02;
+
+    camera.position.x = Math.cos(time*0.3)*260;
+    camera.position.z = Math.sin(time*0.3)*260;
+    camera.position.y = Math.sin(time*0.17)*50;
+    camera.lookAt(0,0,0);
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+</script>
+</body>
+</html>

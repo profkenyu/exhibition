@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Act I, Scene 2.</title>
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000003;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+}
+#ui{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.65);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    right:120px;
+    z-index:10;
+    line-height:1.6;
+}
+#ui h1{
+    margin:0;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+    letter-spacing:.25em;
+    color:rgba(255,255,255,.75);
+}
+.prime-pulse{
+    display:inline-block;
+    color:#00ffcc;
+    font-size:9px;
+    font-weight:400;
+    letter-spacing:.1em;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #ui {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #ui h1 {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #ui {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    .prime-pulse {
+        font-size: 8px;
+    }
+    #back-btn {
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+<body>
+<div id="ui">
+<h1>QUANTUM SINGULARITY</h1>
+θ = p·2π/137.507 · r = √p×12 &nbsp;·&nbsp;<br>
+Evolution Phase: <span id="evo-phase" class="prime-pulse">INITIALIZING</span><br>
+Current Prime Factor: <span id="prime-factor" class="prime-pulse">2</span>
+</div>
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000003, 0.0003);
+const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 8000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.appendChild(renderer.domElement);
+const masterGroup = new THREE.Group();
+scene.add(masterGroup);
+function isPrime(n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 === 0 || n % 3 === 0) return false;
+    for (let i = 5; i * i <= n; i += 6) {
+        if (n % i === 0 || n % (i + 2) === 0) return false;
+    }
+    return true;
+}
+const primes = [];
+let candidate = 2;
+while(primes.length < 3000) {
+    if(isPrime(candidate)) primes.push(candidate);
+    candidate++;
+}
+const latticeGeometry = new THREE.BufferGeometry();
+const latticePoints = [];
+const latticeColors = [];
+const latticeIndices = [];
+primes.forEach((p, idx) => {
+    const theta = (p * Math.PI * 2) / 137.507;
+    const r = Math.sqrt(p) * 12.0;
+    const baseHeight = (p % 77) * 15;
+    for(let h = 0; h < 5; h++) {
+        const y = -400 + baseHeight + (h * 120);
+        const radiusOffset = Math.sin(h * 0.8) * 30.0;
+        const px = Math.cos(theta) * (r + radiusOffset);
+        const pz = Math.sin(theta) * (r + radiusOffset);
+        latticePoints.push(px, y, pz);
+        const rColor = Math.sin(p * 0.05) * 0.5 + 0.5;
+        const gColor = Math.sin(p * 0.08 + 2.0) * 0.5 + 0.5;
+        const bColor = Math.cos(p * 0.03 + 4.0) * 0.5 + 0.5;
+        latticeColors.push(rColor, gColor, bColor);
+    }
+    const startIdx = idx * 5;
+    for(let h=0; h<4; h++) {
+        latticeIndices.push(startIdx + h, startIdx + h + 1);
+    }
+});
+latticeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(latticePoints, 3));
+latticeGeometry.setAttribute('color', new THREE.Float32BufferAttribute(latticeColors, 3));
+latticeGeometry.setIndex(latticeIndices);
+const lineMat = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.6,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+});
+const cathedralLattice = new THREE.LineSegments(latticeGeometry, lineMat);
+masterGroup.add(cathedralLattice);
+const nebulaMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        uTime: { value: 0 },
+        uEvolution: { value: 0 }
+    },
+    vertexShader: `
+        varying vec3 vPosition;
+        varying vec3 vColor;
+        uniform float uTime;
+        void main() {
+            vPosition = position;
+            vec3 p = position;
+            float wave = sin(uTime * 0.1 + p.y * 0.005) * 40.0;
+            p.x += cos(uTime * 0.05 + p.z * 0.002) * wave;
+            p.z += sin(uTime * 0.05 + p.x * 0.002) * wave;
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            gl_PointSize = (1200.0 / -mvPosition.z) * (1.2 + sin(uTime * 0.2 + position.y * 0.01) * 0.4);
+        }
+    `,
+    fragmentShader: `
+        varying vec3 vPosition;
+        varying vec3 vColor;
+        uniform float uTime;
+        uniform float uEvolution;
+        void main() {
+            vec2 center = gl_PointCoord - vec2(0.5);
+            float dist = length(center);
+            if (dist > 0.5) discard;
+            float intensity = smoothstep(0.5, 0.0, dist) * 0.4;
+            vec3 dynamicColor = vColor;
+            dynamicColor.r += sin(vPosition.x * 0.002 + uTime * 0.15) * 0.25;
+            dynamicColor.g += cos(vPosition.y * 0.003 - uTime * 0.1) * 0.25;
+            dynamicColor.b += sin(vPosition.z * 0.001 + uTime * 0.2) * 0.25;
+            dynamicColor *= (1.0 + sin(uEvolution * 6.283) * 0.3);
+            gl_FragColor = vec4(dynamicColor * intensity, intensity);
+        }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    vertexColors: true
+});
+const nebulaGeometry = new THREE.BufferGeometry();
+const countNebulaPoints = 400000;
+const nebulaPos = new Float32Array(countNebulaPoints * 3);
+const nebulaCols = new Float32Array(countNebulaPoints * 3);
+for(let i=0; i<countNebulaPoints; i++) {
+    const segment = i % 4;
+    const r = Math.pow(Math.random(), 0.7) * 2500;
+    const theta = (i * 0.0005) + (segment * Math.PI / 2);
+    nebulaPos[i*3] = Math.cos(theta) * r + (Math.random() - 0.5) * 150;
+    nebulaPos[i*3+1] = (Math.random() - 0.5) * 600 + Math.sin(r * 0.002) * 300;
+    nebulaPos[i*3+2] = Math.sin(theta) * r + (Math.random() - 0.5) * 150;
+    if(segment === 0) {
+        nebulaCols[i*3] = 0.0; nebulaCols[i*3+1] = 0.6; nebulaCols[i*3+2] = 1.0;
+    } else if(segment === 1) {
+        nebulaCols[i*3] = 0.9; nebulaCols[i*3+1] = 0.1; nebulaCols[i*3+2] = 0.5;
+    } else {
+        nebulaCols[i*3] = 0.4; nebulaCols[i*3+1] = 0.2; nebulaCols[i*3+2] = 0.8;
+    }
+}
+nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPos, 3));
+nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaCols, 3));
+const nebulaParticles = new THREE.Points(nebulaGeometry, nebulaMaterial);
+masterGroup.add(nebulaParticles);
+const blackHoleGeometry = new THREE.SphereGeometry(65, 64, 64);
+const blackHoleMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        uTime: { value: 0 },
+        uCameraPos: { value: new THREE.Vector3() }
+    },
+    vertexShader: `
+        varying vec3 vNormal;
+        varying vec3 vWorldPos;
+        void main() {
+            vNormal = normalize(normalMatrix * normal);
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
+            vWorldPos = worldPos.xyz;
+            gl_Position = projectionMatrix * viewMatrix * worldPos;
+        }
+    `,
+    fragmentShader: `
+        varying vec3 vNormal;
+        varying vec3 vWorldPos;
+        uniform float uTime;
+        uniform vec3 uCameraPos;
+        void main() {
+            vec3 viewDir = normalize(uCameraPos - vWorldPos);
+            float dotProduct = dot(vNormal, viewDir);
+            float rim = 1.0 - max(0.0, dotProduct);
+            float gravityGlow = pow(rim, 4.0) * 2.5;
+            float distortion = sin(uTime * 3.0 + vWorldPos.y * 0.1) * 0.15 + 0.85;
+            vec3 coreColor = vec3(0.0, 0.05, 0.1);
+            vec3 lensGlowColor = vec3(0.0, 0.9, 1.0) * gravityGlow * distortion;
+            vec3 finalColor = mix(coreColor, lensGlowColor, rim);
+            gl_FragColor = vec4(finalColor, rim);
+        }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending
+});
+const blackHole = new THREE.Mesh(blackHoleGeometry, blackHoleMaterial);
+scene.add(blackHole);
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 180000;
+const starPos = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount; i++) {
+    starPos[i * 3] = (Math.random() - 0.5) * 7000;
+    starPos[i * 3 + 1] = (Math.random() - 0.5) * 4000;
+    starPos[i * 3 + 2] = (Math.random() - 0.5) * 7000;
+}
+starGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const starMaterial = new THREE.PointsMaterial({
+    size: 0.8,
+    color: 0x90b0ff,
+    transparent: true,
+    opacity: 0.5,
+    sizeAttenuation: true
+});
+scene.add(new THREE.Points(starGeometry, starMaterial));
+let globalTime = 0;
+const UI_PHASE = document.getElementById('evo-phase');
+const UI_PRIME = document.getElementById('prime-factor');
+function getEvolutionState(seconds) {
+    const totalCycle = 1800;
+    const progress = (seconds % totalCycle) / totalCycle;
+    let stateName = "ERA OF GENESIS";
+    if (progress > 0.2) stateName = "RIEMANN CHRONICLES";
+    if (progress > 0.45) stateName = "HYPERBOLIC CATHEDRAL";
+    if (progress > 0.7) stateName = "QUANTUM SINGULARITY";
+    if (progress > 0.9) stateName = "THERMODYNAMIC DEATH";
+    return {
+        progress: progress,
+        name: stateName,
+        currentPrime: primes[Math.floor((seconds * 1.6) % primes.length)]
+    };
+}
+function animate() {
+    requestAnimationFrame(animate);
+    globalTime += 0.0035; 
+    const realSeconds = globalTime * 10;
+    nebulaMaterial.uniforms.uTime.value = globalTime;
+    nebulaMaterial.uniforms.uEvolution.value = getEvolutionState(realSeconds).progress;
+    blackHoleMaterial.uniforms.uTime.value = globalTime;
+    blackHoleMaterial.uniforms.uCameraPos.value.copy(camera.position);
+    masterGroup.rotation.y = globalTime * 0.015;
+    masterGroup.rotation.z = Math.sin(globalTime * 0.005) * 0.05;
+    const state = getEvolutionState(realSeconds);
+    const evoProg = state.progress;
+    const radius = 1300 + Math.sin(globalTime * 0.1) * 300 + Math.cos(evoProg * Math.PI * 4) * 200;
+    const speedMultiplier = 0.12 + (Math.sin(evoProg * Math.PI) * 0.05);
+    camera.position.x = Math.cos(globalTime * speedMultiplier) * radius;
+    camera.position.z = Math.sin(globalTime * speedMultiplier) * radius;
+    camera.position.y = 350 * Math.sin(globalTime * 0.06) + Math.cos(globalTime * 0.02) * 200;
+    camera.lookAt(0, 0, 0);
+    if(Math.floor(realSeconds * 10) % 5 === 0) {
+        UI_PHASE.innerText = state.name + ` (${(evoProg * 100).toFixed(2)}%)`;
+        UI_PRIME.innerText = state.currentPrime;
+    }
+    renderer.render(scene, camera);
+}
+animate();
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

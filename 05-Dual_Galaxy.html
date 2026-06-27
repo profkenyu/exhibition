@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Act II.</title>
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#010106;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+}
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    right:120px;
+    z-index:10;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #title {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #title span {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #title {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    #back-btn {
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="title">
+<span>DUAL GALAXY</span>
+r = √i · θ = i×0.013 + arm×2π/2 &nbsp;·&nbsp;Move Mouse / Touch
+</div>
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+
+<script type="module">
+
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x020208, 0.0015);
+
+// 원본 camera.position.z 세팅은 animate() 내부 루프에서 덮어씌워지므로 제거
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+
+const MOBILE = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const COUNT = MOBILE ? 60000 : 120000;
+
+// 1. 은하(Galaxy) 지오메트리 생성 및 최적화
+const galaxyGeo = new THREE.BufferGeometry();
+const pos = new Float32Array(COUNT * 3);
+const col = new Float32Array(COUNT * 3);
+
+for(let i = 0; i < COUNT; i++) {
+    const arm = i % 2;
+    const angle = i * 0.015;
+    const radius = Math.sqrt(i) * 1.2;
+    const spread = (Math.random() - 0.5) * 25;
+
+    const x = Math.cos(angle) * radius + spread;
+    const z = Math.sin(angle) * radius + spread;
+    const y = (Math.random() - 0.5) * 50;
+
+    const idx = i * 3;
+    pos[idx]     = x;
+    pos[idx + 1] = y;
+    pos[idx + 2] = z;
+
+    if(arm === 0) {
+        col[idx]     = 1.0;
+        col[idx + 1] = 0.25;
+        col[idx + 2] = 0.15;
+    } else {
+        col[idx]     = 0.15;
+        col[idx + 1] = 0.55;
+        col[idx + 2] = 1.0;
+    }
+}
+
+galaxyGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+galaxyGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+const galaxy = new THREE.Points(
+    galaxyGeo,
+    new THREE.PointsMaterial({
+        size: MOBILE ? 1.8 : 1.2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    })
+);
+scene.add(galaxy);
+
+// 2. 배경 별(Stars) 생성 및 최적화
+const starGeo = new THREE.BufferGeometry();
+const STAR_COUNT = MOBILE ? 10000 : 20000; // 모바일 환경에서 배경 별 개수 반으로 조정하여 최적화
+const starPos = new Float32Array(STAR_COUNT * 3);
+
+for(let i = 0; i < STAR_COUNT; i++) {
+    const idx = i * 3;
+    starPos[idx]     = (Math.random() - 0.5) * 8000;
+    starPos[idx + 1] = (Math.random() - 0.5) * 8000;
+    starPos[idx + 2] = (Math.random() - 0.5) * 8000;
+}
+
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+
+const stars = new THREE.Points(
+    starGeo,
+    new THREE.PointsMaterial({
+        size: 2,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.6,
+        depthWrite: false
+    })
+);
+scene.add(stars);
+
+// 3. 블랙홀 세그먼트 수 최적화 (64x64 -> 32x32로 연산 절감)
+const blackHole = new THREE.Mesh(
+    new THREE.SphereGeometry(12, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x000000 })
+);
+scene.add(blackHole);
+
+// 4. 이벤트 핸들러 및 인터랙션 최적화
+let targetRX = 0;
+let targetRY = 0;
+const scaleTarget = new THREE.Vector3(1, 1, 1);
+
+// 마우스 및 터치(pointermove 하나로 통합 처리)
+window.addEventListener('pointermove', e => {
+    targetRY = (e.clientX / window.innerWidth - 0.5) * 1.4;
+    targetRX = (e.clientY / window.innerHeight - 0.5) * 0.8;
+});
+
+// 터치 이벤트 발생 시 블랙홀 크기 타겟 변경
+window.addEventListener('touchstart', e => {
+    // UI 요소를 누를 때는 작동하지 않도록 방지
+    if(e.target.id === 'back-btn') return;
+    blackHole.scale.set(1.3, 1.3, 1.3);
+}, { passive: true });
+
+// 5. 애니메이션 루프 및 최적화 변수 선언
+let t = 0;
+const tempColor = new THREE.Color();
+
+function animate() {
+    requestAnimationFrame(animate);
+    t += 0.003;
+
+    // 회전 애니메이션
+    galaxy.rotation.y += 0.0007;
+    galaxy.rotation.z += 0.00005;
+    stars.rotation.y -= 0.00003;
+
+    // 마우스 팔로잉 (Lerp)
+    scene.rotation.x += (targetRX - scene.rotation.x) * 0.02;
+    scene.rotation.y += (targetRY - scene.rotation.y) * 0.02;
+
+    // 카메라 궤도 계산
+    camera.position.x = Math.cos(t * 0.2) * 500;
+    camera.position.z = Math.sin(t * 0.2) * 500;
+    camera.position.y = Math.sin(t * 0.13) * 120;
+    camera.lookAt(0, 0, 0);
+
+    // Fog 색상 주기 계산 및 가비지 컬렉션 방지 최적화
+    const r = (0.5 + 0.5 * Math.sin(t)) * 0.12;
+    const g = (0.5 + 0.5 * Math.sin(t + 2.09)) * 0.12;
+    const b = (0.5 + 0.5 * Math.sin(t + 4.18)) * 0.12;
+    
+    tempColor.setRGB(r, g, b);
+    scene.fog.color.copy(tempColor);
+    
+    // 블랙홀 크기 복원
+    blackHole.scale.lerp(scaleTarget, 0.05);
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// 6. 윈도우 리사이즈 버그 수정 (해상도 비율 대응 및 렌더러 크기 업데이트 정정)
+window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    
+    renderer.setSize(width, height);
+    // 고해상도 디스플레이 대응 리사이징 버그 수정
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+});
+
+</script>
+</body>
+</html>

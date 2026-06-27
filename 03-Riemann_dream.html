@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Act I, Scene 1.</title>
+<style>
+html,body{
+    margin:0;
+    overflow:hidden;
+    background:#020208;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+}
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    z-index:10;
+    right:120px;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #title {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #title span {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #title {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    #back-btn {
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="title">
+<span>RIEMANN DREAMS</span>
+θ = i×0.045 + sin(p)×2 · r = √i×0.55 + p×0.08 &nbsp;·&nbsp;Prime Ocean Zeta Lattice Matrix&nbsp;·&nbsp;Move Mouse
+</div>
+
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x020208,0.004);
+
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,1000);
+camera.position.set(0,20,160);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+
+const COUNT=60000;
+const geo=new THREE.BufferGeometry();
+const pos=new Float32Array(COUNT*3);
+const col=new Float32Array(COUNT*3);
+
+const velocities=[];
+const initialPos=[];
+
+function isPrime(n){
+    if(n<2)return false;
+    for(let i=2;i<=Math.sqrt(n);i++){
+        if(n%i===0)return false;
+    }
+    return true;
+}
+
+const primes=[];
+let num=2;
+while(primes.length<300){
+    if(isPrime(num))primes.push(num);
+    num++;
+}
+
+for(let i=0;i<COUNT;i++){
+    const idx=i%primes.length;
+    const p=primes[idx];
+    
+    const theta=i*0.045+Math.sin(p)*2.0;
+    const rad=Math.sqrt(i)*0.55+p*0.08;
+    
+    const px=Math.cos(theta)*rad;
+    const py=(Math.random()-0.5)*15+Math.sin(rad*0.1)*6;
+    const pz=Math.sin(theta)*rad;
+
+    pos[i*3]=px;
+    pos[i*3+1]=py;
+    pos[i*3+2]=pz;
+
+    initialPos.push({x:px,y:py,z:pz,rad:rad,p:p,seed:Math.random()});
+    velocities.push({x:0,y:0,z:0});
+
+    col[i*3]=0.2+0.4*Math.sin(p*0.5);
+    col[i*3+1]=0.4+0.5*Math.cos(rad*0.02);
+    col[i*3+2]=0.7+0.3*Math.sin(theta);
+}
+
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+
+const mat=new THREE.PointsMaterial({
+    size:0.45,
+    vertexColors:true,
+    transparent:true,
+    opacity:0.85,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+});
+
+const cloud=new THREE.Points(geo,mat);
+scene.add(cloud);
+
+let bloom=[];
+function triggerBloom(x,y){
+    bloom.push({
+        x:x,
+        y:y,
+        life:1.0,
+        maxLife:1.0
+    });
+    if(bloom.length>8)bloom.shift();
+}
+
+let tx=0,ty=0;
+let gyroX=0,gyroY=0;
+
+addEventListener('pointermove',e=>{
+    tx=(e.clientX/innerWidth-0.5)*2.5;
+    ty=(e.clientY/innerHeight-0.5)*1.8;
+});
+
+addEventListener('click',e=>{
+    const vec=new THREE.Vector3(
+        (e.clientX/innerWidth)*2-1,
+        -(e.clientY/innerHeight)*2+1,
+        0.5
+    );
+    vec.unproject(camera);
+    const dir=vec.sub(camera.position).normalize();
+    const distance=-camera.position.y/dir.y;
+    const pos=camera.position.clone().add(dir.multiplyScalar(distance));
+    triggerBloom(pos.x,pos.z);
+});
+
+if(window.DeviceOrientationEvent){
+    addEventListener('deviceorientation',e=>{
+        if(e.beta!==null)gyroY=e.beta;
+        if(e.gamma!==null)gyroX=e.gamma;
+    },true);
+}
+
+let time=0;
+function animate(){
+    requestAnimationFrame(animate);
+    time+=0.004;
+
+    cloud.rotation.y+=0.0012;
+
+    camera.position.x+=(tx*50-camera.position.x)*0.03;
+    camera.position.y+=((-ty*40+35)-camera.position.y)*0.03;
+    camera.lookAt(0,-5,0);
+
+    for(let b of bloom){
+        b.life-=0.008;
+    }
+    bloom=bloom.filter(b=>b.life>0);
+
+    const posAttr=geo.attributes.position;
+    const colorsAttr=geo.attributes.color;
+    const positions=posAttr.array;
+    const col=colorsAttr.array;
+
+    for(let i=0;i<COUNT;i++){
+        let px=positions[i*3];
+        let py=positions[i*3+1];
+        let pz=positions[i*3+2];
+        let vx=velocities[i].x;
+        let vy=velocities[i].y;
+        let vz=velocities[i].z;
+        const init=initialPos[i];
+
+        const rWave=Math.sin(init.rad*0.08-time*2.5)*3.2;
+        const pWave=Math.cos(init.p*0.4+time*1.5)*1.8;
+        
+        vy+=(init.y+rWave+pWave-py)*0.012;
+
+        for(let b of bloom){
+            const dx=px-b.x;
+            const dy=pz-b.life; 
+            const d=Math.sqrt(dx*dx+dy*dy)+1;
+            const f=0.2*b.life/d;
+            vx+=dx*f;
+            vy+=dy*f;
+        }
+
+        vx*=0.985;
+        vy*=0.985;
+        vz*=0.985;
+        vx+=gyroX*0.001;
+        vy+=gyroY*0.001;
+        px+=vx;
+        py+=vy;
+        pz+=vz;
+
+        if(px>140)px=-140; if(px<-140)px=140;
+        if(py>140)py=-140; if(py<-140)py=140;
+        if(pz>140)pz=-140; if(pz<-140)pz=140;
+
+        velocities[i].x=vx; velocities[i].y=vy; velocities[i].z=vz;
+        positions[i*3]=px; positions[i*3+1]=py; positions[i*3+2]=pz;
+
+        const t=time+(px+py+pz)*0.01;
+        col[i*3]=0.5+0.5*Math.sin(t);
+        col[i*3+1]=0.5+0.5*Math.sin(t+2.094);
+        col[i*3+2]=0.5+0.5*Math.sin(t+4.188);
+    }
+
+    posAttr.needsUpdate=true;
+    colorsAttr.needsUpdate=true;
+
+    renderer.render(scene,camera);
+}
+animate();
+
+addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+</body>
+</html>

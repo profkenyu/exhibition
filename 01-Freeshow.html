@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Freeshow.</title>
+<style>
+:root{
+  color-scheme:dark;
+  --panel:rgba(4,6,16,.48);
+  --line:rgba(255,255,255,.16);
+  --text:rgba(246,250,255,.9);
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#010103;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  touch-action:none;
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    right:120px;
+    z-index:10;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+
+@media (max-width:640px){
+  #title {
+      top: 20px;
+      left: 20px;
+      right: 100px;
+  }
+  #title span {
+      font-size: 18px;
+      margin-bottom: 4px;
+  }
+  #title {
+      font-size: 10px;
+      letter-spacing: .15em;
+  }
+  #back-btn {
+      top: 20px;
+      right: 20px;
+      padding: 6px 12px;
+      font-size: 10px;
+  }
+}
+</style>
+</head>
+<body>
+<div id="title">
+  <span>Freeshow: RGB GALAXY ENGINE</span>
+  r = √i×1.6 · θ = i×0.013 + arm×2π/3 &nbsp;·&nbsp; 3-Arm · GLSL Bloom · Move Mouse
+</div>
+<a href="javascript:history.back()" id="back-btn">BACK</a>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const MOBILE = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const state = {
+  pointer: new THREE.Vector2(),
+  target: new THREE.Vector2()
+};
+
+const TARGET_SCALE = new THREE.Vector3(1, 1, 1);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x010103, 0.0009);
+
+const camera = new THREE.PerspectiveCamera(65, innerWidth / innerHeight, 0.1, 30000);
+camera.position.set(0, 400, 1300);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: !MOBILE,
+  alpha: false,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+
+const renderTarget = new THREE.WebGLRenderTarget(innerWidth, innerHeight, {
+  depthBuffer: false,
+  stencilBuffer: false,
+  colorSpace: THREE.SRGBColorSpace
+});
+
+const postScene = new THREE.Scene();
+const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const postMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    tScene: { value: renderTarget.texture },
+    uTime: { value: 0 },
+    uResolution: { value: new THREE.Vector2(innerWidth, innerHeight) },
+    uBloom: { value: 1 }
+  },
+  vertexShader: `
+    varying vec2 vUv;
+    void main(){
+      vUv = uv;
+      gl_Position = vec4(position.xy,0.0,1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tScene;
+    uniform vec2 uResolution;
+    uniform float uTime;
+    uniform float uBloom;
+    varying vec2 vUv;
+
+    vec3 sampleGlow(vec2 uv){
+      vec2 px = 1.0 / uResolution;
+      vec3 glow = vec3(0.0);
+      glow += texture2D(tScene, uv + px * vec2( 2.8, 0.0)).rgb;
+      glow += texture2D(tScene, uv + px * vec2(-2.8, 0.0)).rgb;
+      glow += texture2D(tScene, uv + px * vec2( 0.0, 2.8)).rgb;
+      glow += texture2D(tScene, uv + px * vec2( 0.0,-2.8)).rgb;
+      glow += texture2D(tScene, uv + px * vec2( 5.4, 3.6)).rgb * .7;
+      glow += texture2D(tScene, uv + px * vec2(-5.4,-3.6)).rgb * .7;
+      return glow / 7.8;
+    }
+
+    void main(){
+      vec2 uv = vUv;
+      vec2 center = uv - .5;
+      float dist = length(center);
+      vec2 chroma = normalize(center + 0.0001) * .0045 * uBloom;
+      vec3 base;
+      base.r = texture2D(tScene, uv + chroma).r;
+      base.g = texture2D(tScene, uv).g;
+      base.b = texture2D(tScene, uv - chroma).b;
+
+      vec3 glow = sampleGlow(uv);
+      float threshold = smoothstep(.12, .85, max(max(glow.r, glow.g), glow.b));
+      vec3 color = base + glow * threshold * (.72 + .28 * sin(uTime * 1.5)) * uBloom;
+      color += vec3(.012, .008, .025) * (1.0 - dist);
+      color *= 1.0 - smoothstep(.55, .98, dist) * .35;
+      color = pow(color, vec3(.85));
+      gl_FragColor = vec4(color,1.0);
+    }
+  `
+});
+postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial));
+
+const galaxyGeo = new THREE.BufferGeometry();
+const COUNT = MOBILE ? 60000 : 250000;
+const pos = new Float32Array(COUNT * 3);
+const seed = new Float32Array(COUNT);
+const armAttr = new Float32Array(COUNT);
+
+for(let i = 0; i < COUNT; i++){
+  const arm = i % 3;
+  const radius = Math.sqrt(i) * (MOBILE ? 1.85 : 1.6);
+  const angle = i * .013 + arm * Math.PI * 2 / 3;
+  const turbulence = Math.pow(Math.random(), 2.2) * 82;
+  const spread = (Math.random() - .5) * turbulence;
+  const vertical = (Math.random() - .5) * (54 + radius * .022);
+
+  pos[i * 3] = Math.cos(angle) * radius + spread;
+  pos[i * 3 + 1] = vertical;
+  pos[i * 3 + 2] = Math.sin(angle) * radius + (Math.random() - .5) * turbulence;
+  seed[i] = Math.random();
+  armAttr[i] = arm;
+}
+
+galaxyGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+galaxyGeo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
+galaxyGeo.setAttribute('aArm', new THREE.BufferAttribute(armAttr, 1));
+
+const galaxyMaterial = new THREE.ShaderMaterial({
+  uniforms:{
+    uTime:{value:0},
+    uPixelRatio:{value:renderer.getPixelRatio()},
+    uRgb:{value:1}
+  },
+  transparent:true,
+  depthWrite:false,
+  blending:THREE.AdditiveBlending,
+  vertexShader:`
+    attribute float aSeed;
+    attribute float aArm;
+    uniform float uTime;
+    uniform float uPixelRatio;
+    uniform float uRgb;
+    varying vec3 vColor;
+    varying float vPulse;
+
+    vec3 rgbWheel(float x){
+      return .55 + .45 * cos(6.28318 * (vec3(.0,.33,.67) + x));
+    }
+
+    void main(){
+      vec3 p = position;
+      float wave = sin(uTime * 2.0 + aSeed * 17.0 + length(p.xz) * .01);
+      p.y += wave * 16.0 * uRgb;
+      p.xz *= 1.0 + .012 * sin(uTime + aSeed * 9.0);
+
+      float phase = aArm / 3.0 + uTime * .025 + aSeed * .15;
+      vec3 rgb = rgbWheel(phase);
+      vec3 warm = vec3(1.0,.38,.18);
+      vec3 cool = vec3(.15,.62,1.0);
+      vColor = mix(mix(warm, cool, step(1.0, aArm)), rgb, uRgb);
+      vPulse = .62 + .38 * wave;
+
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_Position = projectionMatrix * mv;
+      gl_PointSize = (1.35 + aSeed * 1.9 + vPulse * 1.45) * uPixelRatio * (480.0 / -mv.z);
+    }
+  `,
+  fragmentShader:`
+    varying vec3 vColor;
+    varying float vPulse;
+
+    void main(){
+      vec2 p = gl_PointCoord - .5;
+      float d = length(p);
+      float core = smoothstep(.5, .0, d);
+      float halo = exp(-d * 8.0);
+      float alpha = (core * .16 + halo * .07) * vPulse;
+      if(alpha < .015) discard;
+      gl_FragColor = vec4(vColor * (.72 + halo * 1.15), alpha);
+    }
+  `
+});
+
+const galaxy = new THREE.Points(galaxyGeo, galaxyMaterial);
+scene.add(galaxy);
+
+const starGeo = new THREE.BufferGeometry();
+const STAR_COUNT = MOBILE ? 15000 : 45000;
+const starPos = new Float32Array(STAR_COUNT * 3);
+const starSeed = new Float32Array(STAR_COUNT);
+for(let i = 0; i < STAR_COUNT; i++){
+  const radius = 3000 + Math.random() * 9000;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(Math.random() * 2 - 1);
+  starPos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+  starPos[i * 3 + 1] = radius * Math.cos(phi);
+  starPos[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+  starSeed[i] = Math.random();
+}
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+starGeo.setAttribute('aSeed', new THREE.BufferAttribute(starSeed, 1));
+
+const starMaterial = new THREE.ShaderMaterial({
+  uniforms:{uTime:{value:0}, uPixelRatio:{value:renderer.getPixelRatio()}},
+  transparent:true,
+  depthWrite:false,
+  blending:THREE.AdditiveBlending,
+  vertexShader:`
+    attribute float aSeed;
+    uniform float uTime;
+    uniform float uPixelRatio;
+    varying float vAlpha;
+    void main(){
+      vec4 mv = modelViewMatrix * vec4(position,1.0);
+      gl_Position = projectionMatrix * mv;
+      vAlpha = .35 + .45 * sin(uTime * (1.2 + aSeed) + aSeed * 20.0);
+      gl_PointSize = (.9 + aSeed * 1.8) * uPixelRatio;
+    }
+  `,
+  fragmentShader:`
+    varying float vAlpha;
+    void main(){
+      vec2 p = gl_PointCoord - .5;
+      float a = smoothstep(.5, .0, length(p)) * vAlpha;
+      gl_FragColor = vec4(vec3(.72,.9,1.0), a);
+    }
+  `
+});
+const stars = new THREE.Points(starGeo, starMaterial);
+scene.add(stars);
+
+const fogGroup = new THREE.Group();
+const fogMaterial = new THREE.ShaderMaterial({
+  uniforms:{
+    uTime:{value:0},
+    uColorA:{value:new THREE.Color(0x18e5ff)},
+    uColorB:{value:new THREE.Color(0xff26df)},
+    uFog:{value:1}
+  },
+  transparent:true,
+  depthWrite:false,
+  side:THREE.DoubleSide,
+  blending:THREE.AdditiveBlending,
+  vertexShader:`
+    varying vec2 vUv;
+    varying vec3 vWorld;
+    void main(){
+      vUv = uv;
+      vec4 world = modelMatrix * vec4(position,1.0);
+      vWorld = world.xyz;
+      gl_Position = projectionMatrix * viewMatrix * world;
+    }
+  `,
+  fragmentShader:`
+    uniform float uTime;
+    uniform float uFog;
+    uniform vec3 uColorA;
+    uniform vec3 uColorB;
+    varying vec2 vUv;
+    varying vec3 vWorld;
+
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+    float noise(vec2 p){
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0,0.0)), u.x),
+                 mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);
+    }
+    float fbm(vec2 p){
+      float v = 0.0;
+      float a = .5;
+      for(int i=0;i<5;i++){
+        v += noise(p) * a;
+        p *= 2.03;
+        a *= .52;
+      }
+      return v;
+    }
+
+    void main(){
+      vec2 q = vUv * 3.5 + vec2(uTime * .025, -uTime * .015);
+      float cloud = fbm(q + vWorld.xz * .0012);
+      float radial = 1.0 - smoothstep(.15, .82, length(vUv - .5));
+      vec3 color = mix(uColorA, uColorB, cloud);
+      float alpha = radial * smoothstep(.25, .85, cloud) * .12 * uFog;
+      gl_FragColor = vec4(color * (1.25 + cloud), alpha);
+    }
+  `
+});
+
+const FOG_LAYERS = MOBILE ? 10 : 22;
+const planeGeo = new THREE.PlaneGeometry(1, 1);
+
+for(let i = 0; i < FOG_LAYERS; i++){
+  const mesh = new THREE.Mesh(planeGeo, fogMaterial);
+  mesh.scale.set(1600 + i * 110, 900 + i * 65, 1);
+  mesh.position.y = (i - FOG_LAYERS/2) * 22;
+  mesh.position.z = (i - FOG_LAYERS/2) * 32;
+  mesh.rotation.x = Math.PI / 2 + (i - FOG_LAYERS/2) * .012;
+  mesh.rotation.z = i * .35;
+  fogGroup.add(mesh);
+}
+scene.add(fogGroup);
+
+const core = new THREE.Mesh(
+  new THREE.SphereGeometry(26, 32, 32),
+  new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0}},
+    transparent:true,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending,
+    vertexShader:`
+      varying vec3 vNormal;
+      void main(){
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+    `,
+    fragmentShader:`
+      uniform float uTime;
+      varying vec3 vNormal;
+      void main(){
+        float rim = pow(1.0 - abs(vNormal.z), 2.6);
+        vec3 color = .6 + .4 * cos(6.28318 * (vec3(.0,.28,.62) + uTime * .08));
+        gl_FragColor = vec4(color * rim * 3.2, rim * .75);
+      }
+    `
+  })
+);
+scene.add(core);
+
+const voidCore = new THREE.Mesh(
+  new THREE.SphereGeometry(18, 24, 24),
+  new THREE.MeshBasicMaterial({color:0x000000})
+);
+scene.add(voidCore);
+
+addEventListener('pointermove', event => {
+  state.target.x = (event.clientX / innerWidth - .5) * 1.1;
+  state.target.y = (event.clientY / innerHeight - .5) * .6;
+}, { passive: true });
+
+addEventListener('touchstart', () => {
+  core.scale.set(1.45, 1.45, 1.45);
+  voidCore.scale.set(1.28, 1.28, 1.28);
+}, { passive: true });
+
+const clock = new THREE.Clock();
+const ease = (current, target, amount) => current + (target - current) * amount;
+
+function animate(){
+  requestAnimationFrame(animate);
+  
+  const time = clock.getElapsedTime();
+  
+  state.pointer.x = ease(state.pointer.x, state.target.x, .025);
+  state.pointer.y = ease(state.pointer.y, state.target.y, .025);
+
+  galaxyMaterial.uniforms.uTime.value = time;
+  galaxyMaterial.uniforms.uRgb.value = ease(galaxyMaterial.uniforms.uRgb.value, 1, .06);
+  starMaterial.uniforms.uTime.value = time;
+  fogMaterial.uniforms.uTime.value = time;
+  fogMaterial.uniforms.uFog.value = ease(fogMaterial.uniforms.uFog.value, 1, .05);
+  core.material.uniforms.uTime.value = time;
+  postMaterial.uniforms.uTime.value = time;
+  postMaterial.uniforms.uBloom.value = ease(postMaterial.uniforms.uBloom.value, 1, .06);
+
+  galaxy.rotation.y += .0005;
+  galaxy.rotation.z += .00005;
+  stars.rotation.y -= .00002;
+  fogGroup.rotation.y += .00012;
+  fogGroup.rotation.z = Math.sin(time * .05) * .05;
+
+  scene.rotation.x = ease(scene.rotation.x, state.pointer.y, .02);
+  scene.rotation.y = ease(scene.rotation.y, state.pointer.x, .02);
+
+  camera.position.x = Math.cos(time * .1) * 1250;
+  camera.position.z = Math.sin(time * .1) * 1250;
+  camera.position.y = Math.sin(time * .07) * 200 + 420;
+  camera.lookAt(0, 0, 0);
+
+  const r = .5 + .5 * Math.sin(time * .18);
+  const g = .5 + .5 * Math.sin(time * .18 + 2.09);
+  const b = .5 + .5 * Math.sin(time * .18 + 4.18);
+  scene.fog.color.setRGB(.012 + r * .05, .012 + g * .05, .025 + b * .06);
+
+  core.scale.lerp(TARGET_SCALE, .045);
+  voidCore.scale.lerp(TARGET_SCALE, .05);
+
+  renderer.setRenderTarget(renderTarget);
+  renderer.render(scene, camera);
+  renderer.setRenderTarget(null);
+  renderer.render(postScene, postCamera);
+}
+
+animate();
+
+addEventListener('resize', () => {
+  const w = innerWidth;
+  const h = innerHeight;
+  
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  
+  renderer.setSize(w, h);
+  renderTarget.setSize(w, h);
+  
+  postMaterial.uniforms.uResolution.value.set(w, h);
+  galaxyMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+  starMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+});
+</script>
+</body>
+</html>
