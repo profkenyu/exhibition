@@ -126,6 +126,14 @@ h1:hover{
     letter-spacing:.22em; text-transform:uppercase;
     pointer-events:none;
 }
+#hint{
+    position:fixed; bottom:24px; left:24px;
+    z-index:500; pointer-events:none;
+    font-size:10px; color:rgba(255,255,255,.48);
+    letter-spacing:.04em;
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:300;
+}
 #fixed-top-left{
     position:fixed; top:16px; left:22px;
     z-index:99999; pointer-events:auto;
@@ -261,6 +269,7 @@ h1:hover{
 <div id="progress"></div>
 <div id="nav-dots"></div>
 <div id="museum"></div>
+<div id="hint">* 작품의 타이틀을 클릭하세요</div>
 
 <div id="fixed-top-left">
     <a href="all/index.html" id="all-works-btn">List</a>
