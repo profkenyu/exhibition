@@ -59,6 +59,12 @@ canvas{
     font-size:12px; letter-spacing:.28em;
     margin-bottom:16px; text-transform:uppercase;
 }
+.title-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
 h1{
     font-size:clamp(40px,6vw,90px);
     line-height:1.02; font-weight:300; letter-spacing:-.04em;
@@ -68,6 +74,28 @@ h1{
 }
 h1:hover{
     color:var(--accent);
+}
+.btn-cinematic {
+    font-size: 10px;
+    color: rgba(255,255,255,.8);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 4px 10px;
+    background: rgba(2,3,5,0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+    line-height: 1;
+    border-radius: 3px;
+    display: inline-block;
+}
+.btn-cinematic:hover {
+    color: black;
+    background: white;
+    border-color: white;
 }
 .poetic{
     margin-top:24px;
@@ -179,6 +207,8 @@ h1:hover{
 @media(max-width:768px){
     .scene{ align-items:center; padding:36px; }
     h1{ font-size:44px; }
+    .title-container { gap: 10px; }
+    .btn-cinematic { font-size: 8px; padding: 3px 7px; }
     .poetic{ font-size:18px; }
     #nav-dots{ display:none; }
     #fixed-top-left{ top:16px; left:16px; }
@@ -247,13 +277,17 @@ document.getElementById('enterBtn').addEventListener('click', () => {
 const museum  = document.getElementById('museum');
 const navDots = document.getElementById('nav-dots');
 
+// 1. 동적 엘리먼트 생성 (Cinematic 버튼 <h1> 우측 래핑 구조 반영)
 works.forEach((w, index) => {
     const section = document.createElement('section');
     section.className = 'scene';
     section.innerHTML = `
         <div class="content">
             <div class="scene-id">${w.id}</div>
-            <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
+            <div class="title-container">
+                <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
+                <a href="../index.html" class="btn-cinematic">Cinematic</a>
+            </div>
             <div class="poetic">${w.poetic}</div>
             <div class="desc">${w.desc}</div>
             <div class="meta">
@@ -271,17 +305,29 @@ works.forEach((w, index) => {
     navDots.appendChild(dot);
 });
 
+// ★ [해결책 적용] 상세페이지 진입 후 뒤로 가기 시 스크롤 위치 즉각 복원
+const savedScrollTop = sessionStorage.getItem('museum_scroll_pos');
+if (savedScrollTop) {
+    requestAnimationFrame(() => {
+        museum.scrollTop = parseInt(savedScrollTop, 10);
+    });
+}
+
 const dots     = document.querySelectorAll('.dot');
 const progress = document.getElementById('progress');
 
+// 2. 스크롤 위치 추적 리스너
 museum.addEventListener('scroll', () => {
     const idx = Math.round(museum.scrollTop / window.innerHeight);
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
     const pct = (museum.scrollTop / (museum.scrollHeight - window.innerHeight)) * 100;
     progress.style.height = pct + '%';
+
+    // ★ [해결책 적용] 사용자의 최신 스크롤 위치 좌표를 세션에 실시간 기록
+    sessionStorage.setItem('museum_scroll_pos', museum.scrollTop);
 });
 
-// 타이틀 클릭 시 트랜지션 및 페이지 이동 처리
+// 3. 타이틀 클릭 시 트랜지션 및 페이지 이동 처리
 document.querySelectorAll('.title-link').forEach(btn => {
     btn.addEventListener('click', e => {
         const file  = btn.dataset.file;
@@ -291,6 +337,7 @@ document.querySelectorAll('.title-link').forEach(btn => {
     });
 });
 
+// 배경 스페이스 캔버스 애니메이션 엔진
 const bgCanvas = document.getElementById('space');
 const bgCtx    = bgCanvas.getContext('2d');
 let bW, bH;
