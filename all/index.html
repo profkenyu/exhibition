@@ -48,6 +48,17 @@ header {
   justify-content:space-between;
   gap: 24px;
 }
+.h-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 header h1 {
   font-family: 'Futura-Bold', Futura, 'Trebuchet MS', Arial, sans-serif;
   font-weight:700;
@@ -55,6 +66,26 @@ header h1 {
   line-height:1.2;
   letter-spacing:-0.02em;
   color:var(--text-main);
+}
+.btn-cinematic {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--text-main);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--text-main);
+  padding: 3px 8px;
+  background: transparent;
+  transition: all 0.2s ease-in-out;
+  font-weight: 400;
+  border-radius: 2px;
+  line-height: 1;
+  display: inline-block;
+}
+.btn-cinematic:hover {
+  color: #ffffff;
+  background: var(--text-main);
 }
 .h-left .sub {
   margin-top:10px;
@@ -190,6 +221,8 @@ footer {
 @media (max-width: 640px) {
   footer { flex-direction:column; align-items:flex-start; gap:6px; }
   .h-right .count { font-size: 28px; }
+  header { align-items: flex-start; }
+  .title-area { gap: 8px; }
 }
 </style>
 </head>
@@ -198,7 +231,10 @@ footer {
 <div class="shell">
 <header>
 <div class="h-left">
+<div class="title-area">
 <h1>2026: a digital odyssey</h1>
+<a href="../index.html" class="btn-cinematic">Cinematic</a>
+</div>
 <p class="sub">Kim Gunwoo 19th Exhibition — Equations of the Abyss</p>
 </div>
 <div class="h-right">
@@ -253,7 +289,7 @@ footer {
 <span class="card-title">Quantum Singularity</span>
 </div>
 <div class="card-formula">θ = p·2π/137.507 · r = √p×12  ·  3,000 primes · 400,000 pts · GLSL Gravity Lens</div>
-<div class="card-desc">황금각(137.5°)과 페르마 나선 구조를 바탕으로 정렬된 입자들이 중심의 특이점을 에워싸고 전개된다. 시스템 시간이 소수 시점에 도달할 때마다 공간의 형태가 비선형적으로 도약하며 자연의 불규칙한 리듬을 소수 알고리즘으로 변조한다. <span class="card-interaction">Touch · Drag · Spatial Distortion</span></div>
+<div class="card-desc">황금각(137.5°)하고 페르마 나선 구조를 바탕으로 정렬된 입자들이 중심의 특이점을 에워싸고 전개된다. 시스템 시간이 소수 시점에 도달할 때마다 공간의 형태가 비선형적으로 도약하며 자연의 불규칙한 리듬을 소수 알고리즘으로 변조한다. <span class="card-interaction">Touch · Drag · Spatial Distortion</span></div>
 <div class="card-footer">
 <span class="tag">Three.js</span>
 <span class="tag">GLSL Shader</span>
@@ -292,7 +328,7 @@ footer {
 <span class="card-title">Lambert Nebula: Archive</span>
 </div>
 <div class="card-formula">W₀ × W₋₁  ·  6-Cluster Deep Field, 120,000 pts · AdditiveBlending</div>
-<div class="card-desc">디지털 스크린이 빛을 표현하는 근본 법칙인 가산 혼합(Additive Blending)을 시각화한 아카이브 공간이다. 픽셀และ 입자가 중첩될수록 광도가 기하급수적으로 증가하며 중심 광원을 클릭하면 연산 공간 전체가 비선형적으로 팽창한다. <span class="card-interaction">Mouse Rotate · Core Expansion</span></div>
+<div class="card-desc">디지털 스크린이 빛을 표현하는 근본 법칙인 가산 혼합(Additive Blending)을 시각화한 아카이브 공간이다. 픽셀 입자가 중첩될수록 광도가 기하급수적으로 증가하며 중심 광원을 클릭하면 연산 공간 전체가 비선형적으로 팽창한다. <span class="card-interaction">Mouse Rotate · Core Expansion</span></div>
 <div class="card-footer">
 <span class="tag">Three.js</span>
 <span class="tag">Multi-Cluster</span>
@@ -384,7 +420,7 @@ footer {
 <span class="card-title">Black Hole Voyage</span>
 </div>
 <div class="card-formula">Δθ ∝ e<sup>-r/260.0</sup> · SlitScan(x=108→145) · Entropy Collapse · Cycle = 180s</div>
-<div class="card-desc">Web Audio API 신시사이저 엔진과 WebGL 입자 그래픽이 결합된 전시의 클라이맥스 작품이다. 오디오의 증폭값과 주파수가 공간의 붕괴 메커니즘을 직접 트리거하며, 마우스 이동은 사운드의 피치 변조와 입자 왜곡을 동기화한다. <span class="card-interaction">Audio · Spatial Collapse</span></div>
+<div class="card-desc">Web Audio API 신시사이저 엔진하고 WebGL 입자 그래픽이 결합된 전시의 클라이맥스 작품이다. 오디오의 증폭값과 주파수가 공간의 붕괴 메커니즘을 직접 트리거하며, 마우스 이동은 사운드의 피치 변조와 입자 왜곡을 동기화한다. <span class="card-interaction">Audio · Spatial Collapse</span></div>
 <div class="card-footer">
 <span class="tag">Three.js</span>
 <span class="tag">Slit-Scan</span>
