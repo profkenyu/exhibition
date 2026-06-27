@@ -59,12 +59,6 @@ canvas{
     font-size:12px; letter-spacing:.28em;
     margin-bottom:16px; text-transform:uppercase;
 }
-.title-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-}
 h1{
     font-size:clamp(40px,6vw,90px);
     line-height:1.02; font-weight:300; letter-spacing:-.04em;
@@ -74,28 +68,6 @@ h1{
 }
 h1:hover{
     color:var(--accent);
-}
-.btn-cinematic {
-    font-size: 10px;
-    color: rgba(255,255,255,.8);
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,.3);
-    padding: 4px 10px;
-    background: rgba(2,3,5,0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: all 0.2s ease-in-out;
-    font-weight: 500;
-    line-height: 1;
-    border-radius: 3px;
-    display: inline-block;
-}
-.btn-cinematic:hover {
-    color: black;
-    background: white;
-    border-color: white;
 }
 .poetic{
     margin-top:24px;
@@ -178,7 +150,12 @@ h1:hover{
     display:flex; align-items:center; justify-content:center;
     transition:opacity 2s ease;
 }
-#opening.hidden{ opacity:0; pointer-events:none; }
+#opening.hidden{
+    opacity:0;
+    pointer-events:none;
+    /* visibility hidden 추가 — 완전히 숨겨야 클릭 통과 */
+    visibility:hidden;
+}
 .open-inner{ text-align:center; }
 .open-inner h2{
     font-size:clamp(40px,7vw,100px);
@@ -207,8 +184,6 @@ h1:hover{
 @media(max-width:768px){
     .scene{ align-items:center; padding:36px; }
     h1{ font-size:44px; }
-    .title-container { gap: 10px; }
-    .btn-cinematic { font-size: 8px; padding: 3px 7px; }
     .poetic{ font-size:18px; }
     #nav-dots{ display:none; }
     #fixed-top-left{ top:16px; left:16px; }
@@ -261,33 +236,38 @@ const works = [
   { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그. ds² = −(1−rs/ρ²)dt² + 포톤 링 필라멘트",                          file:"15-Epilogue.html",          tags:["Kerr","Plasma","Epilogue"] }
 ];
 
-const hasEntered = sessionStorage.getItem('odyssey_entered');
-const opening    = document.getElementById('opening');
+// ─── opening 처리 ──────────────────────────────────────────────
+const opening = document.getElementById('opening');
 
-if (hasEntered) {
+// sessionStorage로 이미 입장했으면 opening 즉시 숨김
+if (sessionStorage.getItem('odyssey_entered')) {
     opening.style.transition = 'none';
+    opening.style.opacity    = '0';
+    opening.style.visibility = 'hidden';
+    opening.style.pointerEvents = 'none';
     opening.classList.add('hidden');
 }
 
 document.getElementById('enterBtn').addEventListener('click', () => {
     sessionStorage.setItem('odyssey_entered', '1');
     opening.classList.add('hidden');
+    // transition 후 visibility도 숨김
+    setTimeout(() => {
+        opening.style.visibility = 'hidden';
+    }, 2100);
 });
 
+// ─── museum 빌드 ───────────────────────────────────────────────
 const museum  = document.getElementById('museum');
 const navDots = document.getElementById('nav-dots');
 
-// 1. 동적 엘리먼트 생성
 works.forEach((w, index) => {
     const section = document.createElement('section');
     section.className = 'scene';
     section.innerHTML = `
         <div class="content">
             <div class="scene-id">${w.id}</div>
-            <div class="title-container">
-                <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
-                <a href="../index.html" class="btn-cinematic">Cinematic</a>
-            </div>
+            <h1 class="title-link" data-file="${w.file}">${w.title}</h1>
             <div class="poetic">${w.poetic}</div>
             <div class="desc">${w.desc}</div>
             <div class="meta">
@@ -305,44 +285,21 @@ works.forEach((w, index) => {
     navDots.appendChild(dot);
 });
 
-// [수정] 모바일 BFCache 및 동적 스크롤 복원 타이밍 안정화 구조화
-function restoreScrollPosition() {
-    const savedScrollTop = sessionStorage.getItem('museum_scroll_pos');
-    if (savedScrollTop) {
-        // DOM 렌더링 및 모바일 브라우저 뷰포트 연산 여유 시간을 확보하기 위한 비동기 딜레이 적용
-        setTimeout(() => {
-            museum.scrollTop = parseInt(savedScrollTop, 10);
-        }, 80); 
-    }
-}
-
-// 최초 로드 시 실행
-restoreScrollPosition();
-
-// 모바일 브라우저의 뒤로가기(BFCache) 활성화 감지 리스너 추가
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        restoreScrollPosition();
-    }
-});
-
 const dots     = document.querySelectorAll('.dot');
 const progress = document.getElementById('progress');
 
-// 2. 스크롤 위치 추적 리스너
 museum.addEventListener('scroll', () => {
     const idx = Math.round(museum.scrollTop / window.innerHeight);
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-    const pct = (museum.scrollTop / (museum.scrollHeight - window.innerHeight)) * 100;
+    const pct = museum.scrollHeight > window.innerHeight
+        ? (museum.scrollTop / (museum.scrollHeight - window.innerHeight)) * 100
+        : 0;
     progress.style.height = pct + '%';
-
-    // 사용자의 최신 스크롤 위치 좌표를 세션에 실시간 기록
-    sessionStorage.setItem('museum_scroll_pos', museum.scrollTop);
 });
 
-// 3. 타이틀 클릭 시 트랜지션 및 페이지 이동 처리
+// 타이틀 클릭 — 트랜지션 후 이동
 document.querySelectorAll('.title-link').forEach(btn => {
-    btn.addEventListener('click', e => {
+    btn.addEventListener('click', () => {
         const file  = btn.dataset.file;
         const layer = document.getElementById('transition-layer');
         layer.classList.add('active');
@@ -350,21 +307,20 @@ document.querySelectorAll('.title-link').forEach(btn => {
     });
 });
 
-// 배경 스페이스 캔버스 애니메이션 엔진
+// ─── 배경 Canvas ──────────────────────────────────────────────
 const bgCanvas = document.getElementById('space');
 const bgCtx    = bgCanvas.getContext('2d');
-let bW, bH;
+let bW, bH, bgRafId = null;
 
 function resizeBg() {
     bW = bgCanvas.width  = window.innerWidth;
     bH = bgCanvas.height = window.innerHeight;
 }
 resizeBg();
-window.addEventListener('resize', resizeBg);
 
 const bgStars = Array.from({ length: 300 }, () => ({
-    x : Math.random() * bW,
-    y : Math.random() * bH,
+    x : Math.random() * (window.innerWidth  || 375),
+    y : Math.random() * (window.innerHeight || 812),
     r : Math.random() * 1.8,
     a : Math.random(),
     vx: (Math.random() - .5) * 0.04,
@@ -372,7 +328,9 @@ const bgStars = Array.from({ length: 300 }, () => ({
 }));
 
 let bgTime = 0;
+
 function renderBg() {
+    bgRafId = requestAnimationFrame(renderBg);
     bgCtx.clearRect(0, 0, bW, bH);
     bgTime += 0.003;
     const g = bgCtx.createRadialGradient(bW/2, bH/2, 0, bW/2, bH/2, bW * .7);
@@ -390,9 +348,69 @@ function renderBg() {
         bgCtx.fillStyle = `rgba(180,220,255,${alpha})`;
         bgCtx.fill();
     }
-    requestAnimationFrame(renderBg);
 }
 renderBg();
+
+window.addEventListener('resize', () => {
+    resizeBg();
+    // 별 위치가 화면 밖으로 나가지 않도록 재클램프
+    for (const s of bgStars) {
+        if (s.x > bW) s.x = Math.random() * bW;
+        if (s.y > bH) s.y = Math.random() * bH;
+    }
+});
+
+// ─── bfcache 복원 핸들러 (핵심 수정) ─────────────────────────
+// 모바일에서 history.back() 으로 돌아오면 pageshow가 persisted=true로 발화.
+// 이때 canvas loop가 멈춰 있으므로 재시작하고, opening 상태도 재확인한다.
+window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+        // 1) canvas 루프 재시작
+        if (bgRafId) cancelAnimationFrame(bgRafId);
+        resizeBg();
+        renderBg();
+
+        // 2) transition-layer 초기화 (이전 페이지 이동 후 남은 잔상)
+        const layer = document.getElementById('transition-layer');
+        layer.classList.remove('active');
+        layer.style.opacity = '0';
+
+        // 3) opening 재확인 — sessionStorage 있으면 확실히 숨김
+        if (sessionStorage.getItem('odyssey_entered')) {
+            opening.style.transition = 'none';
+            opening.style.opacity    = '0';
+            opening.style.visibility = 'hidden';
+            opening.style.pointerEvents = 'none';
+            opening.classList.add('hidden');
+        }
+
+        // 4) museum scroll 강제 갱신 (스냅 복원)
+        const scrollTop = museum.scrollTop;
+        museum.scrollTop = scrollTop + 1;
+        museum.scrollTop = scrollTop;
+    }
+});
+
+// ─── pagehide: bfcache 진입 전 RAF 정지 ─────────────────────
+// 일부 브라우저에서 bfcache에 들어갈 때 RAF가 살아있으면 복원이 불안정.
+window.addEventListener('pagehide', () => {
+    if (bgRafId) {
+        cancelAnimationFrame(bgRafId);
+        bgRafId = null;
+    }
+});
+
+// visibilitychange로도 보완 (탭 전환 후 복귀 포함)
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        if (!bgRafId) renderBg();
+    } else {
+        if (bgRafId) {
+            cancelAnimationFrame(bgRafId);
+            bgRafId = null;
+        }
+    }
+});
 </script>
 </body>
 </html>
