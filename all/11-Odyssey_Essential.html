@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Act V, Scene 1.</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#000}
+canvas{display:block}
+#title{position:fixed;top:24px;left:24px;color:rgba(255,255,255,.75);letter-spacing:.25em;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;pointer-events:none;z-index:10;right:120px}
+#title span{display:block;font-size:28px;font-weight:200;margin-bottom:6px;color:#fff}
+#back-btn{position:fixed;top:24px;right:24px;color:rgba(255,255,255,.5);text-decoration:none;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:8px 16px;border-radius:4px;z-index:10;transition:all .3s ease}
+#back-btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#back-btn{top:20px;right:20px;padding:6px 12px;font-size:10px}}
+</style>
+</head>
+<body>
+<div id="title">
+<span>ODYSSEY: ESSENTIAL</span>
+v(r) = 35.0 / r &nbsp;·&nbsp; Photon Ring &amp; Relativistic Drift &nbsp;·&nbsp; Autonomous Camera Orbit
+</div>
+<a href="index.html" id="back-btn">BACK</a>
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x000000,0.00035);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.1,80000);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+const blackHole=new THREE.Mesh(new THREE.SphereGeometry(80,96,96),new THREE.MeshBasicMaterial({color:0x000000}));
+scene.add(blackHole);
+const photonRing=new THREE.Mesh(new THREE.TorusGeometry(135,6,24,320),new THREE.MeshBasicMaterial({color:0xfff2cf}));
+photonRing.rotation.x=Math.PI/2;
+scene.add(photonRing);
+const jetGeo=new THREE.CylinderGeometry(5,40,7000,16,1,true);
+const jetMat=new THREE.MeshBasicMaterial({color:0x88bbff,transparent:true,opacity:.15});
+const jet1=new THREE.Mesh(jetGeo,jetMat);const jet2=new THREE.Mesh(jetGeo,jetMat);
+jet1.position.y=3500;jet2.position.y=-3500;
+scene.add(jet1,jet2);
+const COUNT=320000;
+const pos=new Float32Array(COUNT*3);
+const info=new Float32Array(COUNT*3);
+for(let i=0;i<COUNT;i++){
+const r=180+Math.pow(Math.random(),1.8)*3500;const t=Math.random()*Math.PI*2;
+pos[i*3]=Math.cos(t)*r;pos[i*3+1]=(Math.random()-0.5)*(r*0.07);pos[i*3+2]=Math.sin(t)*r;
+info[i*3]=r;info[i*3+1]=t;info[i*3+2]=Math.random();
+}
+const geo=new THREE.BufferGeometry();
+geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+geo.setAttribute("aInfo",new THREE.BufferAttribute(info,3));
+const mat=new THREE.ShaderMaterial({
+transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+uniforms:{uTime:{value:0}},
+vertexShader:`attribute vec3 aInfo;uniform float uTime;varying vec3 vColor;void main(){float r=aInfo.x;float theta=aInfo.y+(35.0/r)*uTime;vec3 p;p.x=cos(theta)*r;p.z=sin(theta)*r;float warp=exp(-r/500.0);p.y=sin(theta*4.0+uTime)*r*0.015;p*=1.0-(warp*0.08*sin(uTime*2.0));vec4 mv=modelViewMatrix*vec4(p,1.0);if(r<500.0)vColor=vec3(1.0,0.95,0.85);else if(r<1500.0)vColor=vec3(1.0,0.45,0.12);else vColor=vec3(0.2,0.45,1.0);gl_Position=projectionMatrix*mv;gl_PointSize=max(1.2,3200.0/(-mv.z));}`,
+fragmentShader:`varying vec3 vColor;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float a=smoothstep(.5,.0,d);gl_FragColor=vec4(vColor,a*0.75);}`
+});
+scene.add(new THREE.Points(geo,mat));
+const stars=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({size:2}));
+const sCount=60000;
+const sPos=new Float32Array(sCount*3);
+for(let i=0;i<sCount;i++){
+const r=12000+Math.random()*25000;const a=Math.random()*Math.PI*2;const b=Math.acos(Math.random()*2-1);
+sPos[i*3]=r*Math.sin(b)*Math.cos(a);sPos[i*3+1]=r*Math.cos(b);sPos[i*3+2]=r*Math.sin(b)*Math.sin(a);
+}
+stars.geometry.setAttribute("position",new THREE.BufferAttribute(sPos,3));
+scene.add(stars);
+const clock=new THREE.Clock();
+function animate(){
+requestAnimationFrame(animate);
+const t=clock.getElapsedTime();
+mat.uniforms.uTime.value=t;
+photonRing.rotation.z=t*0.5;
+const orbit=700+Math.sin(t*0.12)*450;const angle=t*0.22;
+camera.position.set(Math.cos(angle)*orbit,Math.sin(t*0.18)*150,Math.sin(angle)*orbit);
+const focus=20+Math.sin(t*0.35)*50;
+camera.lookAt(focus,0,0);
+renderer.render(scene,camera);
+}
+animate();
+addEventListener("resize",()=>{
+camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+</body>
+</html>

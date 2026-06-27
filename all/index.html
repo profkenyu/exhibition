@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>김건우교수 제 19회 개인전</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg-main: #f9f9fb;
+  --text-main: #111115;
+  --text-muted: #767680;
+  --text-light: #76778b;
+  --red-accent: #ce0909;
+  --cyan-accent: #0891b2;
+  --line-color: #e5e5ea;
+  --tag-bg: #f0f0f4;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%;
+  overflow:hidden;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:'DM Mono', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+#bg {
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+.shell {
+  position:relative;
+  z-index:1;
+  width:100%; height:100vh;
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 0 clamp(24px,5vw,80px);
+}
+
+header {
+  padding-top: clamp(36px,5vh,72px);
+  padding-bottom: clamp(18px,2.5vh,36px);
+  border-bottom: 1px solid var(--line-color);
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 24px;
+}
+.h-left h1 {
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight:500;
+  font-size: clamp(20px,2.2vw,34px);
+  line-height:1.2;
+  letter-spacing:-0.02em;
+  color:var(--text-main);
+}
+.h-left .sub {
+  margin-top:10px;
+  font-size: clamp(9px,0.75vw,11px);
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.h-right {
+  text-align:right;
+  flex-shrink:0;
+}
+.h-right .count {
+  font-size: clamp(28px,3.5vw,52px);
+  font-weight:300;
+  color: var(--red-accent);
+  letter-spacing:-0.03em;
+  line-height:1;
+}
+.h-right .count-label {
+  margin-top:4px;
+  font-size: clamp(8px,0.7vw,10px);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+
+.grid-wrap {
+  position:relative;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-top: clamp(24px,3.5vh,52px);
+  padding-bottom: clamp(60px,8vh,120px);
+  scrollbar-width:none;
+}
+.grid-wrap::-webkit-scrollbar { display:none; }
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: clamp(0px,0vw,0px) clamp(24px,3vw,48px);
+}
+
+.card {
+  position:relative;
+  padding: clamp(18px,2.2vh,28px) 0;
+  border-bottom: 1px solid var(--line-color);
+  cursor:pointer;
+  text-decoration:none;
+  display:block;
+  transition: background 0.2s;
+}
+.card:last-child { border-bottom: none; }
+
+.card-header {
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:9px;
+}
+.card-index {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:.12em;
+  color: var(--red-accent);
+  font-variant-numeric: tabular-nums;
+  min-width: 22px;
+}
+.card-title {
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight:400;
+  font-size: clamp(14px,1.2vw,19px);
+  letter-spacing:-0.01em;
+  color:var(--text-main);
+  line-height:1.3;
+  transition: font-weight 0.2s ease;
+}
+.card:hover .card-title { font-weight: 700; }
+
+.card-formula {
+  font-family:'DM Mono', monospace;
+  font-size: clamp(10px,0.82vw,12px);
+  color: var(--cyan-accent);
+  letter-spacing:0.02em;
+  margin-bottom:8px;
+  font-style:italic;
+  line-height:1.5;
+}
+
+.card-desc {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size: clamp(9.5px, 0.8vw, 10.5px);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  margin-bottom: 11px;
+  word-break: keep-all;
+}
+
+.card-footer {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.tag {
+  font-family:'DM Mono', monospace;
+  font-size:8.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:2px 7px;
+  color:var(--text-light);
+  background:var(--tag-bg);
+  border-radius:2px;
+}
+.card-interaction {
+  display: block;
+  margin-top: 8px;
+  width: fit-content;
+  font-family:'DM Mono', monospace;
+  font-size:8.5px;
+  letter-spacing:.04em;
+  color:#ffffff;
+  background: #a0a8bc;
+  padding:2px 8px;
+  border-radius:2px;
+}
+
+footer {
+  border-top:1px solid var(--line-color);
+  padding: clamp(16px,2.5vh,26px) 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:9.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+@media (max-width: 640px) {
+  footer { flex-direction:column; align-items:flex-start; gap:6px; }
+  .h-right .count { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="shell">
+<header>
+<div class="h-left">
+<h1>2026: a digital odyssey</h1>
+<p class="sub">2026: A DIGITAL ODYSSEY — Equations of the Abyss</p>
+</div>
+<div class="h-right">
+<div class="count">15</div>
+<div class="count-label">Interactive Works</div>
+</div>
+</header>
+<div class="grid-wrap">
+<div class="grid">
+<!-- 01 -->
+<a class="card" href="01-Freeshow.html">
+<div class="card-header">
+<span class="card-index">Freeshow.</span>
+<span class="card-title">RGB Galaxy Engine</span>
+</div>
+<div class="card-formula">r = √i×1.6 · θ = i×0.013 + arm×2π/3  ·  3-Arm · GLSL Bloom · Chromatic Aberration</div>
+<div class="card-desc">세 개의 나선 팔이 회전하며 형성하는 은하계 구조를 시각화한 작품이다. 100,000개 이상의 입자가 페르마 나선 방정식을 따라 정밀하게 배치되며, 배경의 색온도는 삼각함수 주기에 맞춰 유기적으로 변화한다. 관람자의 마우스 이동은 우주의 중력축으로 치환된다. <span class="card-interaction">Mouse Move · Galaxy Rotation</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">GLSL Post FX</span>
+<span class="tag">Bloom · Chromatic · FBM Fog</span>
+</div>
+</a>
+<!-- 02 -->
+<a class="card" href="02-Prologue.html">
+<div class="card-header">
+<span class="card-index">Prologue.</span>
+<span class="card-title">Hyperbolic Nebula</span>
+</div>
+<div class="card-formula">z = sinh(u)·cosh(v) − tanh(r)  ·  55,000 pts · GLSL FBM Noise</div>
+<div class="card-desc">자연계의 구름, 해안선, 산의 윤곽을 형성하는 수학적 구조인 분형 브라운 운동(fBm) 알고리즘을 활용하여 생성된 성운이다. 층층이 중첩된 노이즈 파동이 가스 성운의 유동적 흐름을 연출한다. 관람자의 개입 없이 공간은 스스로 흐르고 연산한다. <span class="card-interaction">Autonomous Flow</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Hyperbolic Functions</span>
+<span class="tag">GLSL FBM</span>
+</div>
+</a>
+<!-- 03 -->
+<a class="card" href="03-Riemann_dream.html">
+<div class="card-header">
+<span class="card-index">Act I, Scene 1.</span>
+<span class="card-title">Riemann Dreams</span>
+</div>
+<div class="card-formula">θ = i×0.045 + sin(p)×2 · r = √i×0.55 + p×0.08  ·  300 primes · 60,000 pts</div>
+<div class="card-desc">수학계의 대난제인 리만 가설(Riemann Hypothesis)의 수학적 격자 구조를 시각적 공간으로 은유한 인터랙티브 작품이다. 리만 제타 함수의 해를 기반으로 배치된 수만 개의 입자들은 관람자의 마우스 이동이나 기기의 기울임에 반응하여 중력장이 휘어지듯 새로운 파동의 궤적을 형성한다. <span class="card-interaction">Mouse · Gyro · Gravity Wave</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Prime Phase</span>
+<span class="tag">N-Body Field</span>
+</div>
+</a>
+<!-- 04 -->
+<a class="card" href="04-Quantum_sing.html">
+<div class="card-header">
+<span class="card-index">Act I, Scene 2.</span>
+<span class="card-title">Quantum Singularity</span>
+</div>
+<div class="card-formula">θ = p·2π/137.507 · r = √p×12  ·  3,000 primes · 400,000 pts · GLSL Gravity Lens</div>
+<div class="card-desc">황금각(137.5°)과 페르마 나선 구조를 바탕으로 정렬된 입자들이 중심의 특이점을 에워싸고 전개된다. 시스템 시간이 소수 시점에 도달할 때마다 공간의 형태가 비선형적으로 도약하며 자연의 불규칙한 리듬을 소수 알고리즘으로 변조한다. <span class="card-interaction">Touch · Drag · Spatial Distortion</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">GLSL Shader</span>
+<span class="tag">Prime · Golden Angle</span>
+</div>
+</a>
+<!-- 05 -->
+<a class="card" href="05-Dual_Galaxy.html">
+<div class="card-header">
+<span class="card-index">Act II.</span>
+<span class="card-title">Dual Galaxy</span>
+</div>
+<div class="card-formula">r = √i · θ = i×0.013 + arm×2π/2  ·  2-Arm Spiral, 120,000 pts</div>
+<div class="card-desc">쌍성계 시스템처럼 두 개의 나선 은하가 180도 대칭을 이루며 상호 공전하는 구조를 연출한다. 관람자가 화면을 클릭하는 순간 은하 중심부의 블랙홀이 급격히 팽창하며 중력 임계 상태를 시각화한다. 두 개의 중력장은 서로를 변형시키며 새로운 질서를 생성한다. <span class="card-interaction">Mouse Move · Click Trigger</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Spiral Arms</span>
+<span class="tag">Black Hole</span>
+</div>
+</a>
+<!-- 06 -->
+<a class="card" href="06-Lambert_Essential.html">
+<div class="card-header">
+<span class="card-index">Act III, Scene 1.</span>
+<span class="card-title">Lambert Nebula: Essential</span>
+</div>
+<div class="card-formula">W₀(x) · FogExp2(density=0.0025)  ·  Mobile 45K / Desktop 95K pts</div>
+<div class="card-desc">물리학에서 이상적인 확산 반사를 기술하는 램버트 반사 모델을 성운의 광학 구조로 번역한 공간이다. 15,000개의 별 입자가 배경을 형성하는 가운데 성운 자체는 순방향으로, 배경은 역방향으로 자전하며 다층적인 공간감과 시간의 깊이를 생성한다. <span class="card-interaction">Inertia Camera Move</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Lambert W₀</span>
+<span class="tag">Responsive</span>
+</div>
+</a>
+<!-- 07 -->
+<a class="card" href="07-Lambert_Archive.html">
+<div class="card-header">
+<span class="card-index">Act III, Scene 2.</span>
+<span class="card-title">Lambert Nebula: Archive</span>
+</div>
+<div class="card-formula">W₀ × W₋₁  ·  6-Cluster Deep Field, 120,000 pts · AdditiveBlending</div>
+<div class="card-desc">디지털 스크린이 빛을 표현하는 근본 법칙인 가산 혼합(Additive Blending)을 시각화한 아카이브 공간이다. 픽셀과 입자가 중첩될수록 광도가 기하급수적으로 증가하며 중심 광원을 클릭하면 연산 공간 전체가 비선형적으로 팽창한다. <span class="card-interaction">Mouse Rotate · Core Expansion</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Multi-Cluster</span>
+<span class="tag">Deep Field</span>
+</div>
+</a>
+<!-- 08 -->
+<a class="card" href="08-Lambert_nebu.html">
+<div class="card-header">
+<span class="card-index">Act III, Scene 3.</span>
+<span class="card-title">Lambert Nebula</span>
+</div>
+<div class="card-formula">W₀(x) ∪ W₋₁(x)  ·  Audio-Reactive Input &amp; Branch Isolation, 60,000 pts</div>
+<div class="card-desc">Web Audio API를 이용한 실시간 오디오 주파수 분석 데이터가 3차원 비주얼 공간과 동기화되는 공감각적 작품이다. 저음역은 카메라 공전 반지름을 변조하고 고음역은 입자의 파동 변위를 실시간으로 제어한다. <span class="card-interaction">Audio Reactive · Mouse Sync</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">W₀ · W₋₁ Isolation</span>
+<span class="tag">Audio Analysis</span>
+<span class="tag">Additive Blending</span>
+</div>
+</a>
+<!-- 09 -->
+<a class="card" href="09-Bessel_bloom.html">
+<div class="card-header">
+<span class="card-index">Act IV, Scene 1.</span>
+<span class="card-title">Bessel Bloom</span>
+</div>
+<div class="card-formula">J₀(x) ≈ √(2/πx)·cos(x−π/4)  ·  z = Σ J₀(dₙ·0.7 − 3t), 12,000 pts</div>
+<div class="card-desc">원통형 파동의 전파를 기술하는 특수함수인 제1종 베셀 함수를 기반으로 구현된 간섭지대이다. 여러 개의 가상 진원지들이 서로 교차하고 충돌하면서 계산된 빛과 색의 간섭 패턴을 실시간으로 생성한다. <span class="card-interaction">Wave Interference</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Bessel J₀</span>
+<span class="tag">Wave Interference</span>
+</div>
+</a>
+<!-- 10 -->
+<a class="card" href="10-Lorenz_butt.html">
+<div class="card-header">
+<span class="card-index">Act IV, Scene 2.</span>
+<span class="card-title">Lorenz Butterfly Garden</span>
+</div>
+<div class="card-formula">ẋ = σ(y−x) · ẏ = x(ρ−z)−y · ż = xy−βz  ·  σ=10, ρ=28, β=8/3</div>
+<div class="card-desc">기상 예측의 비선형적 한계를 증명한 로렌즈 카오스 방정식을 브라우저 환경에서 실시간 수치 해석으로 구동한다. 수천 개의 결정론적 입자들은 서로 충돌하지 않으면서도 예측 불가능한 카오스 구조를 형성한다. <span class="card-interaction">Autonomous Chaos System</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Lorenz Attractor</span>
+<span class="tag">ODE · Euler Method</span>
+</div>
+</a>
+<!-- 11 -->
+<a class="card" href="11-Odyssey_Essential.html">
+<div class="card-header">
+<span class="card-index">Act V, Scene 1.</span>
+<span class="card-title">Odyssey: Essential</span>
+</div>
+<div class="card-formula">v(r) = 35.0 / r  ·  Photon Ring &amp; Relativistic Drift · 320,000 pts</div>
+<div class="card-desc">60,000개의 성간 입자와 배경의 별들을 구면 좌표계 알고리즘을 통해 3차원 우주 공간에 배치한 작품이다. 관람자 시점으로부터의 거리를 연산하여 입자마다 서로 다른 색과 광도를 실시간 셰이더 렌더링으로 부여한다. <span class="card-interaction">Touch · Orbit Control</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Photon Ring</span>
+<span class="tag">Relativistic Drift</span>
+</div>
+</a>
+<!-- 12 -->
+<a class="card" href="12-Odyssey_Archive.html">
+<div class="card-header">
+<span class="card-index">Act V, Scene 2.</span>
+<span class="card-title">Odyssey: Archive</span>
+</div>
+<div class="card-formula">R<sub>s</sub> = 2GM / c<sup>2</sup>  ·  Kerr Drift: Δθ ∝ exp(-r/450) · 420,000 pts</div>
+<div class="card-desc">90,000개의 파티클 시스템과 함께 구체 메시를 뒤집어 우주 전체를 감싸는 성운 돔을 구축한 확장형 아카이브 공간이다. 마우스의 가속도에 비례하여 스타필드의 자전 관성이 유기적으로 조율된다. <span class="card-interaction">Inertia Orbit · Rotation Boost</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Kerr Metric</span>
+<span class="tag">Einstein Ring</span>
+</div>
+</a>
+<!-- 13 -->
+<a class="card" href="13-Event_Horizon.html">
+<div class="card-header">
+<span class="card-index">Act V, Scene 3.</span>
+<span class="card-title">Event Horizon</span>
+</div>
+<div class="card-formula">ω ∝ r<sup>−3/2</sup>  ·  Keplerian Rotation &amp; Gravitational Lensing · 150,000 pts</div>
+<div class="card-desc">슈바르츠실트 계량(Schwarzschild Metric)을 기반으로 블랙홀 주변의 중력 렌즈와 광자 궤도 굴절을 구현했다. 지평선에 가까워질수록 화면 전체에 적색 임계 신호가 증폭되며 관람자는 사건의 지평선 경계에 접근하게 된다. <span class="card-interaction">Black Hole Orbit Flight</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Keplerian Disk</span>
+<span class="tag">Post-FX Lens</span>
+</div>
+</a>
+<!-- 14 -->
+<a class="card" href="14-Black_Voyage.html">
+<div class="card-header">
+<span class="card-index">Act VI.</span>
+<span class="card-title">Black Hole Voyage</span>
+</div>
+<div class="card-formula">Δθ ∝ e<sup>-r/260.0</sup> · SlitScan(x=108→145) · Entropy Collapse · Cycle = 180s</div>
+<div class="card-desc">Web Audio API 신시사이저 엔진과 WebGL 입자 그래픽이 결합된 전시의 클라이맥스 작품이다. 오디오의 증폭값과 주파수가 공간의 붕괴 메커니즘을 직접 트리거하며, 마우스 이동은 사운드의 피치 변조와 입자 왜곡을 동기화한다. <span class="card-interaction">Audio · Spatial Collapse</span></div>
+<div class="card-footer">
+<span class="tag">Three.js</span>
+<span class="tag">Slit-Scan</span>
+<span class="tag">Entropy Collapse</span>
+</div>
+</a>
+<!-- 15 -->
+<a class="card" href="15-Epilogue.html">
+<div class="card-header">
+<span class="card-index">Epilogue.</span>
+<span class="card-title">Kerr Plasma Cathedral</span>
+</div>
+<div class="card-formula">ds² = -(1 - r_s r/ρ²)dt² - (2r_s r a sin²θ/ρ²)dtdϕ + ...  ·  Audio Reactive Raymarching</div>
+<div class="card-desc">회전하는 블랙홀 주변의 시공간 왜곡을 기술하는 커르 계량(Kerr Metric)의 수학적 개념을 공간적으로 해제한 에필로그 작품이다. 관람자의 드래그 움직임과 오디오의 저음·고음 주파수가 파티클의 발광과 잔존 관성을 최종 조율한다. <span class="card-interaction">Drag · Audio Dissolution</span></div>
+<div class="card-footer">
+<span class="tag">WebGL</span>
+<span class="tag">Kerr Metric</span>
+<span class="tag">Raymarching</span>
+<span class="tag">Web Audio API</span>
+</div>
+</a>
+</div>
+</div>
+<footer>
+<span>PROF. KIM GUNWOO — 19TH SOLO EXHIBITION</span>
+<span class="tech-spec">Equations of the Abyss</span>
+<span>2026 Summer Opening</span>
+</footer>
+</div>
+<script>
+const bg = document.getElementById('bg');
+const bx = bg.getContext('2d');
+let bw, bh;
+
+function resizeBg() {
+  bw = bg.width  = window.innerWidth;
+  bh = bg.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
+
+const pts = Array.from({length: 70}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  vx: (Math.random() - .5) * .10,
+  vy: (Math.random() - .5) * .10,
+  r: Math.random() * 1.2 + .3,
+  a: Math.random()
+}));
+
+let bt = 0;
+function drawBg() {
+  bx.clearRect(0, 0, bw, bh);
+  bt += .004;
+  for (const p of pts) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = bw;
+    if (p.x > bw) p.x = 0;
+    if (p.y < 0) p.y = bh;
+    if (p.y > bh) p.y = 0;
+    const alpha = .04 + .025 * Math.sin(bt + p.a * 4);
+    bx.beginPath();
+    bx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    bx.fillStyle = `rgba(192,21,42,${alpha})`;
+    bx.fill();
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+</script>
+</body>
+</html>

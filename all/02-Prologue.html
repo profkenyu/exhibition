@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prologue.</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#010206;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+canvas{display:block}
+#title{position:fixed;top:24px;left:24px;color:rgba(255,255,255,.75);letter-spacing:.25em;font-size:12px;pointer-events:none;z-index:10;right:120px}
+#title span{display:block;font-size:28px;font-weight:200;margin-bottom:6px}
+#back-btn{position:fixed;top:24px;right:24px;color:rgba(255,255,255,.5);text-decoration:none;font-size:12px;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:8px 16px;border-radius:4px;transition:all .3s ease;z-index:10}
+#back-btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#back-btn{top:20px;right:20px;padding:6px 12px;font-size:10px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+<div id="title">
+    <span>Prologue: HYPERBOLIC NEBULA</span>
+    z = sinh(u)·cosh(v) − tanh(r) &nbsp;·&nbsp;Move Mouse · Parallax Camera</div>
+<a href="index.html" id="back-btn">BACK</a>
+<script>
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x010206,0.015);
+const camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,2000);
+camera.position.set(0,0,30);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+const sinh=x=>(Math.exp(x)-Math.exp(-x))/2,cosh=x=>(Math.exp(x)+Math.exp(-x))/2,tanh=x=>sinh(x)/cosh(x);
+const geo=new THREE.BufferGeometry();
+const N=55000;
+const pos=new Float32Array(N*3);
+const col=new Float32Array(N*3);
+for(let i=0;i<N;i++){
+let u=(Math.random()-0.5)*9.0,v=(Math.random()-0.5)*9.0,r=Math.sqrt(u*u+v*v);
+let z=(sinh(u*0.6)*0.12*cosh(v*0.45))-(tanh(r)*1.4);
+let theta=Math.atan2(v,u),spiral=theta*3.0+r*1.1;
+pos[i*3]=(u+Math.cos(spiral)*z)*4.2;pos[i*3+1]=(v+Math.sin(spiral)*z)*4.2;pos[i*3+2]=z*12.0;
+col[i*3]=0.5+0.5*Math.sin(z*1.8);col[i*3+1]=0.5+0.5*Math.sin(r*1.2+2.8);col[i*3+2]=0.5+0.5*Math.sin(theta*3.0+5.1);
+}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+const cloud=new THREE.Points(geo,new THREE.PointsMaterial({size:0.08,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(cloud);
+const nebulaGeo=new THREE.SphereGeometry(60,64,64);
+const nebulaMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,uniforms:{time:{value:0}},
+vertexShader:`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+fragmentShader:`uniform float time;varying vec3 vPos;
+float hash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float noise(vec3 p){vec3 i=floor(p);vec3 f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(mix(hash(i+vec3(0,0,0)),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+void main(){vec3 p=vPos*0.04;float n=0.0;n+=noise(p+time*0.035);n+=0.5*noise(p*2.0-time*0.02);n+=0.25*noise(p*4.0);vec3 c=vec3(0.35+0.65*sin(n*6.2831),0.35+0.65*sin(n*6.2831+2.094),0.35+0.65*sin(n*6.2831+4.188));float alpha=pow(n,3.0)*0.1;gl_FragColor=vec4(c,alpha);}`});
+const nebula=new THREE.Mesh(nebulaGeo,nebulaMat);scene.add(nebula);
+let tx=0,ty=0;addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-0.5)*1.5;ty=(e.clientY/innerHeight-0.5)*1.5;});
+let t=0;function animate(){requestAnimationFrame(animate);t+=0.003;nebulaMat.uniforms.time.value=t;cloud.rotation.y+=0.0015;cloud.rotation.z+=0.0006;nebula.rotation.y-=0.0004;nebula.rotation.x+=0.0001;camera.position.x+=(tx*10-camera.position.x)*0.03;camera.position.y+=(-ty*8-camera.position.y)*0.03;camera.lookAt(0,0,0);renderer.render(scene,camera);}animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+</script>
+</body>
+</html>

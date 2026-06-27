@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Act IV, Scene 2.</title>
+<style>
+html,body{
+    margin:0;
+    overflow:hidden;
+    background:#02030a;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+}
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    z-index:10;
+    right:120px;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 16px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #title {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #title span {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #title {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    #back-btn {
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="title">
+<span>LORENZ BUTTERFLY</span>
+ẋ = σ(y−x) · ẏ = x(ρ−z)−y · ż = xy−βz &nbsp;·&nbsp; σ=10, ρ=28, β=8/3 · Click
+</div>
+
+<a href="index.html" id="back-btn">BACK</a>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 1000);
+camera.position.set(0,20,80);
+
+const renderer=new THREE.WebGLRenderer({ antialias:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+let sigma=10;
+let rho=28;
+let beta=8/3;
+
+const COUNT=4000;
+const positions=new Float32Array(COUNT*3);
+const colors=new Float32Array(COUNT*3);
+const particles=[];
+
+function seedParticle(){
+    return{
+        x:(Math.random()-0.5)*2,
+        y:(Math.random()-0.5)*2,
+        z:(Math.random()-0.5)*2,
+        life:300+Math.random()*500
+    };
+}
+
+for(let i=0;i<COUNT;i++){
+    particles.push(seedParticle());
+}
+
+const geo=new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const mat=new THREE.PointsMaterial({
+    size:0.35,
+    vertexColors:true,
+    transparent:true,
+    opacity:0.9,
+    blending: THREE.AdditiveBlending
+});
+
+const cloud=new THREE.Points(geo, mat);
+scene.add(cloud);
+
+const seeds=[];
+window.addEventListener('pointerdown', e=>{
+    if(e.target.id === 'back-btn') return;
+    const mx=(e.clientX/innerWidth-.5)*20;
+    const my=-(e.clientY/innerHeight-.5)*20;
+    seeds.push({ x:mx, y:my, life:1 });
+    if(seeds.length>8){
+        seeds.shift();
+    }
+    rho=36;
+});
+
+let t=0;
+function animate(){
+    requestAnimationFrame(animate);
+    t+=0.01;
+    rho += (28-rho)*0.01;
+
+    for(let i=0;i<COUNT;i++){
+        let p=particles[i];
+        const dt=0.006;
+        const dx=sigma*(p.y-p.x);
+        const dy=p.x*(rho-p.z)-p.y;
+        const dz=p.x*p.y-beta*p.z;
+
+        p.x+=dx*dt;
+        p.y+=dy*dt;
+        p.z+=dz*dt;
+        p.life--;
+
+        if(p.life<0 || Math.abs(p.x)>40 || Math.abs(p.y)>40 || Math.abs(p.z)>40){
+            particles[i]=seedParticle();
+            p=particles[i];
+        }
+
+        for(let s of seeds){
+            const vx=s.x-p.x*0.2;
+            const vy=s.y-p.y*0.2;
+            p.x+=vx*0.0005*s.life;
+            p.y+=vy*0.0005*s.life;
+        }
+
+        const k=i*3;
+        positions[k]=p.x*1.5;
+        positions[k+1]=p.z-25;
+        positions[k+2]=p.y*1.5;
+
+        const c=Math.sin(t+p.x*0.1);
+        colors[k]=0.15+0.2*(c+1)/2;
+        colors[k+1]=0.4+0.6*(Math.sin(t*0.5+p.y*0.1)+1)/2;
+        colors[k+2]=0.6+0.4*(Math.sin(t*0.3+p.z*0.1)+1)/2;
+    }
+
+    for(let i=seeds.length-1;i>=0;i--){
+        seeds[i].life*=0.992;
+        if(seeds[i].life<0.02){
+            seeds.splice(i,1);
+        }
+    }
+
+    geo.attributes.position.needsUpdate=true;
+    geo.attributes.color.needsUpdate=true;
+
+    camera.position.x=Math.sin(t*0.15)*70;
+    camera.position.z=Math.cos(t*0.15)*70;
+    camera.position.y=15+Math.sin(t*0.08)*12;
+    camera.lookAt(0,0,0);
+
+    cloud.rotation.y+=0.0005;
+    renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize', ()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
