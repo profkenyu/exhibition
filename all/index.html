@@ -68,25 +68,63 @@ header h1 {
   font-kerning: normal;
   color:var(--text-main);
 }
-.btn-cinematic {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  color: var(--text-main);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid var(--text-main);
-  padding: 3px 8px;
-  background: transparent;
-  transition: all 0.2s ease-in-out;
-  font-weight: 400;
-  border-radius: 2px;
-  line-height: 1;
-  display: inline-block;
+/* ── Mode Toggle Pill ── */
+#mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(17,17,21,.18);
+  border-radius: 3px;
+  background: rgba(249,249,251,0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  flex-shrink: 0;
 }
-.btn-cinematic:hover {
-  color: #ffffff;
-  background: var(--text-main);
+#mode-toggle .m-btn {
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: 'DM Mono', 'Noto Sans KR', sans-serif;
+  padding: 5px 11px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(17,17,21,.32);
+  transition: all .25s ease-in-out;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+#mode-toggle .m-btn.active {
+  background: rgba(17,17,21,.9);
+  color: #f9f9fb;
+  border-radius: 2px;
+}
+#mode-toggle .m-btn:not(.active):hover {
+  color: rgba(17,17,21,.65);
+}
+#mode-toggle .m-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: .7;
+}
+#mode-toggle .m-btn.active .m-dot {
+  background: #c0152a;
+  opacity: 1;
+}
+#mode-toggle .m-divider {
+  width: 1px; height: 13px;
+  background: rgba(17,17,21,.1);
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  #mode-toggle .m-btn { padding: 4px 8px; font-size: 7px; letter-spacing: .1em; }
 }
 .h-left .sub {
   margin-top:10px;
@@ -234,7 +272,11 @@ footer {
 <div class="h-left">
 <div class="title-area">
 <h1>2026: a digital odyssey</h1>
-<a href="../index.html" class="btn-cinematic">Cinematic Mode</a>
+<div id="mode-toggle">
+  <a href="../index.html" class="m-btn" id="btn-cinematic"><span class="m-dot"></span>Cinematic</a>
+  <div class="m-divider"></div>
+  <span class="m-btn active" id="btn-archive"><span class="m-dot"></span>Archive</span>
+</div>
 </div>
 <p class="sub">Kim Gunwoo 19th Exhibition — Equations of the Abyss</p>
 </div>
