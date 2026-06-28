@@ -76,12 +76,28 @@ h1{
     font-weight:700;
     letter-spacing:-.03em;
     cursor:pointer;
-    display:inline-block;
+    display:inline-flex; /* 내부 역삼각형 정렬을 위한 inline-flex 처리 */
+    align-items:center;
     transition:color 0.3s ease;
 }
 h1:hover{
     color:var(--accent);
 }
+
+/* ── 작품 타이틀 옆 폰트 높이 30% 크기의 역삼각형 추가 ── */
+h1::after {
+    content: "";
+    display: inline-block;
+    /* 폰트 높이(em) 기준 30% 비례 구조 */
+    width: 0.3em;
+    height: 0.3em;
+    margin-left: 0.25em; /* 글자와의 여백 */
+    background-color: currentColor; /* 글자색 변동 시 함께 동기화 */
+    /* 완벽한 비율의 역삼각형 클리핑 기하학 */
+    clip-path: polygon(0% 15%, 100% 15%, 50% 85%);
+    flex-shrink: 0;
+}
+
 .poetic{
     margin-top:14px;
     font-size:clamp(15px,1.6vw,24px);
@@ -240,7 +256,6 @@ h1:hover{
 #opening.hidden{
     opacity:0;
     pointer-events:none;
-    /* visibility hidden 추가 — 완전히 숨겨야 클릭 통과 */
     visibility:hidden;
 }
 .open-inner{ text-align:center; margin-bottom:22vh; }
@@ -258,19 +273,45 @@ h1:hover{
     margin-top:26px; color:rgba(255,255,255,.5);
     letter-spacing:.3em; text-transform:uppercase; font-size:12px;
 }
-#enterBtn{
-    margin-top:60px; padding:8px 20px;
-    background:#9a9a9a;
-    border:none;
-    color:#111; cursor:pointer;
-    letter-spacing:.22em; text-transform:uppercase;
-    transition:all .35s ease;
-    font-size:10px; font-family:'Inter','Noto Sans KR',sans-serif;
-    font-weight:500;
+
+/* ── 변경된 DEPART 역삼각형 버튼 스타일 ── */
+#enterBtn {
+    margin-top: 50px;
+    width: 90px;
+    height: 78px;
+    background: #9a9a9a;
+    border: none;
+    color: #111;
+    cursor: pointer;
+    
+    /* 정삼각형에 가까운 역삼각형 클리핑 처리 (가로 100%, 세로 100% 기준 하단 중앙 꼭지점) */
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    
+    /* 텍스트 세부 정렬 및 폰트 사이즈 하향 조정 */
+    font-size: 8.5px; 
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    font-weight: 600;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    text-indent: 0.25em; /* 글자 자간 배치 중앙 정렬 보정 */
+    
+    /* 내부 텍스트가 역삼각형 위쪽 넓은 영역에 배치되도록 패딩 조정 */
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    
+    transition: all .35s cubic-bezier(0.25, 1, 0.5, 1);
 }
-#enterBtn:hover{ background:#b8b8b8; color:#000; }
+
+#enterBtn:hover {
+    background: #e0e0e0;
+    color: #000;
+    transform: translateY(4px); /* 호버 시 침강하는 듯한 인터랙션 */
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
+}
+
 @media(max-width:768px){
-    /* dvh 사용: 모바일 브라우저 주소창 높이를 제외한 실제 뷰포트 */
     #museum{ height:100dvh; }
     .scene{
         height:100dvh;
@@ -313,6 +354,13 @@ h1:hover{
     #mode-toggle{
         backdrop-filter:none;
         -webkit-backdrop-filter:none;
+    }
+    /* 모바일 환경 대응 버튼 스케일 */
+    #enterBtn {
+        width: 80px;
+        height: 69px;
+        font-size: 7.5px;
+        padding-top: 18px;
     }
 }
 
@@ -380,7 +428,6 @@ const works = [
 // ─── opening 처리 ──────────────────────────────────────────────
 const opening = document.getElementById('opening');
 
-// sessionStorage로 이미 입장했으면 opening 즉시 숨김
 if (sessionStorage.getItem('odyssey_entered')) {
     opening.style.transition = 'none';
     opening.style.opacity    = '0';
@@ -392,7 +439,6 @@ if (sessionStorage.getItem('odyssey_entered')) {
 document.getElementById('enterBtn').addEventListener('click', () => {
     sessionStorage.setItem('odyssey_entered', '1');
     opening.classList.add('hidden');
-    // transition 후 visibility도 숨김
     setTimeout(() => {
         opening.style.visibility = 'hidden';
     }, 2100);
@@ -450,7 +496,6 @@ window.addEventListener('resize', () => {
     if (!uiScrollRaf) uiScrollRaf = requestAnimationFrame(updateScrollUI);
 });
 
-// 타이틀 클릭 — 트랜지션 후 이동
 document.querySelectorAll('.title-link').forEach(btn => {
     btn.addEventListener('click', () => {
         const file  = btn.dataset.file;
@@ -480,7 +525,6 @@ document.querySelectorAll('.title-link').forEach(btn => {
           || canvas.getContext('experimental-webgl', glOptions);
     let bgRafId = null;
 
-    // ── Fallback to 2D if no WebGL ──
     if (!gl) {
         const ctx = canvas.getContext('2d');
         let W = canvas.width = window.innerWidth, H = canvas.height = window.innerHeight;
@@ -507,24 +551,17 @@ document.querySelectorAll('.title-link').forEach(btn => {
         return;
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // VERTEX SHADER — fullscreen quad
-    // ─────────────────────────────────────────────────────────────
     const VS = `
 attribute vec2 a_pos;
 void main(){ gl_Position = vec4(a_pos,0.,1.); }
 `;
 
-    // ─────────────────────────────────────────────────────────────
-    // FRAGMENT SHADER — volumetric nebula + star field
-    // ─────────────────────────────────────────────────────────────
     const FS = `
 precision highp float;
 uniform vec2  u_res;
 uniform float u_time;
-uniform float u_scroll; // 0..1 normalised scroll
+uniform float u_scroll;
 
-// ── Hash / Noise ──────────────────────────────────────────────
 float hash(vec2 p){
     p = fract(p * vec2(127.1, 311.7));
     p += dot(p, p + 19.19);
@@ -558,7 +595,6 @@ float noise3(vec3 p){
                mix(mix(e,ff,u.x),mix(g,h,u.x),u.y),u.z);
 }
 
-// ── Fractional Brownian Motion ─────────────────────────────────
 float fbm(vec2 p, int oct){
     float v=0., a=.5;
     mat2 rot = mat2(.8,.6,-.6,.8);
@@ -577,9 +613,7 @@ float fbm3(vec3 p, int oct){
     return v;
 }
 
-// ── Volumetric nebula layer ────────────────────────────────────
 vec3 nebula(vec2 uv, float t){
-    // Domain warping — two levels
     vec2 q = vec2(fbm(uv + vec2(.0,.0), 5),
                   fbm(uv + vec2(5.2,1.3), 5));
     vec2 r = vec2(fbm(uv + 4.*q + vec2(1.7,9.2) + .15*t, 6),
@@ -587,20 +621,17 @@ vec3 nebula(vec2 uv, float t){
     float f = fbm(uv + 4.*r, 7);
     f = clamp(f, 0., 1.);
 
-    // Colour mapping — deep space blues → crimson accent → pale cyan
     vec3 col = mix(vec3(.004,.008,.025), vec3(.03,.015,.05), clamp(f*2.,0.,1.));
     col = mix(col, vec3(.06,.025,.12), clamp(f*f*4.,0.,1.));
-    col = mix(col, vec3(.54,.04,.14), clamp(pow(f,3.)*8.,0.,1.)); // crimson core
-    col = mix(col, vec3(.55,.85,1.0), clamp(pow(f,4.)*15.,0.,1.)); // hot cyan
+    col = mix(col, vec3(.54,.04,.14), clamp(pow(f,3.)*8.,0.,1.));
+    col = mix(col, vec3(.55,.85,1.0), clamp(pow(f,4.)*15.,0.,1.));
 
-    // Volume density → glow
     float density = smoothstep(.38, .72, f);
     col *= .55 + density * .45;
 
     return col * (.3 + .7 * density);
 }
 
-// ── Star field (multi-scale) ───────────────────────────────────
 float stars(vec2 uv, float scale, float t){
     vec2 g = floor(uv * scale);
     vec2 f = fract(uv * scale) - .5;
@@ -614,7 +645,6 @@ float stars(vec2 uv, float scale, float t){
     return 0.;
 }
 
-// ── Volumetric dust lane (3D noise slice) ─────────────────────
 float dustLane(vec2 uv, float t){
     vec3 p = vec3(uv * vec2(.6,.9), t * .04);
     float d = fbm3(p, 5);
@@ -628,48 +658,37 @@ void main(){
     vec2 st = (uv - .5) * vec2(ar, 1.);
 
     float t = u_time * .06;
-
-    // Slow nebula drift
     vec2 drift = vec2(sin(t*.3)*.04, cos(t*.2)*.025);
 
-    // ── Primary nebula ──
     vec3 col = nebula(st * .9 + drift, t);
-
-    // ── Secondary nebula — offset for depth ──
     vec3 col2 = nebula(st * .65 + vec2(.8,-.3) + drift*.7, t*.8);
     col = col + col2 * .35;
 
-    // ── Dust lane overlay ──
     float dust = dustLane(st * .5 + drift * .5, u_time);
     col += vec3(.08,.04,.12) * dust * .7;
 
-    // ── Star field — three density layers ──
     float s1 = stars(uv + drift*.02, 60., u_time);
     float s2 = stars(uv * 1.5 + vec2(.17,.43) + drift*.015, 90., u_time + 1.7);
     float s3 = stars(uv * 2.3 + vec2(.83,.11) + drift*.008, 130., u_time + 3.3);
     vec3 starCol = vec3(.85,.93,1.) * s1
-                 + vec3(.98,.9,.75) * s2   // warm yellow-white
-                 + vec3(.75,.85,1.) * s3;  // cool blue
+                 + vec3(.98,.9,.75) * s2
+                 + vec3(.75,.85,1.) * s3;
     col += starCol * 1.2;
 
-    // ── Scroll-reactive brightness pulse ──
     float scrollFade = .82 + .18 * cos(u_scroll * 3.14159 * 2.);
     col *= scrollFade;
 
-    // ── Subtle radial vignette ──
     float vignette = 1. - dot(st * vec2(.55,.6), st * vec2(.55,.6));
     vignette = clamp(vignette, 0., 1.);
     col *= (.45 + .55 * vignette);
 
-    // ── Tone map (filmic) ──
     col = col / (col + .55);
-    col = pow(col, vec3(.88));          // mild gamma lift
+    col = pow(col, vec3(.88));
 
     gl_FragColor = vec4(col, 1.);
 }
 `;
 
-    // ── Compile shaders ──
     function compileShader(type, src) {
         const s = gl.createShader(type);
         gl.shaderSource(s, src);
@@ -692,7 +711,6 @@ void main(){
     }
     gl.useProgram(prog);
 
-    // ── Fullscreen quad ──
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
@@ -700,12 +718,10 @@ void main(){
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    // ── Uniform locations ──
     const uRes    = gl.getUniformLocation(prog, 'u_res');
     const uTime   = gl.getUniformLocation(prog, 'u_time');
     const uScroll = gl.getUniformLocation(prog, 'u_scroll');
 
-    // ── Resize ──
     function resize() {
         const dpr = lowPowerMode
             ? Math.min(window.devicePixelRatio || 1, 0.72)
@@ -718,7 +734,6 @@ void main(){
     }
     resize();
 
-    // ── Scroll reactive ──
     let scrollNorm = 0;
     const museumEl = document.getElementById('museum');
     if (museumEl) {
@@ -728,7 +743,6 @@ void main(){
         }, { passive: true });
     }
 
-    // ── Render loop ──
     const startTime = performance.now();
     const frameInterval = lowPowerMode ? 1000 / 24 : 1000 / 60;
     let lastFrame = 0;
@@ -745,7 +759,6 @@ void main(){
     }
     render();
 
-    // ── Lifecycle handlers ──
     window.addEventListener('resize', resize);
 
     window.addEventListener('pageshow', (e) => {
