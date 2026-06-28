@@ -364,7 +364,7 @@ h1::after {
     }
 }
 
-/* 태블릿 (769px – 1024px): 하단 safe area 보정 */
+/* 태블릿 (769px – 1024px): 세로모드 safe area 보정 */
 @media(min-width:769px) and (max-width:1024px){
     #museum{ height:100dvh; }
     .scene{
@@ -374,6 +374,81 @@ h1::after {
     }
     h1{ font-size:clamp(28px,4vw,48px); }
     .poetic{ font-size:clamp(16px,2.2vw,22px); }
+}
+
+/* ── 태블릿 / 모바일 가로모드 (landscape): 콘텐츠 하단 가림 방지 ── */
+@media(max-height:600px) and (orientation:landscape){
+    #museum{ height:100dvh; }
+    .scene{
+        height:100dvh;
+        /* 가로모드에서 상하 padding을 줄여 가시 영역 확보 */
+        align-items:flex-end;
+        padding:clamp(12px,2vw,32px) clamp(16px,4vw,64px);
+        padding-top:max(44px, calc(env(safe-area-inset-top) + 36px));
+        padding-bottom:max(24px, calc(env(safe-area-inset-bottom) + 18px));
+        /* 콘텐츠가 넘칠 경우 스크롤 허용 (snap은 section 단위로 유지) */
+        overflow-y:auto;
+    }
+    .content{
+        /* 세로 공간 부족 시 콘텐츠가 viewport 안에 수용되도록 */
+        max-width:min(680px, 60vw);
+        padding-bottom:4px;
+    }
+    /* scene-id: 콤팩트 */
+    .scene-id{
+        font-size:9px;
+        letter-spacing:.22em;
+        margin-bottom:6px;
+    }
+    /* 타이틀: landscape에서 vw 기준 font-size 재조정 */
+    h1{
+        font-size:clamp(17px,2.8vh,34px);
+        line-height:1.0;
+        letter-spacing:-.025em;
+    }
+    /* 시적 문구: 축약 */
+    .poetic{
+        font-size:clamp(12px,1.8vh,17px);
+        margin-top:6px;
+        line-height:1.4;
+    }
+    /* 설명: 한 줄 정도로 줄어드는 것 허용 */
+    .desc{
+        font-size:clamp(10px,1.4vh,13px);
+        margin-top:6px;
+        line-height:1.6;
+        max-width:520px;
+    }
+    /* 수식: 최소화 */
+    .formula{
+        font-size:clamp(9px,1.2vh,11px);
+        margin-top:5px;
+        line-height:1.45;
+    }
+    /* 태그 메타: 간격 축소 */
+    .meta{
+        margin-top:8px;
+        gap:5px;
+    }
+    .tag{
+        padding:4px 7px;
+        font-size:8.5px;
+    }
+    /* hint 레이블: 가로모드에서 화면 침범 최소화 */
+    #hint{
+        bottom:max(12px, calc(env(safe-area-inset-bottom) + 8px));
+        left:max(16px, calc(env(safe-area-inset-left) + 16px));
+        font-size:9px;
+    }
+    /* nav dots: 세로 간격 축소 */
+    #nav-dots{ gap:9px; }
+    .dot{ width:8px; height:8px; min-width:8px; min-height:8px; }
+    /* 상단 fixed header: 가로모드 safe-area 보정 */
+    #fixed-top-left{
+        top:max(12px, env(safe-area-inset-top));
+        left:max(14px, env(safe-area-inset-left));
+        right:max(50px, calc(env(safe-area-inset-right) + 14px));
+    }
 }
 </style>
 </head>
@@ -494,6 +569,12 @@ museum.addEventListener('scroll', () => {
 
 window.addEventListener('resize', () => {
     if (!uiScrollRaf) uiScrollRaf = requestAnimationFrame(updateScrollUI);
+    // 가로모드 전환 시 scroll snap 보정: 현재 슬라이드 유지
+    const viewportH = museum.clientHeight || window.innerHeight;
+    const currentIdx = Math.round(museum.scrollTop / viewportH);
+    requestAnimationFrame(() => {
+        museum.scrollTop = currentIdx * (museum.clientHeight || window.innerHeight);
+    });
 });
 
 document.querySelectorAll('.title-link').forEach(btn => {
@@ -510,9 +591,10 @@ document.querySelectorAll('.title-link').forEach(btn => {
     const canvas = document.getElementById('space');
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+    const isLandscapeShort = window.matchMedia('(max-height: 600px) and (orientation: landscape)').matches;
     const lowCoreCount = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
     const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 4;
-    const lowPowerMode = isAndroid || isMobileViewport || lowCoreCount || lowMemory;
+    const lowPowerMode = isAndroid || isMobileViewport || isLandscapeShort || lowCoreCount || lowMemory;
     const glOptions = {
         antialias: false,
         alpha: false,
