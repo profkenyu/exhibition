@@ -376,79 +376,70 @@ h1::after {
     .poetic{ font-size:clamp(16px,2.2vw,22px); }
 }
 
-/* ── 태블릿 / 모바일 가로모드 (landscape): 콘텐츠 하단 가림 방지 ── */
-@media(max-height:600px) and (orientation:landscape){
+/* ── 가로모드 공통 (태블릿 포함): 콘텐츠 하단 가림 완전 방지 ──
+   max-height:900px로 넓게 잡아 태블릿 가로(높이 ~600-900px)까지 포괄 */
+@media(orientation:landscape) and (max-height:900px){
     #museum{ height:100dvh; }
     .scene{
         height:100dvh;
-        /* 가로모드에서 상하 padding을 줄여 가시 영역 확보 */
-        align-items:flex-end;
-        padding:clamp(12px,2vw,32px) clamp(16px,4vw,64px);
-        padding-top:max(44px, calc(env(safe-area-inset-top) + 36px));
-        padding-bottom:max(24px, calc(env(safe-area-inset-bottom) + 18px));
-        /* 콘텐츠가 넘칠 경우 스크롤 허용 (snap은 section 단위로 유지) */
-        overflow-y:auto;
+        /* 핵심 변경: flex-end → flex-start
+           콘텐츠를 상단부터 배치하면 하단 잘림 원천 차단 */
+        align-items:flex-start;
+        justify-content:flex-start;
+        flex-direction:column;
+        padding:0;
+        padding-top:max(46px, calc(env(safe-area-inset-top) + 38px));
+        padding-left:clamp(20px,5vw,72px);
+        padding-right:clamp(56px,8vw,110px);
+        padding-bottom:max(18px, calc(env(safe-area-inset-bottom) + 14px));
+        overflow:hidden;
     }
+    /* content: 가용 높이 내에서 내부 스크롤 — 잘림 완전 방지 */
     .content{
-        /* 세로 공간 부족 시 콘텐츠가 viewport 안에 수용되도록 */
-        max-width:min(680px, 60vw);
-        padding-bottom:4px;
+        max-width:min(720px,68vw);
+        width:100%;
+        max-height:calc(
+            100dvh
+            - max(46px, calc(env(safe-area-inset-top) + 38px))
+            - max(18px, calc(env(safe-area-inset-bottom) + 14px))
+        );
+        overflow-y:auto;
+        overflow-x:hidden;
+        scrollbar-width:none;
+        padding-bottom:6px;
     }
-    /* scene-id: 콤팩트 */
-    .scene-id{
-        font-size:9px;
-        letter-spacing:.22em;
-        margin-bottom:6px;
+    .content::-webkit-scrollbar{ display:none; }
+    /* 그라디언트: 상단 방향으로 전환 */
+    .scene::before{
+        background:
+            linear-gradient(to bottom,
+                rgba(0,0,0,.82) 0%,
+                rgba(0,0,0,.14) 55%,
+                rgba(0,0,0,0) 100%);
     }
-    /* 타이틀: landscape에서 vw 기준 font-size 재조정 */
-    h1{
-        font-size:clamp(17px,2.8vh,34px);
-        line-height:1.0;
-        letter-spacing:-.025em;
-    }
-    /* 시적 문구: 축약 */
-    .poetic{
-        font-size:clamp(12px,1.8vh,17px);
-        margin-top:6px;
-        line-height:1.4;
-    }
-    /* 설명: 한 줄 정도로 줄어드는 것 허용 */
+    .scene-id{ font-size:9px; letter-spacing:.2em; margin-bottom:4px; }
+    h1{ font-size:clamp(15px,3vh,36px); line-height:1.02; letter-spacing:-.025em; }
+    .poetic{ font-size:clamp(11px,1.85vh,17px); margin-top:5px; line-height:1.36; }
     .desc{
-        font-size:clamp(10px,1.4vh,13px);
-        margin-top:6px;
-        line-height:1.6;
-        max-width:520px;
+        font-size:clamp(10px,1.5vh,13px);
+        margin-top:5px; line-height:1.52; max-width:100%;
     }
-    /* 수식: 최소화 */
-    .formula{
-        font-size:clamp(9px,1.2vh,11px);
-        margin-top:5px;
-        line-height:1.45;
-    }
-    /* 태그 메타: 간격 축소 */
-    .meta{
-        margin-top:8px;
-        gap:5px;
-    }
-    .tag{
-        padding:4px 7px;
-        font-size:8.5px;
-    }
-    /* hint 레이블: 가로모드에서 화면 침범 최소화 */
+    .formula{ font-size:clamp(9px,1.25vh,11px); margin-top:4px; line-height:1.38; }
+    .meta{ margin-top:7px; gap:4px; }
+    .tag{ padding:3px 7px; font-size:8.5px; letter-spacing:.1em; }
     #hint{
-        bottom:max(12px, calc(env(safe-area-inset-bottom) + 8px));
-        left:max(16px, calc(env(safe-area-inset-left) + 16px));
+        bottom:max(10px, calc(env(safe-area-inset-bottom) + 7px));
+        left:max(16px, calc(env(safe-area-inset-left) + 14px));
         font-size:9px;
     }
-    /* nav dots: 세로 간격 축소 */
-    #nav-dots{ gap:9px; }
+    #nav-dots{ right:max(12px, calc(env(safe-area-inset-right) + 10px)); gap:8px; }
     .dot{ width:8px; height:8px; min-width:8px; min-height:8px; }
-    /* 상단 fixed header: 가로모드 safe-area 보정 */
     #fixed-top-left{
-        top:max(12px, env(safe-area-inset-top));
+        top:max(10px, env(safe-area-inset-top));
         left:max(14px, env(safe-area-inset-left));
-        right:max(50px, calc(env(safe-area-inset-right) + 14px));
+        right:max(48px, calc(env(safe-area-inset-right) + 14px));
     }
+    #title-ui{ display:none; }
 }
 </style>
 </head>
