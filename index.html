@@ -76,8 +76,10 @@ h1{
     font-weight:700;
     letter-spacing:-.03em;
     cursor:pointer;
-    display:inline-flex; /* 내부 역삼각형 정렬을 위한 inline-flex 처리 */
+    display:flex; /* inline-flex → flex: 인라인 맥락 제거로 유령 언더라인 방지 */
     align-items:center;
+    width:fit-content; /* 블록이 되어도 콘텐츠 너비만 점유 */
+    text-decoration:none; /* 브라우저/WebKit 유령 언더라인 명시 차단 */
     transition:color 0.3s ease;
 }
 h1:hover{
@@ -417,16 +419,16 @@ h1::after {
                 rgba(0,0,0,.14) 55%,
                 rgba(0,0,0,0) 100%);
     }
-    .scene-id{ font-size:9px; letter-spacing:.2em; margin-bottom:4px; }
-    h1{ font-size:clamp(15px,3vh,36px); line-height:1.02; letter-spacing:-.025em; }
-    .poetic{ font-size:clamp(11px,1.85vh,17px); margin-top:5px; line-height:1.36; }
+    .scene-id{ font-size:10px; letter-spacing:.2em; margin-bottom:5px; }
+    h1{ font-size:clamp(19px,3.4vh,40px); line-height:1.02; letter-spacing:-.025em; }
+    .poetic{ font-size:clamp(13px,2.1vh,20px); margin-top:6px; line-height:1.4; }
     .desc{
-        font-size:clamp(10px,1.5vh,13px);
-        margin-top:5px; line-height:1.52; max-width:100%;
+        font-size:clamp(11.5px,1.65vh,14.5px);
+        margin-top:6px; line-height:1.56; max-width:100%;
     }
-    .formula{ font-size:clamp(9px,1.25vh,11px); margin-top:4px; line-height:1.38; }
-    .meta{ margin-top:7px; gap:4px; }
-    .tag{ padding:3px 7px; font-size:8.5px; letter-spacing:.1em; }
+    .formula{ font-size:clamp(10px,1.35vh,12.5px); margin-top:5px; line-height:1.42; }
+    .meta{ margin-top:8px; gap:5px; }
+    .tag{ padding:4px 8px; font-size:9px; letter-spacing:.1em; }
     #hint{
         bottom:max(10px, calc(env(safe-area-inset-bottom) + 7px));
         left:max(16px, calc(env(safe-area-inset-left) + 14px));
