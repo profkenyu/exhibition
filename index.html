@@ -55,7 +55,7 @@ canvas{
     content:"";
     position:absolute; inset:0;
     background:
-        linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.18) 55%, rgba(0,0,0,0) 100%);
+        linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.14) 55%, rgba(0,0,0,0) 100%);
     z-index:0;
 }
 .content{
@@ -415,8 +415,8 @@ h1::after {
     .scene::before{
         background:
             linear-gradient(to bottom,
-                rgba(0,0,0,.82) 0%,
-                rgba(0,0,0,.14) 55%,
+                rgba(0,0,0,.76) 0%,
+                rgba(0,0,0,.10) 55%,
                 rgba(0,0,0,0) 100%);
     }
     .scene-id{ font-size:10px; letter-spacing:.2em; margin-bottom:5px; }
@@ -487,10 +487,10 @@ const works = [
   { id:"Act IV, Scene 1.", title:"Bessel Bloom",              poetic:"파동은 충돌하며 꽃처럼 피어난다.",           desc:"베셀 함수 기반 파동 간섭 구조.",                                                                             formula:"J₀(x) ≈ √(2/πx) · cos(x − π/4) · z = Σ J₀(dₙ · 0.7 − 3t)",                               file:"09-Bessel_bloom.html",      tags:["Bessel Function","Wave Interference","Harmonic Propagation"] },
   { id:"Act IV, Scene 2.", title:"Lorenz Butterfly",          poetic:"카오스는 질서의 또 다른 이름이다.",          desc:"Lorenz attractor 기반 카오스 시뮬레이션.",                                                                   formula:"ẋ = σ(y − x) · ẏ = x(ρ − z) − y · ż = xy − βz",                                           file:"10-Lorenz_butt.html",       tags:["Lorenz Attractor","Chaotic Flow","Dynamical System"] },
   { id:"Act V, Scene 1.",  title:"Odyssey: Essential",        poetic:"별들은 관측자의 시점을 따라 이동한다.",       desc:"케플러 궤도 기반 블랙홀 강착 원반 시뮬레이션.",                                                              formula:"v(r) = 35.0 / r · Photon Ring",                                                              file:"11-Odyssey_Essential.html", tags:["Accretion Disk","Photon Ring","Relativistic Drift"] },
-  { id:"Act V, Scene 2.",  title:"Odyssey: Archive",          poetic:"기억된 우주가 끝없이 확장된다.",              desc:"슈바르츠실트-커 혼합 계량 기반 420,000 particle 우주 공간.",                                                 formula:"MRs = 2GM/c²",                                                                               file:"12-Odyssey_Archive.html",   tags:["Kerr Geometry","Particle Cosmos","Einstein Ring"] },
+  { id:"Act V, Scene 2.",  title:"Odyssey: Archive",          poetic:"기억된 우주가 끝없이 확장된다.",              desc:"슈바르츠실트-커 혼합 계량 기반 420,000 particle 우주 공간.",                                                 formula:"Rs = 2GM/c²",                                                                                file:"12-Odyssey_Archive.html",   tags:["Kerr Geometry","Particle Cosmos","Einstein Ring"] },
   { id:"Act V, Scene 3.",  title:"Event Horizon",             poetic:"빛조차 돌아오지 못하는 경계.",               desc:"케플러 회전 및 중력 렌즈 왜곡 기반 블랙홀 구조.",                                                           formula:"ω ∝ r⁻³ᐟ² · Drag to Drift Gaze",                                                            file:"13-Event_Horizon.html",     tags:["Schwarzschild Metric","Gravitational Lensing","Keplerian Orbit"] },
-  { id:"Act VI.",          title:"Black Hole Voyage",         poetic:"붕괴는 가장 거대한 음악이다.",               desc:"오디오 반응형 블랙홀 8악장 붕괴 시뮬레이션.",                                                               formula:"WebGL Raymarching · RK4 Geodesic",                                                           file:"14-Black_Voyage.html",      tags:["Entropy Collapse","Slit-Scan Space","Audio Singularity"] },
-  { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그.",                                                                 formula:"ds² = −(1 − rs/ρ²)dt² · 포톤 링 필라멘트",                                                  file:"15-Epilogue.html",          tags:["Kerr Metric","Volumetric Raymarching","Plasma Filament"] }
+  { id:"Act VI.",          title:"Black Hole Voyage",         poetic:"붕괴는 가장 거대한 음악이다.",               desc:"오디오 반응형 블랙홀 8악장 붕괴 시뮬레이션.",                                                               formula:"Δθ ∝ e<sup>-r/260.0</sup> · Cycle = 180s",                                                           file:"14-Black_Voyage.html",      tags:["Entropy Collapse","Slit-Scan Space","Audio Singularity"] },
+  { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그.",                                                                 formula:"ds² = −(1 − rs·r/ρ²)dt² · 포톤 링 필라멘트",                                                  file:"15-Epilogue.html",          tags:["Kerr Metric","Volumetric Raymarching","Plasma Filament"] }
 ];
 
 // ─── opening 처리 ──────────────────────────────────────────────
@@ -631,6 +631,14 @@ attribute vec2 a_pos;
 void main(){ gl_Position = vec4(a_pos,0.,1.); }
 `;
 
+    // ── 성능 최적화: 저사양 디바이스에서는 fbm 옥타브 수와 성운 레이어를 줄여
+    //    프래그먼트 셰이더 연산량을 절감한다. 고사양에서는 기존 품질 그대로 유지.
+    const oct1   = lowPowerMode ? 4 : 5;
+    const oct2   = lowPowerMode ? 4 : 6;
+    const oct3   = lowPowerMode ? 5 : 7;
+    const oct3d  = lowPowerMode ? 4 : 5;
+    const dualLayer = !lowPowerMode;
+
     const FS = `
 precision highp float;
 uniform vec2  u_res;
@@ -689,11 +697,11 @@ float fbm3(vec3 p, int oct){
 }
 
 vec3 nebula(vec2 uv, float t){
-    vec2 q = vec2(fbm(uv + vec2(.0,.0), 5),
-                  fbm(uv + vec2(5.2,1.3), 5));
-    vec2 r = vec2(fbm(uv + 4.*q + vec2(1.7,9.2) + .15*t, 6),
-                  fbm(uv + 4.*q + vec2(8.3,2.8) + .126*t, 6));
-    float f = fbm(uv + 4.*r, 7);
+    vec2 q = vec2(fbm(uv + vec2(.0,.0), ${oct1}),
+                  fbm(uv + vec2(5.2,1.3), ${oct1}));
+    vec2 r = vec2(fbm(uv + 4.*q + vec2(1.7,9.2) + .15*t, ${oct2}),
+                  fbm(uv + 4.*q + vec2(8.3,2.8) + .126*t, ${oct2}));
+    float f = fbm(uv + 4.*r, ${oct3});
     f = clamp(f, 0., 1.);
 
     vec3 col = mix(vec3(.004,.008,.025), vec3(.03,.015,.05), clamp(f*2.,0.,1.));
@@ -722,7 +730,7 @@ float stars(vec2 uv, float scale, float t){
 
 float dustLane(vec2 uv, float t){
     vec3 p = vec3(uv * vec2(.6,.9), t * .04);
-    float d = fbm3(p, 5);
+    float d = fbm3(p, ${oct3d});
     d = pow(clamp(d-.3, 0., 1.) * 1.7, 1.8);
     return d;
 }
@@ -736,15 +744,15 @@ void main(){
     vec2 drift = vec2(sin(t*.3)*.04, cos(t*.2)*.025);
 
     vec3 col = nebula(st * .9 + drift, t);
-    vec3 col2 = nebula(st * .65 + vec2(.8,-.3) + drift*.7, t*.8);
-    col = col + col2 * .35;
+    ${dualLayer ? `vec3 col2 = nebula(st * .65 + vec2(.8,-.3) + drift*.7, t*.8);
+    col = col + col2 * .35;` : ''}
 
     float dust = dustLane(st * .5 + drift * .5, u_time);
     col += vec3(.08,.04,.12) * dust * .7;
 
     float s1 = stars(uv + drift*.02, 60., u_time);
     float s2 = stars(uv * 1.5 + vec2(.17,.43) + drift*.015, 90., u_time + 1.7);
-    float s3 = stars(uv * 2.3 + vec2(.83,.11) + drift*.008, 130., u_time + 3.3);
+    ${dualLayer ? `float s3 = stars(uv * 2.3 + vec2(.83,.11) + drift*.008, 130., u_time + 3.3);` : 'float s3 = 0.;'}
     vec3 starCol = vec3(.85,.93,1.) * s1
                  + vec3(.98,.9,.75) * s2
                  + vec3(.75,.85,1.) * s3;
