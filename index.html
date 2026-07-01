@@ -22,7 +22,7 @@ html,body{
     color:var(--fg);
     font-family:'Inter','Noto Sans KR',sans-serif;
 }
-/* Helvetica / Univers Bold 폰트 스택 — 작품 타이틀 전용 */
+
 @font-face {
     font-family:'HelveticaNeue-Title';
     src: local('Helvetica Neue Bold'), local('HelveticaNeue-Bold'),
@@ -76,26 +76,26 @@ h1{
     font-weight:700;
     letter-spacing:-.03em;
     cursor:pointer;
-    display:flex; /* inline-flex → flex: 인라인 맥락 제거로 유령 언더라인 방지 */
+    display:flex; 
     align-items:center;
-    width:fit-content; /* 블록이 되어도 콘텐츠 너비만 점유 */
-    text-decoration:none; /* 브라우저/WebKit 유령 언더라인 명시 차단 */
+    width:fit-content; 
+    text-decoration:none; 
     transition:color 0.3s ease;
 }
 h1:hover{
     color:var(--accent);
 }
 
-/* ── 작품 타이틀 옆 폰트 높이 30% 크기의 역삼각형 추가 ── */
+
 h1::after {
     content: "";
     display: inline-block;
-    /* 폰트 높이(em) 기준 30% 비례 구조 */
+    
     width: 0.3em;
     height: 0.3em;
-    margin-left: 0.12em; /* 글자와의 여백 */
-    background-color: currentColor; /* 글자색 변동 시 함께 동기화 */
-    /* 완벽한 비율의 역삼각형 클리핑 기하학 */
+    margin-left: 0.12em; 
+    background-color: currentColor; 
+    
     clip-path: polygon(0% 15%, 100% 15%, 50% 85%);
     flex-shrink: 0;
 }
@@ -165,7 +165,7 @@ h1::after {
     align-items:center;
     gap:14px;
 }
-/* ── Mode Toggle Pill ── */
+
 #mode-toggle{
     display:inline-flex;
     align-items:center;
@@ -222,7 +222,7 @@ h1::after {
     flex-shrink:0;
 }
 
-/* 모바일: 타이틀 숨김 */
+
 #progress{
     position:fixed; top:0; left:0;
     width:2px; height:0;
@@ -276,7 +276,7 @@ h1::after {
     letter-spacing:.3em; text-transform:uppercase; font-size:12px;
 }
 
-/* ── 변경된 DEPART 역삼각형 버튼 스타일 ── */
+
 #enterBtn {
     margin-top: 50px;
     width: 90px;
@@ -286,18 +286,18 @@ h1::after {
     color: #111;
     cursor: pointer;
     
-    /* 정삼각형에 가까운 역삼각형 클리핑 처리 (가로 100%, 세로 100% 기준 하단 중앙 꼭지점) */
+    
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
     
-    /* 텍스트 세부 정렬 및 폰트 사이즈 하향 조정 */
+    
     font-size: 8.5px; 
     font-family: 'Inter', 'Noto Sans KR', sans-serif;
     font-weight: 600;
     letter-spacing: .25em;
     text-transform: uppercase;
-    text-indent: 0.25em; /* 글자 자간 배치 중앙 정렬 보정 */
+    text-indent: 0.25em; 
     
-    /* 내부 텍스트가 역삼각형 위쪽 넓은 영역에 배치되도록 패딩 조정 */
+    
     display: inline-flex;
     align-items: flex-start;
     justify-content: center;
@@ -309,7 +309,7 @@ h1::after {
 #enterBtn:hover {
     background: #e0e0e0;
     color: #000;
-    transform: translateY(4px); /* 호버 시 침강하는 듯한 인터랙션 */
+    transform: translateY(4px); 
     filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
 }
 
@@ -357,7 +357,7 @@ h1::after {
         backdrop-filter:none;
         -webkit-backdrop-filter:none;
     }
-    /* 모바일 환경 대응 버튼 스케일 */
+    
     #enterBtn {
         width: 80px;
         height: 69px;
@@ -366,7 +366,7 @@ h1::after {
     }
 }
 
-/* 태블릿 (769px – 1024px): 세로모드 safe area 보정 */
+
 @media(min-width:769px) and (max-width:1024px){
     #museum{ height:100dvh; }
     .scene{
@@ -378,14 +378,12 @@ h1::after {
     .poetic{ font-size:clamp(16px,2.2vw,22px); }
 }
 
-/* ── 가로모드 공통 (태블릿 포함): 콘텐츠 하단 가림 완전 방지 ──
-   max-height:900px로 넓게 잡아 태블릿 가로(높이 ~600-900px)까지 포괄 */
+
 @media(orientation:landscape) and (max-height:900px){
     #museum{ height:100dvh; }
     .scene{
         height:100dvh;
-        /* 핵심 변경: flex-end → flex-start
-           콘텐츠를 상단부터 배치하면 하단 잘림 원천 차단 */
+        
         align-items:flex-start;
         justify-content:flex-start;
         flex-direction:column;
@@ -396,7 +394,7 @@ h1::after {
         padding-bottom:max(18px, calc(env(safe-area-inset-bottom) + 14px));
         overflow:hidden;
     }
-    /* content: 가용 높이 내에서 내부 스크롤 — 잘림 완전 방지 */
+    
     .content{
         max-width:min(720px,68vw);
         width:100%;
@@ -411,7 +409,7 @@ h1::after {
         padding-bottom:6px;
     }
     .content::-webkit-scrollbar{ display:none; }
-    /* 그라디언트: 상단 방향으로 전환 */
+    
     .scene::before{
         background:
             linear-gradient(to bottom,
@@ -493,7 +491,7 @@ const works = [
   { id:"Epilogue.",        title:"Kerr Plasma Cathedral",     poetic:"모든 입자는 결국 침묵 속으로 사라진다.",     desc:"Kerr 계량 기반 플라즈마 레이마칭 에필로그.",                                                                 formula:"ds² = −(1 − rs·r/ρ²)dt² · 포톤 링 필라멘트",                                                  file:"15-Epilogue.html",          tags:["Kerr Metric","Volumetric Raymarching","Plasma Filament"] }
 ];
 
-// ─── opening 처리 ──────────────────────────────────────────────
+
 const opening = document.getElementById('opening');
 
 if (sessionStorage.getItem('odyssey_entered')) {
@@ -512,7 +510,7 @@ document.getElementById('enterBtn').addEventListener('click', () => {
     }, 2100);
 });
 
-// ─── museum 빌드 ───────────────────────────────────────────────
+
 const museum  = document.getElementById('museum');
 const navDots = document.getElementById('nav-dots');
 
@@ -562,7 +560,7 @@ museum.addEventListener('scroll', () => {
 
 window.addEventListener('resize', () => {
     if (!uiScrollRaf) uiScrollRaf = requestAnimationFrame(updateScrollUI);
-    // 가로모드 전환 시 scroll snap 보정: 현재 슬라이드 유지
+    
     const viewportH = museum.clientHeight || window.innerHeight;
     const currentIdx = Math.round(museum.scrollTop / viewportH);
     requestAnimationFrame(() => {
@@ -579,7 +577,7 @@ document.querySelectorAll('.title-link').forEach(btn => {
     });
 });
 
-// ─── WebGL Volumetric Nebula Background ───────────────────────
+
 (function() {
     const canvas = document.getElementById('space');
     const isAndroid = /Android/i.test(navigator.userAgent);
@@ -631,8 +629,8 @@ attribute vec2 a_pos;
 void main(){ gl_Position = vec4(a_pos,0.,1.); }
 `;
 
-    // ── 성능 최적화: 저사양 디바이스에서는 fbm 옥타브 수와 성운 레이어를 줄여
-    //    프래그먼트 셰이더 연산량을 절감한다. 고사양에서는 기존 품질 그대로 유지.
+    
+    
     const oct1   = lowPowerMode ? 4 : 5;
     const oct2   = lowPowerMode ? 4 : 6;
     const oct3   = lowPowerMode ? 5 : 7;

@@ -16,7 +16,7 @@ canvas{
     display:block;
 }
 
-/* HUD 인터페이스 구성 */
+
 #hud-container {
     position: fixed;
     top: 0;
@@ -53,7 +53,7 @@ canvas{
     letter-spacing: 0.15em;
 }
 
-/* 오디오 및 제어 통합 모니터 */
+
 #data-monitor {
     position: absolute;
     bottom: 30px;
@@ -94,7 +94,7 @@ canvas{
     animation: pulse 2s infinite ease-in-out;
 }
 
-/* 컨트롤 패널 그룹화 */
+
 #control-panel {
     position: absolute;
     top: 30px;
@@ -225,14 +225,14 @@ function Wm1(x){
     return w;
 }
 
-// 60,000 입자 생성 및 분지 정보 할당을 위한 별도 배열 구성
+
 const COUNT = 60000;
 const geo = new THREE.BufferGeometry();
 const pos = new Float32Array(COUNT*3);
 const col = new Float32Array(COUNT*3);
 
-// 셰이더 대신 정적 투명도 제어가 용이하도록 커스텀 속성 배열 정의
-const branchType = new Uint8Array(COUNT); // 0: W0, 1: Wm1
+
+const branchType = new Uint8Array(COUNT); 
 const defaultAlpha = new Float32Array(COUNT);
 
 for(let i=0;i<COUNT;i++){
@@ -273,7 +273,7 @@ for(let i=0;i<COUNT;i++){
 geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
 geo.setAttribute('color', new THREE.BufferAttribute(col,3));
 
-// 입자의 투명도 동적 제어를 위해 버퍼 컬러에 알파 채널 정보 혼합 구조 대신 세련된 PointsMaterial 구조 유지 및 로직 추가
+
 const mat = new THREE.PointsMaterial({
     size:.35,
     vertexColors:true,
@@ -291,7 +291,7 @@ const core = new THREE.Mesh(
 );
 scene.add(core);
 
-// --- 1번 오디오 반응형 시스템 (Web Audio API 통합) ---
+
 let audioContext, analyser, dataArray;
 let isAudioActive = false;
 let bass = 0, mid = 0, high = 0;
@@ -303,7 +303,7 @@ const valHigh = document.getElementById('val-high');
 audioBtn.addEventListener('click', async () => {
     if (!isAudioActive) {
         try {
-            // 마이크 및 오디오 스트림 획득
+            
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
@@ -318,7 +318,7 @@ audioBtn.addEventListener('click', async () => {
             isAudioActive = true;
             audioBtn.innerText = "AUDIO INPUT: ON";
             audioBtn.classList.add('active');
-            document.getElementById('guide-overlay').innerText = "[ AUDIO ACTIVE - MAKE SOUND TO DISTORTE NEBULA ]";
+            document.getElementById('guide-overlay').innerText = "[ AUDIO ACTIVE - MAKE SOUND TO DISTORT NEBULA ]";
         } catch (err) {
             alert("마이크 오디오 권한 허용이 필요합니다: " + err.message);
         }
@@ -334,8 +334,8 @@ audioBtn.addEventListener('click', async () => {
     }
 });
 
-// --- 3번 분지별 격리 스위칭 기능 로직 ---
-let isolationMode = "all"; // all, w0, wm1
+
+let isolationMode = "all"; 
 const btnAll = document.getElementById('btn-all');
 const btnW0 = document.getElementById('btn-w0');
 const btnWm1 = document.getElementById('btn-wm1');
@@ -374,7 +374,7 @@ window.addEventListener('click', e=>{
     core.scale.set(2.5, 2.5, 2.5);
 });
 
-// 원본 위치 배열 백업 (오디오 변형 후 복구용)
+
 const originalPositions = pos.slice();
 
 let t=0;
@@ -382,14 +382,14 @@ function animate(){
     requestAnimationFrame(animate);
     t += 0.0025;
 
-    // 1. 오디오 데이터 해석 및 실시간 파라미터화
+    
     if (isAudioActive && analyser) {
         analyser.getByteFrequencyData(dataArray);
         
         let bSum = 0, mSum = 0, hSum = 0;
-        for (let i = 0; i < 8; i++) bSum += dataArray[i];        // 저음 (Bass)
-        for (let i = 8; i < 40; i++) mSum += dataArray[i];       // 중음 (Mid)
-        for (let i = 40; i < 128; i++) hSum += dataArray[i];     // 고음 (High)
+        for (let i = 0; i < 8; i++) bSum += dataArray[i];        
+        for (let i = 8; i < 40; i++) mSum += dataArray[i];       
+        for (let i = 40; i < 128; i++) hSum += dataArray[i];     
         
         bass = bSum / 8 / 255;
         mid = mSum / 32 / 255;
@@ -398,31 +398,31 @@ function animate(){
         valBass.innerText = bass.toFixed(2);
         valHigh.innerText = high.toFixed(2);
     } else {
-        // 미활성화 시 서서히 감소 감쇄 연출
+        
         bass += (0 - bass) * 0.1;
         mid += (0 - mid) * 0.1;
         high += (0 - high) * 0.1;
     }
 
-    // 2. 오디오 분석값 기반 기하학 변형 연산 및 격리 가시성 실시간 연산
+    
     const pAttr = points.geometry.attributes.position.array;
     const cAttr = points.geometry.attributes.color.array;
     
     for (let i = 0; i < COUNT; i++) {
         const type = branchType[i];
         
-        // 격리 모드에 따른 투명도/크기 대용 스케일 변환 처리 (좌표를 원점으로 압축하여 완전히 숨김)
+        
         let visibilityScale = 1.0;
         if (isolationMode === "w0" && type === 1) visibilityScale = 0.0;
         if (isolationMode === "wm1" && type === 0) visibilityScale = 0.0;
 
-        // 원본 좌표 가져오기
+        
         const origX = originalPositions[i * 3];
         const origY = originalPositions[i * 3 + 1];
         const origZ = originalPositions[i * 3 + 2];
         
-        // 오디오 주파수 변동에 따른 입자 노이즈 변위 공식 대입
-        // 고음에는 미세한 떨림, 저음에는 큰 스케일 팽창 연출
+        
+        
         const wave = Math.sin(t * 10 + i * 0.05) * high * 6.0;
         const push = 1.0 + bass * 0.4 * Math.sin(origZ * 0.1 + t * 5);
         
@@ -432,21 +432,21 @@ function animate(){
     }
     points.geometry.attributes.position.needsUpdate = true;
 
-    // 기본 자전 무빙 효과
+    
     points.rotation.z += 0.0005 + mid * 0.002;
     points.rotation.y += 0.0007;
 
-    // 시네마틱 공전 카메라는 연출을 살리기 위해 저음 비트에 반응해 약간 흔들리도록 유도
+    
     const camRadius = 90 + bass * 8.0;
     camera.position.x = Math.cos(t) * camRadius;
     camera.position.z = Math.sin(t) * camRadius;
     camera.lookAt(0,0,0);
 
-    // 마우스 반응 인터랙션
+    
     scene.rotation.x += (targetRX - scene.rotation.x) * 0.03;
     scene.rotation.y += (targetRY - scene.rotation.y) * 0.03;
 
-    // 코어는 저음 강도에 직접 비례하여 맥동 팽창 연출 추가
+    
     const coreScale = 1.0 + bass * 0.8;
     core.scale.lerp(new THREE.Vector3(coreScale, coreScale, coreScale), 0.1);
     
