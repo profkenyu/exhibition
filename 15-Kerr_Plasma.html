@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kerr Plasma Cathedral — 2026: A Digital Odyssey</title>
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="favicon_io/favicon.ico">
+<meta name="description" content="모든 입자는 결국 침묵 속으로 사라진다. — 김건우교수 제19회 개인전 인터랙티브 미디어아트.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kerr Plasma Cathedral — 2026: A Digital Odyssey">
+<meta property="og:description" content="모든 입자는 결국 침묵 속으로 사라진다.">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/15-Kerr_Plasma.html">
+<link rel="canonical" href="https://kimgunwoo.kr/19th/15-Kerr_Plasma.html">
+<meta property="og:image" content="https://kimgunwoo.kr/19th/og/15.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/15.jpg">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;touch-action:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+canvas{display:block;width:100%;height:100%;cursor:move}
+#title{position:fixed;top:24px;left:24px;color:rgba(255,255,255,.75);letter-spacing:.25em;font-size:12px;pointer-events:none;z-index:10;right:400px;line-height:1.5}
+#title span{display:block;font-size:28px;font-weight:200;margin-bottom:6px}
+#ui-container{position:fixed;top:24px;right:24px;display:flex;align-items:center;gap:12px;z-index:10}
+.btn{color:rgba(255,255,255,.5);text-decoration:none;font-size:10px;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:4px;transition:all .3s ease;background:transparent;cursor:pointer}
+.btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+#audio-btn{color:#ff3366;border-color:rgba(255,51,102,.3);}
+#audio-btn.active{color:#33ff99;border-color:rgba(51,255,153,.5);background:rgba(51,255,153,.05);}
+#sleep-note{position:fixed;left:24px;right:24px;bottom:88px;text-align:center;color:rgba(190,205,235,.85);font-size:11px;letter-spacing:.3em;line-height:2;opacity:0;transition:opacity 4s ease;pointer-events:none;z-index:10}
+@media (max-width:640px){#sleep-note{bottom:110px;font-size:9px;letter-spacing:.18em}}
+@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#ui-container{top:20px;right:20px}.btn{padding:5px 10px;font-size:9px}#ui-container a.btn{min-width:58px}}
+
+#universe-id{position:fixed;bottom:78px;right:24px;z-index:10;color:rgba(110,220,235,.55);font-size:9px;letter-spacing:.22em;pointer-events:none;font-style:italic;font-family:'Space Mono','DM Mono',monospace;text-align:right}
+@media (max-width:640px){#universe-id{bottom:76px;right:20px;font-size:8px}}
+
+#ui-container a.btn{min-width:68px;text-align:center;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
+
+#voyage-line{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;display:flex;align-items:center;z-index:11;height:24px}
+#voyage-line::before{content:"";position:absolute;left:8px;right:8px;top:50%;height:1px;background:rgba(255,255,255,.13)}
+#voyage-line .vt{position:relative;width:22px;height:24px;display:block}
+#voyage-line .vt::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:1px;height:7px;background:rgba(255,255,255,.35);transition:all .25s ease}
+#voyage-line .vt:hover::after{height:12px;background:rgba(255,255,255,.85)}
+#voyage-line .vt.on{pointer-events:none}
+#voyage-line .vt.on::after{height:14px;width:2px;background:rgba(110,220,235,.95);box-shadow:0 0 8px rgba(110,220,235,.75)}
+@media (max-width:640px){
+#voyage-line{left:6px;right:auto;top:50%;bottom:auto;transform:translateY(-50%);flex-direction:column;height:auto;width:22px}
+#voyage-line::before{left:50%;right:auto;top:6px;bottom:6px;width:1px;height:auto;background:rgba(255,255,255,.13)}
+#voyage-line .vt{width:22px;height:26px}
+#voyage-line .vt::after{width:6px;height:1px}
+#voyage-line .vt:hover::after{width:10px;height:1px}
+#voyage-line .vt.on::after{width:12px;height:2px}
+}
+@media (min-width:641px) and (max-width:1000px){#voyage-line .vt{width:18px}}
+
+#arrive,#depart{position:fixed;inset:0;background:#000;z-index:9998;pointer-events:none;transition:opacity .8s ease}
+#arrive{opacity:1}
+#depart{opacity:0}
+body.embed>*:not(canvas){display:none!important}
+#voyage-line .home{position:relative;width:22px;height:24px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);text-decoration:none;transition:color .25s ease}
+#voyage-line .home:hover{color:rgba(255,255,255,.9)}
+#voyage-line .home svg{width:11px;height:11px;display:block}
+#voyage-line .vl-div{width:1px;height:12px;background:rgba(255,255,255,.16);margin:0 2px}
+@media (max-width:640px){#voyage-line .home{width:22px;height:26px}#voyage-line .vl-div{width:12px;height:1px;margin:2px 0}}
+#ui-container a.btn#fin-btn{position:fixed;bottom:24px;right:24px;width:44px;height:44px;min-width:0;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;letter-spacing:.12em;text-indent:.12em}
+#ui-container a.btn#back-btn{position:fixed;bottom:33px;right:80px}
+@media (max-width:640px){#ui-container a.btn#fin-btn{bottom:20px;right:20px}#ui-container a.btn#back-btn{bottom:31px;right:76px}#audio-btn{position:fixed;bottom:20px;left:20px}}
+
+/* ===== MOBILE UNIFIED LAYOUT (base: 08-Lambert_nebu) ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+#title{color:rgba(255,255,255,.5)}
+#title span{color:rgba(255,255,255,.75)}
+@media (max-width:767px), (orientation:landscape) and (max-height:500px){
+  #title{top:20px;left:max(20px,env(safe-area-inset-left,0px));right:96px;font-size:9px;letter-spacing:.15em}
+  #title span{font-size:16px;margin-bottom:4px}
+  .btn{font-size:7px;padding:5px 9px;border-radius:3px;letter-spacing:.18em}
+  #ui-container{top:12px;right:calc(12px + env(safe-area-inset-right,0px));gap:8px}
+  #ui-container a.btn{min-width:48px}
+  #audio-btn{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:max(12px,env(safe-area-inset-left,0px))}
+  #sleep-note{bottom:76px;font-size:9px;letter-spacing:.18em}
+  #universe-id{font-size:8px;bottom:calc(50px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
+  #ui-container a.btn#fin-btn{width:31px;height:31px;bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
+  #ui-container a.btn#back-btn{bottom:calc(18px + env(safe-area-inset-bottom,0px));right:calc(51px + env(safe-area-inset-right,0px))}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #voyage-line{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+}
+</style>
+</head>
+<body>
+<script>
+
+var LOWP=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)||matchMedia('(max-width:768px)').matches||(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4||location.search.indexOf('embed')>-1;
+(function(){var raf=window.requestAnimationFrame.bind(window),q=[];window.requestAnimationFrame=function(cb){return document.hidden?(q.push(cb),0):raf(cb)};document.addEventListener('visibilitychange',function(){if(!document.hidden){var p=q;q=[];for(var i=0;i<p.length;i++)raf(p[i]);}});})();
+</script>
+<div id="title">
+    <span>KERR PLASMA CATHEDRAL</span>
+    ds² = -(1 - r_s r/ρ²)dt² - (2r_s r a sin²θ/ρ²)dtdϕ + (ρ²/Δ)dr² + ρ²dθ² + (r² + a² + r_s r a² sin²θ/ρ²)sin²θdϕ²
+</div>
+<div id="ui-container">
+    <button id="audio-btn" class="btn">AUDIO INPUT: OFF</button>
+    <a href="index.html" onclick="if(history.length>1){history.back();return false}" class="btn" id="back-btn">BACK</a>
+    <a href="index.html#coda" class="btn" id="fin-btn">FIN</a>
+</div>
+<canvas id="c"></canvas>
+<div id="sleep-note">관측이 멈추면, 우주는 잠든다<br>WHEN OBSERVATION CEASES, THE UNIVERSE SLEEPS</div>
+<script>
+const canvas=document.getElementById("c"),gl=canvas.getContext("webgl");
+function resize(){var d=Math.min(window.devicePixelRatio||1,LOWP?1:1.5);canvas.width=window.innerWidth*d;canvas.height=window.innerHeight*d;gl.viewport(0,0,canvas.width,canvas.height)}
+window.addEventListener("resize",resize);resize();
+
+const vertex=`attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}`,
+fragment=`precision highp float;
+uniform vec2 resolution;uniform float time;uniform vec2 mouse;
+uniform float u_bass;
+uniform float u_treble;
+uniform float u_wake;
+#define PI 3.14159265359
+#define MAX_STEPS 90
+#define STEP_SIZE 0.06
+#define VOLUME_STEPS 28
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);float a=hash(i),b=hash(i+vec2(1.0,0.0)),c=hash(i+vec2(0.0,1.0)),d=hash(i+vec2(1.0,1.0));vec2 u=f*f*(3.0-2.0*f);return mix(a,b,u.x)+(c-a)*u.y*(1.0-u.x)+(d-b)*u.x*u.y;}
+float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<4;i++){v+=noise(p)*a;p*=2.0;a*=0.5;}return v;}
+mat2 rot(float a){float s=sin(a),c=cos(a);return mat2(c,-s,s,c);}
+vec3 integrateRay(vec3 ro,vec3 rd, out float outR){vec3 pos=ro,dir=rd;float rs=1.15,spin=0.9;for(int i=0;i<MAX_STEPS;i++){float r=max(length(pos),0.24),gravity=rs/(r*r+0.22);vec3 gravDir=normalize(-pos),frameDrag=normalize(cross(vec3(0.0,1.0,0.0),pos)+0.0001);float damp=smoothstep(0.0,3.0,r);dir+=gravDir*gravity*STEP_SIZE*damp+frameDrag*gravity*spin*0.12*damp;dir=normalize(dir);pos+=dir*STEP_SIZE;}outR=length(pos);return pos;}
+float dotStars(vec2 uv,vec2 drift){vec2 gv=fract(uv*120.0+drift)-0.5,id=floor(uv*120.0+drift);float rnd=hash(id),size=mix(0.003,0.018,rnd);return smoothstep(size,size*0.2,length(gv))*step(0.992,rnd);}
+void main(){vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);float distFromCenter=length(uv),chromaticAberration=0.012*smoothstep(0.1,1.5,distFromCenter)*(0.25+0.75*u_wake);vec3 finalColor=vec3(0.0);vec2 drift=vec2(time*0.08+mouse.x*2.0,time*0.04+mouse.y*2.0);float camAngleX=time*0.05+mouse.x*3.5,camAngleY=mouse.y*1.2;vec3 ro=vec3(0.0,0.0,-5.8);ro.yz*=rot(camAngleY);ro.xz*=rot(camAngleX);vec3 target=vec3(0.0,0.0,0.0),forward=normalize(target-ro),right=normalize(cross(vec3(0.0,1.0,0.0),forward)),up=cross(forward,right);for(int c=0;c<3;c++){float shift=(float(c)-1.0)*chromaticAberration;vec2 shiftedUv=uv*(1.0+shift);vec3 rd=normalize(right*shiftedUv.x+up*shiftedUv.y+forward*1.75);float r;vec3 p=integrateRay(ro,rd,r);float stars=dotStars(shiftedUv*1.5,drift)+dotStars(shiftedUv*0.8+10.0,drift*0.4);vec3 sceneColor=mix(vec3(0.6,0.75,1.0),vec3(1.0,0.92,0.82),fbm(shiftedUv*4.0))*stars*1.8;vec3 starLayer=sceneColor;float disk=exp(-abs(p.y)*15.0)*exp(-abs(length(p.xz)-2.5)*2.2)*fbm(p.xz*3.5+time*0.04);vec3 diskColor=mix(vec3(0.15,0.35,1.0),vec3(1.0,0.5,0.08),disk);diskColor.r*=1.0+smoothstep(-1.0,1.0,p.x)*1.8;diskColor.b*=1.2-smoothstep(-1.0,1.0,p.x)*0.7;sceneColor+=diskColor*disk*2.3;
+
+sceneColor+=vec3(1.0,0.95,0.91)*exp(-abs(r-1.82)*14.0)*(1.0+sin(atan(p.z,p.x)*14.0-time*(1.4+u_treble*2.5))*0.45)*(3.0+u_treble*4.5);
+
+float filament=sin(atan(p.z,p.x)*18.0-time*(2.0+u_bass*3.5)+fbm(p.xz*(4.0+u_bass*5.0))*4.0);filament=smoothstep(0.65,1.0,filament)*exp(-abs(r-2.0)*7.0)*fbm(p.xz*8.0+time*0.15);sceneColor+=mix(vec3(0.2,0.5,1.0),vec3(1.0,0.45,0.08),filament)*filament*(1.8+u_bass*2.0);float t=0.0,transmittance=1.0;for(int i=0;i<VOLUME_STEPS;i++){vec3 vp=ro+rd*t;float vr=length(vp),density=exp(-abs(vr-2.1)*3.0)*fbm(vp.xz*3.0+time*0.04)*0.12;sceneColor+=mix(vec3(0.2,0.4,1.0),vec3(1.0,0.55,0.15),density*4.0)*density*transmittance;transmittance*=exp(-density*0.18);t+=0.17;}sceneColor*=1.0-smoothstep(1.08,0.78,r)*0.68;sceneColor+=vec3(0.015,0.02,0.04)*smoothstep(1.08,0.78,r);sceneColor+=vec3(0.04,0.045,0.07)*exp(-length(shiftedUv)*1.5);sceneColor+=vec3(0.04,0.06,0.1)*exp(-r*0.18);float ember=0.02+0.012*(0.5+0.5*sin(time*0.35));sceneColor=sceneColor*mix(ember,1.0,u_wake)+starLayer*(1.0-u_wake)*0.35;if(c==0)finalColor.r=sceneColor.r;else if(c==1)finalColor.g=sceneColor.g;else finalColor.b=sceneColor.b;}vec3 glow=vec3(0.0);glow+=finalColor*0.3;finalColor=mix(finalColor,finalColor+glow*0.5,0.45)*smoothstep(1.6,0.18,distFromCenter);finalColor=finalColor/(1.0+finalColor);gl_FragColor=vec4(pow(finalColor,vec3(0.88)),1.0);}`;
+
+function compile(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+const program=gl.createProgram();gl.attachShader(program,compile(gl.VERTEX_SHADER,vertex));gl.attachShader(program,compile(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);gl.useProgram(program);
+
+const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+const position=gl.getAttribLocation(program,"position");gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
+
+const resolutionLoc=gl.getUniformLocation(program,"resolution"),timeLoc=gl.getUniformLocation(program,"time"),mouseLoc=gl.getUniformLocation(program,"mouse"),
+bassLoc=gl.getUniformLocation(program,"u_bass"),trebleLoc=gl.getUniformLocation(program,"u_treble"),wakeLoc=gl.getUniformLocation(program,"u_wake");
+
+let isDragging=false,previousMouseX=0,targetX=0.0,currentX=0.0,velocityX=0.0,friction=0.96;
+window.addEventListener("pointerdown",e=>{if(e.target.closest("#ui-container"))return;isDragging=true;previousMouseX=e.clientX;velocityX=0});
+window.addEventListener("pointermove",e=>{if(!isDragging)return;let deltaX=e.clientX-previousMouseX;velocityX=deltaX*0.005;targetX+=velocityX;previousMouseX=e.clientX});
+window.addEventListener("pointerup",()=>{isDragging=false});window.addEventListener("pointercancel",()=>{isDragging=false});
+
+let lastInput=performance.now(),wake=1.0,shaderTime=0,lastFrameT=0;
+const IDLE_DELAY=30000;
+const noteInput=()=>{lastInput=performance.now()};
+["pointerdown","pointermove","wheel","keydown","touchstart"].forEach(ev=>window.addEventListener(ev,noteInput,{passive:true}));
+const sleepNote=document.getElementById("sleep-note");
+
+let audioCtx = null, analyser = null, dataArray = null, mainGainNode = null;
+let isAudioPlaying = false;
+const audioBtn = document.getElementById("audio-btn");
+
+function initAudio() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    const baseOsc1 = audioCtx.createOscillator();
+    const baseOsc2 = audioCtx.createOscillator();
+    const subOsc = audioCtx.createOscillator();
+    const filter = audioCtx.createBiquadFilter();
+    const mainGain = audioCtx.createGain();
+    mainGainNode = mainGain;
+
+    baseOsc1.type = 'sawtooth'; baseOsc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+    baseOsc2.type = 'square'; baseOsc2.frequency.setValueAtTime(55.3, audioCtx.currentTime);
+    subOsc.type = 'sine'; subOsc.frequency.setValueAtTime(27.5, audioCtx.currentTime);
+
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.type = 'sine'; lfo.frequency.setValueAtTime(0.2, audioCtx.currentTime);
+    lfoGain.gain.setValueAtTime(15, audioCtx.currentTime);
+
+    filter.type = 'lowpass';
+    filter.Q.setValueAtTime(4, audioCtx.currentTime);
+    filter.frequency.setValueAtTime(140, audioCtx.currentTime);
+
+    mainGain.gain.setValueAtTime(0.45, audioCtx.currentTime);
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+
+    baseOsc1.connect(filter);
+    baseOsc2.connect(filter);
+    subOsc.connect(mainGain);
+    filter.connect(mainGain);
+
+    mainGain.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    baseOsc1.start(); baseOsc2.start(); subOsc.start(); lfo.start();
+}
+
+audioBtn.addEventListener("click", () => {
+    if (!audioCtx) {
+        initAudio();
+        isAudioPlaying = true;
+        audioBtn.textContent = "AUDIO INPUT: ON";
+        audioBtn.classList.add("active");
+    } else {
+        if (isAudioPlaying) {
+            audioCtx.suspend();
+            isAudioPlaying = false;
+            audioBtn.textContent = "AUDIO INPUT: OFF";
+            audioBtn.classList.remove("active");
+        } else {
+            audioCtx.resume();
+            isAudioPlaying = true;
+            audioBtn.textContent = "AUDIO INPUT: ON";
+            audioBtn.classList.add("active");
+        }
+    }
+});
+
+let smoothBass = 0.0, smoothTreble = 0.0;
+
+function render(t){
+    if(!isDragging){velocityX*=friction;targetX+=velocityX}
+    else lastInput=performance.now();
+    currentX+=(targetX-currentX)*0.05;
+
+    const dt=Math.min(t-lastFrameT,100);lastFrameT=t;
+    const asleep=(performance.now()-lastInput)>IDLE_DELAY;
+    const tau=asleep?18000:2200;
+    wake+=((asleep?0:1)-wake)*Math.min(1,dt/tau);
+    shaderTime+=dt*0.001*(0.12+0.88*wake);
+    sleepNote.style.opacity=wake<0.35?((0.35-wake)/0.35*0.65).toFixed(3):0;
+    if(mainGainNode)mainGainNode.gain.value=0.45*(0.04+0.96*wake);
+
+    if(isAudioPlaying && analyser) {
+        analyser.getByteFrequencyData(dataArray);
+
+        let bassSum = 0;
+        for(let i = 1; i <= 12; i++) { bassSum += dataArray[i]; }
+        let currentBass = (bassSum / 12) / 255.0;
+        smoothBass = smoothBass * 0.88 + currentBass * 0.12;
+
+        let trebleSum = 0;
+        for(let i = 60; i <= 150; i++) { trebleSum += dataArray[i]; }
+        let currentTreble = (trebleSum / 90) / 255.0;
+        smoothTreble = smoothTreble * 0.85 + currentTreble * 0.15;
+    } else {
+
+        smoothBass = 0.04 + Math.sin(t * 0.002) * 0.02;
+        smoothTreble = 0.02 + Math.cos(t * 0.003) * 0.01;
+    }
+
+    gl.uniform2f(resolutionLoc,canvas.width,canvas.height);
+    gl.uniform1f(timeLoc,shaderTime);
+    gl.uniform2f(mouseLoc,currentX,0.0);
+
+    gl.uniform1f(bassLoc, smoothBass * 2.2 * (0.2 + 0.8 * wake));
+    gl.uniform1f(trebleLoc, smoothTreble * 3.5 * (0.2 + 0.8 * wake));
+    gl.uniform1f(wakeLoc, wake);
+
+    gl.drawArrays(gl.TRIANGLES,0,6);
+    requestAnimationFrame(render);
+}
+render(0);
+</script>
+<script>
+(function(){
+  if(location.search.indexOf('embed')>-1){document.body.classList.add('embed');return;}
+  var a=document.createElement('div');a.id='arrive';document.body.appendChild(a);
+  var d=document.createElement('div');d.id='depart';document.body.appendChild(d);
+  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});}
+  if(document.readyState!=='loading')go();else document.addEventListener('DOMContentLoaded',go);
+  window.addEventListener('pageshow',function(e){if(e.persisted){a.style.opacity='0';d.style.opacity='0';}});
+  document.addEventListener('click',function(e){
+    var el=e.target.closest?e.target.closest('a[href]'):null;
+    if(!el)return;
+    var href=el.getAttribute('href');
+    if(!href)return;
+    if(href.indexOf('http')===0||href.charAt(0)==='#'||el.hasAttribute('onclick'))return;
+    e.preventDefault();
+    d.style.opacity='1';
+    setTimeout(function(){location.href=href;},650);
+  },true);
+})();
+</script>
+<script>
+
+(function(){
+  var s=sessionStorage.getItem('universe_seed');
+  if(!s){s=Math.floor(Math.random()*16777216).toString(16).padStart(6,'0').toUpperCase();sessionStorage.setItem('universe_seed',s);}
+  window.UNIVERSE_SEED=s;
+  var lbl=document.getElementById('universe-label');
+  if(lbl){lbl.textContent='#'+s;return;}
+  var el=document.createElement('div');
+  el.id='universe-id';
+  el.textContent='UNIVERSE #'+s;
+  document.body.appendChild(el);
+})();
+</script>
+<nav id="voyage-line" aria-label="Voyage" onpointerdown="event.stopPropagation()" ontouchstart="event.stopPropagation()">
+<a href="index.html" class="home" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg></a>
+<div class="vl-div"></div>
+
+<a href="01-RGB_Galaxy.html" class="vt" title="01 · RGB Galaxy Engine"></a>
+<a href="02-Hyperbolic_Nebula.html" class="vt" title="02 · Hyperbolic Nebula"></a>
+<a href="03-Riemann_dream.html" class="vt" title="03 · Riemann Dreams"></a>
+<a href="04-Quantum_sing.html" class="vt" title="04 · Quantum Singularity"></a>
+<a href="05-Dual_Galaxy.html" class="vt" title="05 · Dual Galaxy"></a>
+<a href="06-Lambert_Essential.html" class="vt" title="06 · Lambert Nebula: Essential"></a>
+<a href="07-Lambert_Archive.html" class="vt" title="07 · Lambert Nebula: Archive"></a>
+<a href="08-Lambert_nebu.html" class="vt" title="08 · Lambert Nebula"></a>
+<a href="09-Bessel_bloom.html" class="vt" title="09 · Bessel Bloom"></a>
+<a href="10-Lorenz_butt.html" class="vt" title="10 · Lorenz Butterfly"></a>
+<a href="11-Odyssey_Essential.html" class="vt" title="11 · Odyssey: Essential"></a>
+<a href="12-Odyssey_Archive.html" class="vt" title="12 · Odyssey: Archive"></a>
+<a href="13-Event_Horizon.html" class="vt" title="13 · Event Horizon"></a>
+<a href="14-Black_Voyage.html" class="vt" title="14 · Black Hole Voyage"></a>
+<a href="15-Kerr_Plasma.html" class="vt on" title="15 · Kerr Plasma Cathedral"></a>
+</nav>
+<script id="vp-resync">
+(function(){
+  var w=innerWidth,h=innerHeight;
+  window.addEventListener('resize',function(){w=innerWidth;h=innerHeight});
+  var kick=function(){window.dispatchEvent(new Event('resize'))};
+  var kicks=function(){setTimeout(kick,120);setTimeout(kick,450);setTimeout(kick,1000)};
+  window.addEventListener('orientationchange',kicks);
+  window.addEventListener('pageshow',kicks);
+  if(window.visualViewport)visualViewport.addEventListener('resize',kick);
+  if(window.matchMedia){try{matchMedia('(orientation:landscape)').addEventListener('change',kicks)}catch(e){}}
+  setInterval(function(){if(innerWidth!==w||innerHeight!==h)kick()},700);
+  if(document.readyState==='complete'){kicks();}else{window.addEventListener('load',kicks);}
+})();
+</script>
+<script>
+(function(){
+  if(location.search.indexOf('embed')>-1)return;
+  try{
+    var f=location.pathname.split('/').pop();
+    var v=JSON.parse(sessionStorage.getItem('odyssey_visited')||'[]');
+    if(v.indexOf(f)<0){v.push(f);sessionStorage.setItem('odyssey_visited',JSON.stringify(v));}
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

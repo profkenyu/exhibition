@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>김건우교수 제19회 개인전 · Archive</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="../favicon_io/favicon.ico">
+<meta name="description" content="김건우교수 제19회 개인전 아카이브 — 15개 작품 전체 목록. 2026.08.24–09.05 갤러리한빛."/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="김건우교수 제19회 개인전 — 심연의 방정식">
+<meta property="og:description" content="2026.08.24–09.05 · 갤러리한빛">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/all/"/>
+<link rel="canonical" href="https://kimgunwoo.kr/19th/all/">
+<meta property="og:image" content="https://kimgunwoo.kr/19th/og/all-index.jpg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/all-index.jpg"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&amp;family=Inter:wght@300;400;500;700&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg-main: #f9f9fb;
+  --text-main: #111115;
+  --text-muted: #767680;
+  --text-light: #76778b;
+  --red-accent: #ce0909;
+  --cyan-accent: #0891b2;
+  --line-color: #e5e5ea;
+  --tag-bg: #f0f0f4;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%;
+  overflow:hidden;
+  background:var(--bg-main);
+  color:var(--text-main);
+  font-family:'DM Mono', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+#bg {
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+.shell {
+  position:relative;
+  z-index:1;
+  width:100%; height:100vh;
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 0 clamp(24px,5vw,80px);
+}
+header {
+  padding-top: clamp(54px,7vh,76px);
+  padding-bottom: clamp(18px,2.5vh,36px);
+  border-bottom: 1px solid var(--line-color);
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 24px;
+}
+.h-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+header h1 {
+  font-family: 'Futura-Bold', Futura, 'Trebuchet MS', Arial, sans-serif;
+  font-weight:700;
+  font-size: clamp(20px,2.2vw,34px);
+  line-height:1.2;
+  font-kerning: normal;
+  color:var(--text-main);
+}
+
+#fixed-top-left {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  right: 60px;
+  z-index: 99999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+#mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 3px;
+  background: rgba(2,3,5,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+#mode-toggle .m-btn {
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  padding: 5px 11px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(255,255,255,.35);
+  transition: all .28s ease-in-out;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+#mode-toggle .m-btn.active {
+  background: rgba(255,255,255,.94);
+  color: #020305;
+  border-radius: 2px;
+}
+#mode-toggle .m-btn:not(.active):hover {
+  color: rgba(255,255,255,.7);
+}
+#mode-toggle .m-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: .7;
+}
+#mode-toggle .m-btn.active .m-dot {
+  background: #c0152a;
+  opacity: 1;
+}
+#mode-toggle .m-divider {
+  width: 1px; height: 13px;
+  background: rgba(255,255,255,.12);
+  flex-shrink: 0;
+}
+#title-ui {
+  font-size: 10px;
+  color: rgba(17,17,21,.45);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+@media (max-width: 768px) {
+  #fixed-top-left {
+    top: max(16px, env(safe-area-inset-top));
+    left: 16px; right: 16px;
+  }
+  #mode-toggle .m-btn { padding: 4px 8px; font-size: 7px; letter-spacing: .1em; }
+  #mode-toggle { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  #title-ui { display: none; }
+}
+.h-left .sub {
+  margin-top:10px;
+  font-size: clamp(9px,0.75vw,11px);
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.h-right {
+  text-align:right;
+  flex-shrink:0;
+}
+.h-right .count {
+  font-size: clamp(28px,3.5vw,52px);
+  font-weight:300;
+  color: var(--red-accent);
+  letter-spacing:-0.03em;
+  line-height:1;
+}
+.h-right .count-label {
+  margin-top:4px;
+  font-size: clamp(8px,0.7vw,10px);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.grid-wrap {
+  position:relative;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-top: clamp(24px,3.5vh,52px);
+  padding-bottom: clamp(60px,8vh,120px);
+  scrollbar-width:none;
+}
+.grid-wrap::-webkit-scrollbar { display:none; }
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: clamp(0px,0vw,0px) clamp(24px,3vw,48px);
+}
+.card {
+  position:relative;
+  padding: clamp(18px,2.2vh,28px) 0;
+  border-bottom: 1px solid var(--line-color);
+  cursor:pointer;
+  text-decoration:none;
+  display:block;
+  transition: background 0.2s;
+}
+.card:last-child { border-bottom: none; }
+.card-header {
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:9px;
+}
+.card-index {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:.12em;
+  color: var(--red-accent);
+  font-variant-numeric: tabular-nums;
+  min-width: 22px;
+}
+.card-title {
+  font-family:'Noto Sans KR', sans-serif;
+  font-weight:400;
+  font-size: clamp(14px,1.2vw,19px);
+  letter-spacing:-0.01em;
+  color:var(--text-main);
+  line-height:1.3;
+  transition: font-weight 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.card:hover .card-title { font-weight: 700; }
+.card-title::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: calc(clamp(14px,1.2vw,19px) * 0.38) solid transparent;
+  border-right: calc(clamp(14px,1.2vw,19px) * 0.38) solid transparent;
+  border-top: calc(clamp(14px,1.2vw,19px) * 0.5) solid #3a3a3f;
+  opacity: 0.5;
+  flex-shrink: 0;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+  transform: translateY(1px);
+}
+.card:hover .card-title::after {
+  opacity: 0.85;
+  transform: translateY(2px);
+}
+.card-formula {
+  font-family:'DM Mono', monospace;
+  font-size: clamp(10px,0.82vw,12px);
+  color: var(--cyan-accent);
+  letter-spacing:0.02em;
+  margin-bottom:8px;
+  font-style:italic;
+  line-height:1.5;
+}
+.card-desc {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size: clamp(9.5px, 0.8vw, 10.5px);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  margin-bottom: 11px;
+  word-break: keep-all;
+}
+.card-footer {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.tag {
+  font-family:'DM Mono', monospace;
+  font-size:8.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:2px 7px;
+  color:var(--text-light);
+  background:var(--tag-bg);
+  border-radius:2px;
+}
+.card-interaction {
+  display: block;
+  margin-top: 8px;
+  width: fit-content;
+  font-family:'DM Mono', monospace;
+  font-size:8.5px;
+  letter-spacing:.04em;
+  color:#ffffff;
+  background: #a0a8bc;
+  padding:2px 8px;
+  border-radius:2px;
+}
+footer {
+  border-top:1px solid var(--line-color);
+  padding: clamp(16px,2.5vh,26px) 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:9.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+@media (max-width: 640px) {
+  footer { flex-direction:column; align-items:flex-start; gap:6px; }
+  header { flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:12px; }
+  .h-right { display:flex; align-items:baseline; gap:8px; text-align:left; }
+  .h-right .count { font-size: 22px; }
+  .h-right .count-label { margin-top:0; }
+  .title-area { gap: 8px; }
+}
+
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="fixed-top-left">
+<div id="mode-toggle">
+<a class="m-btn" href="../index.html" id="btn-cinematic"><span class="m-dot"></span>Cinematic</a>
+<div class="m-divider"></div>
+<span class="m-btn active" id="btn-archive"><span class="m-dot"></span>Archive</span>
+</div>
+<div id="title-ui">김건우교수 제19회 개인전 · 2026.08.24–09.05 · 갤러리한빛</div>
+</div>
+<div class="shell">
+<header>
+<div class="h-left">
+<div class="title-area">
+<h1>2026: a digital odyssey</h1>
+</div>
+<p class="sub">Equations of the Abyss — 심연의 방정식</p> 
+</div>
+<div class="h-right">
+<div class="count">15</div>
+<div class="count-label">Interactive Works</div>
+</div>
+</header>
+<div class="grid-wrap">
+<div class="grid">
+<a class="card" href="01-RGB_Galaxy.html">
+<div class="card-header">
+<span class="card-index">01.</span>
+<span class="card-title">RGB Galaxy Engine</span>
+</div>
+<div class="card-formula">r = √i×1.6 · θ = i×0.013 + arm×2π/3  ·  3-Arm · GLSL Bloom · Chromatic Aberration</div>
+<div class="card-desc">3개의 나선 팔이 회전하며 하나의 은하로 태어난다. 데스크톱 기준 25만개의 입자가 페르마 나선을 따라 제자리를 찾고, 배경의 색온도는 삼각함수의 주기를 따라 천천히 숨 쉰다. 마우스를 움직이면 은하 전체가 기울고, 카메라는 스스로 그 주위를 공전한다. <span class="card-interaction">Mouse Move · Galaxy Rotation</span></div>
+<div class="card-footer"><span class="tag">Procedural Galaxy</span><span class="tag">Particle Dynamics</span><span class="tag">Chromatic Bloom</span></div>
+</a>
+<a class="card" href="02-Hyperbolic_Nebula.html">
+<div class="card-header">
+<span class="card-index">02.</span>
+<span class="card-title">Hyperbolic Nebula</span>
+</div>
+<div class="card-formula">z = sinh(u)·cosh(v) − tanh(r)  ·  55,000 pts · GLSL FBM Noise</div>
+<div class="card-desc">구름과 해안선, 능선을 빚어내는 자연의 문법 — 쌍곡선 함수(sinh·cosh·tanh)로 좌표를 얻은 5만 5천개의 입자와, 3차원 노이즈로 흐르는 성운이 겹쳐진다. 성운은 스스로 유동하고, 마우스를 따라 카메라가 부드럽게 미끄러지며 그 안개의 깊이를 들여다본다. <span class="card-interaction">Mouse · Parallax Camera</span></div>
+<div class="card-footer"><span class="tag">Hyperbolic Geometry</span><span class="tag">fBm Noise</span><span class="tag">Volumetric Flow</span></div>
+</a>
+<a class="card" href="03-Riemann_dream.html">
+<div class="card-header">
+<span class="card-index">03.</span>
+<span class="card-title">Riemann Dreams</span>
+</div>
+<div class="card-formula">θ = i×0.045 + sin(p)×2 · r = √i×0.55 + p×0.08  ·  300 primes · 60,000 pts</div>
+<div class="card-desc">수학의 오랜 수수께끼, 리만 가설의 격자를 하나의 공간으로 옮겨 놓았다. 300개의 소수를 씨앗 삼아 놓인 6만개의 입자는 마우스와 기기의 기울기에 반응하고, 화면을 클릭하면 그 자리에서 중력의 물결이 번져 궤적 전체를 흔든다. <span class="card-interaction">Mouse · Gyro · Gravity Wave</span></div>
+<div class="card-footer"><span class="tag">Riemann Zeta</span><span class="tag">Prime Field</span><span class="tag">Interactive Gravity</span></div>
+</a>
+<a class="card" href="04-Quantum_sing.html">
+<div class="card-header">
+<span class="card-index">04.</span>
+<span class="card-title">Quantum Singularity</span>
+</div>
+<div class="card-formula">θ = p·2π/137.507 · r = √p×12  ·  3,000 primes · 400,000 pts · GLSL Gravity Lens</div>
+<div class="card-desc">황금각 137.5°와 페르마 나선을 따라 정렬된 40만개의 입자가 중심의 특이점을 감싼다. 공간은 창세에서 열죽음에 이르는 다섯 국면을 끝없이 순환하고, 매 순간의 소수 인자가 화면 한쪽에 새겨진다. 블랙홀은 시점에 따라 중력 렌즈로 빛을 굴절시킨다. <span class="card-interaction">Pointer Parallax · Gaze Drift</span></div>
+<div class="card-footer"><span class="tag">Golden Angle</span><span class="tag">Prime Distribution</span><span class="tag">Gravitational Lens</span></div>
+</a>
+<a class="card" href="05-Dual_Galaxy.html">
+<div class="card-header">
+<span class="card-index">05.</span>
+<span class="card-title">Dual Galaxy</span>
+</div>
+<div class="card-formula">r = √i×1.2 · θ = i×0.015 · Dual-Color Arms · 120,000 pts</div>
+<div class="card-desc">하나의 나선 위에 붉은 팔과 푸른 팔이 교차하며 감긴 이중 은하다. 12만개의 입자가 두 색의 중력을 나눠 가진 채 중심을 돌고, 마우스는 은하를 기울인다. 화면을 터치하면 중심의 블랙홀이 잠시 부풀어 오르며 중력의 임계를 드러낸다. <span class="card-interaction">Mouse Tilt · Touch Core</span></div>
+<div class="card-footer"><span class="tag">Binary Galaxy</span><span class="tag">Orbital Collision</span><span class="tag">Black Hole Core</span></div>
+</a>
+<a class="card" href="06-Lambert_Essential.html">
+<div class="card-header">
+<span class="card-index">06.</span>
+<span class="card-title">Lambert Nebula: Essential</span>
+</div>
+<div class="card-formula">W₀(x) · FogExp2(density=0.0025)  ·  Mobile 45K / Desktop 95K pts</div>
+<div class="card-desc">방정식 w·eʷ = x의 해를 주는 램버트 W 함수를 성운의 광학으로 옮긴 공간이다. 9만 5천개의 성운 입자는 순방향으로, 1만 5천개의 별은 역방향으로 자전하며 공간에 여러 겹의 깊이와 시간을 새긴다. 마우스를 따라 시점이 관성으로 흐른다. <span class="card-interaction">Inertia Camera Move</span></div>
+<div class="card-footer"><span class="tag">Lambert W</span><span class="tag">Optical Diffusion</span><span class="tag">Volumetric Nebula</span></div>
+</a>
+<a class="card" href="07-Lambert_Archive.html">
+<div class="card-header">
+<span class="card-index">07.</span>
+<span class="card-title">Lambert Nebula: Archive</span>
+</div>
+<div class="card-formula">W₀ ∪ W₋₁  ·  6-Cluster Deep Field, 120,000 pts · AdditiveBlending</div>
+<div class="card-desc">스크린이 빛을 만드는 근본 원리, 가산 혼합(Additive Blending)을 시각화한 아카이브다. 램버트 함수의 두 가지(W₀·W₋₁)를 따라 여섯 성단에 흩어진 12만개의 입자가 겹칠수록 광도는 기하급수로 차오른다. 중심의 광원을 클릭하면 그 핵이 순간 밝게 부풀어 오른다. <span class="card-interaction">Mouse Rotate · Core Pulse</span></div>
+<div class="card-footer"><span class="tag">Lambert Branch</span><span class="tag">Additive Cosmology</span><span class="tag">Deep Field</span></div>
+</a>
+<a class="card" href="08-Lambert_nebu.html">
+<div class="card-header">
+<span class="card-index">08.</span>
+<span class="card-title">Lambert Nebula</span>
+</div>
+<div class="card-formula">W₀(x) ∪ W₋₁(x)  ·  Audio-Reactive Input &amp; Branch Isolation, 60,000 pts</div>
+<div class="card-desc">마이크로 들어온 실시간 주파수가 3차원의 빛과 하나로 묶이는 공감각의 공간이다. 저음은 카메라의 공전 반지름과 중심핵의 크기를, 고음은 입자의 파동 변위를 실시간으로 흔든다. W₀·W₋₁ 두 가지를 따로 떼어 볼 수도 있다. <span class="card-interaction">Audio Reactive · Branch Isolation</span></div>
+<div class="card-footer"><span class="tag">Audio Reactive</span><span class="tag">Spectral Space</span><span class="tag">Generative Soundfield</span></div>
+</a>
+<a class="card" href="09-Bessel_bloom.html">
+<div class="card-header">
+<span class="card-index">09.</span>
+<span class="card-title">Bessel Bloom</span>
+</div>
+<div class="card-formula">J₀(x) ≈ √(2/πx)·cos(x−π/4)  ·  z = Σ J₀(dₙ·0.7 − 3t), 12,000 pts</div>
+<div class="card-desc">원통형 파동을 기술하는 제1종 베셀 함수로 짜인 간섭의 지대다. 화면을 누르면 그 자리에서 새로운 진원이 태어나 물결을 퍼뜨리고, 여러 진원이 겹치고 부딪히며 빛과 색의 간섭무늬를 만든다. 진원은 시간이 지나면 조용히 사그라든다. <span class="card-interaction">Touch to Bloom · Interference</span></div>
+<div class="card-footer"><span class="tag">Bessel Function</span><span class="tag">Wave Interference</span><span class="tag">Harmonic Propagation</span></div>
+</a>
+<a class="card" href="10-Lorenz_butt.html">
+<div class="card-header">
+<span class="card-index">10.</span>
+<span class="card-title">Lorenz Butterfly</span>
+</div>
+<div class="card-formula">ẋ = σ(y−x) · ẏ = x(ρ−z)−y · ż = xy−βz  ·  σ=10, ρ=28, β=8/3</div>
+<div class="card-desc">날씨를 끝내 예측할 수 없게 만든 로렌즈의 방정식을 브라우저 안에서 실시간으로 푼다. 4천개의 결정론적 입자가 나비 날개 모양의 궤도를 그리는 가운데, 화면을 누르면 계수 ρ가 순간 치솟았다(28→36) 서서히 제자리로 돌아오며 궤도 전체를 교란한다. <span class="card-interaction">Click · Chaos Perturbation</span></div>
+<div class="card-footer"><span class="tag">Lorenz Attractor</span><span class="tag">Chaotic Flow</span><span class="tag">Dynamical System</span></div>
+</a>
+<a class="card" href="11-Odyssey_Essential.html">
+<div class="card-header">
+<span class="card-index">11.</span>
+<span class="card-title">Odyssey: Essential</span>
+</div>
+<div class="card-formula">v(r) = 35.0 / r  ·  Photon Ring &amp; Relativistic Drift · 320,000 pts</div>
+<div class="card-desc">구면좌표에 뿌린 6만개의 별을 배경으로, 32만개의 강착원반 입자가 v(r)=35/r의 차등 속도로 중심을 돈다. 중심과의 거리에 따라 입자는 흰빛에서 주황, 푸른빛으로 물들고, 광자 고리와 상대론적 제트가 중심을 감싼다. 마우스는 공전하는 시점을 유연하게 이끈다. <span class="card-interaction">Pointer Parallax · Autonomous Orbit</span></div>
+<div class="card-footer"><span class="tag">Accretion Disk</span><span class="tag">Photon Ring</span><span class="tag">Relativistic Drift</span></div>
+</a>
+<a class="card" href="12-Odyssey_Archive.html">
+<div class="card-header">
+<span class="card-index">12.</span>
+<span class="card-title">Odyssey: Archive</span>
+</div>
+<div class="card-formula">R<sub>s</sub> = 2GM / c<sup>2</sup>  ·  Kerr Drift: Δθ ∝ exp(-r/450) · 420,000 pts</div>
+<div class="card-desc">슈바르츠실트 반지름 위에 커의 프레임 드래깅을 얹은 확장형 아카이브다. 42만개의 강착원반 입자가 중심에 가까울수록 휘어진 시공간에 끌려 빠르게 감기고(Δθ ∝ e^−r/450), 광자 고리와 아인슈타인 고리, 그리고 9만개의 별이 우주 전체를 감싼다. 마우스는 궤도 시점을 관성으로 끈다. <span class="card-interaction">Pointer Parallax · Autonomous Orbit</span></div>
+<div class="card-footer"><span class="tag">Kerr Geometry</span><span class="tag">Particle Cosmos</span><span class="tag">Einstein Ring</span></div>
+</a>
+<a class="card" href="13-Event_Horizon.html">
+<div class="card-header">
+<span class="card-index">13.</span>
+<span class="card-title">Event Horizon</span>
+</div>
+<div class="card-formula">ω ∝ r<sup>−3/2</sup>  ·  Keplerian Rotation &amp; Gravitational Lensing · 150,000 pts</div>
+<div class="card-desc">케플러 회전(ω ∝ r^−3/2)으로 도는 15만 개의 강착원반이 슈바르츠실트 블랙홀을 두른다. 다가오는 쪽은 상대론적 도플러 효과로 더 밝게 타오르고, 화면 전체는 중력 렌즈로 휘어진다. 지평선에 가까워질수록 붉은 임계 신호가 번지고, 시점 반지름(R/Rs)과 국면이 실시간으로 기록된다. 드래그로 시선을 끈다. <span class="card-interaction">Drag to Drift Gaze</span></div>
+<div class="card-footer"><span class="tag">Schwarzschild Metric</span><span class="tag">Gravitational Lensing</span><span class="tag">Keplerian Orbit</span></div>
+</a>
+<a class="card" href="14-Black_Voyage.html">
+<div class="card-header">
+<span class="card-index">14.</span>
+<span class="card-title">Black Hole Voyage</span>
+</div>
+<div class="card-formula">Δθ ∝ e<sup>-r/260.0</sup> · SlitScan 108→138 · Entropy Collapse 145→180 · Cycle = 180s</div>
+<div class="card-desc">180초의 주기로 스스로 블랙홀을 향해 하강하는 자동 항해다. 108초 지점부터 슬릿스캔이 시간을 잘게 찢고, 145초 이후엔 엔트로피가 붕괴하며 신호가 소실된다. 제너러티브 신시사이저는 붕괴의 시간표를 따라 주파수를 낮추며 함께 무너지고, 마우스는 그 안에서 시선을 돌린다. <span class="card-interaction">Audio · Spatial Collapse</span></div>
+<div class="card-footer"><span class="tag">Entropy Collapse</span><span class="tag">Slit-Scan Space</span><span class="tag">Audio Singularity</span></div>
+</a>
+<a class="card" href="15-Kerr_Plasma.html">
+<div class="card-header">
+<span class="card-index">15.</span>
+<span class="card-title">Kerr Plasma Cathedral</span>
+</div>
+<div class="card-formula">ds² = -(1 - r_s r/ρ²)dt² - (2r_s r a sin²θ/ρ²)dtdϕ + ...  ·  Audio Reactive Raymarching</div>
+<div class="card-desc">회전하는 블랙홀이 시공간을 비트는 방식 — 커 계량(Kerr Metric)을 실시간 레이마칭으로 풀어낸 에필로그다. 드래그의 잔존 관성으로 시점이 돌고, 신시사이저의 저음은 플라스마 필라멘트를, 고음은 광자 고리를 밝힌다. 30초 동안 입력이 없으면, 관측을 멈춘 우주는 서서히 잠든다. <span class="card-interaction">Drag · Audio · Stillness Response</span></div>
+<div class="card-footer"><span class="tag">Kerr Metric</span><span class="tag">Volumetric Raymarching</span><span class="tag">Plasma Filament</span></div>
+</a>
+<a class="card" href="operator.html">
+<div class="card-header">
+<span class="card-index">MNL.</span>
+<span class="card-title">Operator's Codex</span>
+</div>
+<div class="card-formula">HP 사용설명서 · Site Manual &amp; Operations</div>
+<div class="card-desc">본 사이트의 관람 동선과 조작법, 그리고 작품 추가·배포까지의 운영 절차를 기록한 통합 문서다. 화면 지도와 인터랙션 규격, 데이터·URL 파라미터, 성능·호환 정책을 하나의 코덱스로 담았다.</div>
+<div class="card-footer"><span class="tag">Site Manual</span><span class="tag">Visitor Guide</span><span class="tag">Operations</span></div>
+</a>
+</div>
+</div>
+<footer>
+<span>Kim Gunwoo 19th Exhibition</span>
+<span>Equations of the Abyss</span>
+<span>2026.08.24–09.05 · 갤러리한빛</span>
+<span style="font-style:italic;color:rgba(13,148,166,.9)">UNIVERSE <span id="universe-label"></span></span>
+</footer>
+</div>
+<script>
+const bg = document.getElementById('bg');
+const bx = bg.getContext('2d');
+let bw, bh;
+
+function resizeBg() {
+  bw = bg.width  = window.innerWidth;
+  bh = bg.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
+
+const pts = Array.from({length: 70}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  vx: (Math.random() - .5) * .10,
+  vy: (Math.random() - .5) * .10,
+  r: Math.random() * 1.2 + .3,
+  a: Math.random()
+}));
+
+let bt = 0;
+function drawBg() {
+  bx.clearRect(0, 0, bw, bh);
+  bt += .004;
+  for (const p of pts) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = bw;
+    if (p.x > bw) p.x = 0;
+    if (p.y < 0) p.y = bh;
+    if (p.y > bh) p.y = 0;
+    const alpha = .04 + .025 * Math.sin(bt + p.a * 4);
+    bx.beginPath();
+    bx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    bx.fillStyle = `rgba(192,21,42,${alpha})`;
+    bx.fill();
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+</script>
+<script>
+
+(function(){
+  var s=sessionStorage.getItem('universe_seed');
+  if(!s){s=Math.floor(Math.random()*16777216).toString(16).padStart(6,'0').toUpperCase();sessionStorage.setItem('universe_seed',s);}
+  window.UNIVERSE_SEED=s;
+  var lbl=document.getElementById('universe-label');
+  if(lbl){lbl.textContent='#'+s;return;}
+  var el=document.createElement('div');
+  el.id='universe-id';
+  el.textContent='UNIVERSE #'+s;
+  document.body.appendChild(el);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riemann Dreams — 2026: A Digital Odyssey</title>
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="favicon_io/favicon.ico">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+<meta name="description" content="증명되지 않은 우주가 흔들린다. — 김건우교수 제19회 개인전 인터랙티브 미디어아트.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Riemann Dreams — 2026: A Digital Odyssey">
+<meta property="og:description" content="증명되지 않은 우주가 흔들린다.">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/03-Riemann_dream.html">
+<link rel="canonical" href="https://kimgunwoo.kr/19th/03-Riemann_dream.html">
+<meta property="og:image" content="https://kimgunwoo.kr/19th/og/03.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/03.jpg">
+<style>
+html,body{
+    margin:0;
+    overflow:hidden;
+    background:#020208;
+    touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+canvas{
+    display:block;
+}
+#title{
+    position:fixed;
+    top:24px;
+    left:24px;
+    color:rgba(255,255,255,.75);
+    letter-spacing:.25em;
+    font-size:12px;
+    pointer-events:none;
+    z-index:10;
+    right:120px;
+}
+#title span{
+    display:block;
+    font-size:28px;
+    font-weight:200;
+    margin-bottom:6px;
+}
+#back-btn{
+    position:fixed;
+    bottom:24px;
+    right:104px;
+    color:rgba(255,255,255,.5);
+    text-decoration:none;
+    font-size:10px;
+    letter-spacing:.25em;
+    border:1px solid rgba(255,255,255,.2);
+    padding:6px 12px;
+    border-radius:4px;
+    transition:all .3s ease;
+    z-index:10;
+}
+#back-btn:hover{
+    color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.5);
+}
+@media (max-width: 640px) {
+    #title {
+        top: 20px;
+        left: 20px;
+        right: 100px;
+    }
+    #title span {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    #title {
+        font-size: 10px;
+        letter-spacing: .15em;
+    }
+    #back-btn {
+        bottom:20px;
+        right:90px;
+        padding:5px 10px;
+        font-size:9px;
+    }
+}
+
+#next-btn{position:fixed;bottom:24px;right:24px;color:rgba(255,255,255,.5);text-decoration:none;font-size:10px;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:4px;transition:all .3s ease;z-index:10}
+#next-btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+@media (max-width:640px){#next-btn{bottom:20px;right:20px;padding:5px 10px;font-size:9px}}
+
+#universe-id{position:fixed;bottom:68px;right:24px;z-index:10;color:rgba(110,220,235,.55);font-size:9px;letter-spacing:.22em;pointer-events:none;font-style:italic;font-family:'Space Mono','DM Mono',monospace;text-align:right}
+@media (max-width:640px){#universe-id{bottom:58px;right:20px;font-size:8px}}
+
+#back-btn,#next-btn{min-width:68px;text-align:center;box-sizing:border-box}
+@media (max-width:640px){#back-btn,#next-btn{min-width:58px}}
+
+#voyage-line{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;display:flex;align-items:center;z-index:11;height:24px}
+#voyage-line::before{content:"";position:absolute;left:8px;right:8px;top:50%;height:1px;background:rgba(255,255,255,.13)}
+#voyage-line .vt{position:relative;width:22px;height:24px;display:block}
+#voyage-line .vt::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:1px;height:7px;background:rgba(255,255,255,.35);transition:all .25s ease}
+#voyage-line .vt:hover::after{height:12px;background:rgba(255,255,255,.85)}
+#voyage-line .vt.on{pointer-events:none}
+#voyage-line .vt.on::after{height:14px;width:2px;background:rgba(110,220,235,.95);box-shadow:0 0 8px rgba(110,220,235,.75)}
+@media (max-width:640px){
+#voyage-line{left:6px;right:auto;top:50%;bottom:auto;transform:translateY(-50%);flex-direction:column;height:auto;width:22px}
+#voyage-line::before{left:50%;right:auto;top:6px;bottom:6px;width:1px;height:auto;background:rgba(255,255,255,.13)}
+#voyage-line .vt{width:22px;height:26px}
+#voyage-line .vt::after{width:6px;height:1px}
+#voyage-line .vt:hover::after{width:10px;height:1px}
+#voyage-line .vt.on::after{width:12px;height:2px}
+}
+@media (min-width:641px) and (max-width:1000px){#voyage-line .vt{width:18px}}
+
+#arrive,#depart{position:fixed;inset:0;background:#000;z-index:9998;pointer-events:none;transition:opacity .8s ease}
+#arrive{opacity:1}
+#depart{opacity:0}
+body.embed>*:not(canvas){display:none!important}
+#voyage-line .home{position:relative;width:22px;height:24px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);text-decoration:none;transition:color .25s ease}
+#voyage-line .home:hover{color:rgba(255,255,255,.9)}
+#voyage-line .home svg{width:11px;height:11px;display:block}
+#voyage-line .vl-div{width:1px;height:12px;background:rgba(255,255,255,.16);margin:0 2px}
+@media (max-width:640px){#voyage-line .home{width:22px;height:26px}#voyage-line .vl-div{width:12px;height:1px;margin:2px 0}}
+
+/* ===== MOBILE UNIFIED LAYOUT (base: 08-Lambert_nebu) ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+#title{color:rgba(255,255,255,.5)}
+#title span{color:rgba(255,255,255,.75)}
+@media (max-width:767px), (orientation:landscape) and (max-height:500px){
+  #title{top:20px;left:max(20px,env(safe-area-inset-left,0px));right:96px;font-size:9px;letter-spacing:.15em}
+  #title span{font-size:16px;margin-bottom:4px}
+  #back-btn,#next-btn{font-size:7px;padding:5px 9px;border-radius:3px;letter-spacing:.18em;min-width:48px}
+  #back-btn{bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(68px + env(safe-area-inset-right,0px))}
+  #next-btn{bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
+  #universe-id{font-size:8px;bottom:calc(36px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #voyage-line{bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+}
+</style>
+</head>
+<body>
+<script>
+
+var LOWP=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)||matchMedia('(max-width:768px)').matches||(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4||location.search.indexOf('embed')>-1;
+(function(){var raf=window.requestAnimationFrame.bind(window),q=[];window.requestAnimationFrame=function(cb){return document.hidden?(q.push(cb),0):raf(cb)};document.addEventListener('visibilitychange',function(){if(!document.hidden){var p=q;q=[];for(var i=0;i<p.length;i++)raf(p[i]);}});})();
+</script>
+
+<div id="title">
+<span>RIEMANN DREAMS</span>
+θ = i×0.045 + sin(p)×2 · r = √i×0.55 + p×0.08 &nbsp;·&nbsp;Prime Ocean Zeta Lattice Matrix&nbsp;·&nbsp;Move Mouse
+</div>
+
+<a href="index.html" onclick="if(history.length>1){history.back();return false}" id="back-btn">BACK</a>
+<a href="04-Quantum_sing.html" id="next-btn">NEXT</a>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+window.__THREE_OK=1;
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0x020208,0.004);
+
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,1000);
+camera.position.set(0,20,160);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+
+const COUNT=LOWP?25000:60000;
+const geo=new THREE.BufferGeometry();
+const pos=new Float32Array(COUNT*3);
+const col=new Float32Array(COUNT*3);
+
+const velocities=[];
+const initialPos=[];
+
+function isPrime(n){
+    if(n<2)return false;
+    for(let i=2;i<=Math.sqrt(n);i++){
+        if(n%i===0)return false;
+    }
+    return true;
+}
+
+const primes=[];
+let num=2;
+while(primes.length<300){
+    if(isPrime(num))primes.push(num);
+    num++;
+}
+
+for(let i=0;i<COUNT;i++){
+    const idx=i%primes.length;
+    const p=primes[idx];
+
+    const theta=i*0.045+Math.sin(p)*2.0;
+    const rad=Math.sqrt(i)*0.55+p*0.08;
+
+    const px=Math.cos(theta)*rad;
+    const py=(Math.random()-0.5)*15+Math.sin(rad*0.1)*6;
+    const pz=Math.sin(theta)*rad;
+
+    pos[i*3]=px;
+    pos[i*3+1]=py;
+    pos[i*3+2]=pz;
+
+    initialPos.push({x:px,y:py,z:pz,rad:rad,p:p,seed:Math.random()});
+    velocities.push({x:0,y:0,z:0});
+
+    col[i*3]=0.2+0.4*Math.sin(p*0.5);
+    col[i*3+1]=0.4+0.5*Math.cos(rad*0.02);
+    col[i*3+2]=0.7+0.3*Math.sin(theta);
+}
+
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+
+const mat=new THREE.PointsMaterial({
+    size:0.45,
+    vertexColors:true,
+    transparent:true,
+    opacity:0.85,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+});
+
+const cloud=new THREE.Points(geo,mat);
+scene.add(cloud);
+
+let bloom=[];
+function triggerBloom(x,y){
+    bloom.push({
+        x:x,
+        y:y,
+        life:1.0,
+        maxLife:1.0
+    });
+    if(bloom.length>8)bloom.shift();
+}
+
+let tx=0,ty=0;
+let gyroX=0,gyroY=0;
+
+addEventListener('pointermove',e=>{
+    tx=(e.clientX/innerWidth-0.5)*2.5;
+    ty=(e.clientY/innerHeight-0.5)*1.8;
+});
+
+addEventListener('click',e=>{
+    const vec=new THREE.Vector3(
+        (e.clientX/innerWidth)*2-1,
+        -(e.clientY/innerHeight)*2+1,
+        0.5
+    );
+    vec.unproject(camera);
+    const dir=vec.sub(camera.position).normalize();
+    const distance=-camera.position.y/dir.y;
+    const pos=camera.position.clone().add(dir.multiplyScalar(distance));
+    triggerBloom(pos.x,pos.z);
+});
+
+if(window.DeviceOrientationEvent){
+    addEventListener('deviceorientation',e=>{
+        if(e.beta!==null)gyroY=e.beta;
+        if(e.gamma!==null)gyroX=e.gamma;
+    },true);
+}
+
+let time=0;
+function animate(){
+    requestAnimationFrame(animate);
+    time+=0.004;
+
+    cloud.rotation.y+=0.0012;
+
+    camera.position.x+=(tx*50-camera.position.x)*0.03;
+    camera.position.y+=((-ty*40+35)-camera.position.y)*0.03;
+    camera.lookAt(0,-5,0);
+
+    for(let b of bloom){
+        b.life-=0.008;
+    }
+    bloom=bloom.filter(b=>b.life>0);
+
+    const posAttr=geo.attributes.position;
+    const colorsAttr=geo.attributes.color;
+    const positions=posAttr.array;
+    const col=colorsAttr.array;
+
+    for(let i=0;i<COUNT;i++){
+        let px=positions[i*3];
+        let py=positions[i*3+1];
+        let pz=positions[i*3+2];
+        let vx=velocities[i].x;
+        let vy=velocities[i].y;
+        let vz=velocities[i].z;
+        const init=initialPos[i];
+
+        const rWave=Math.sin(init.rad*0.08-time*2.5)*3.2;
+        const pWave=Math.cos(init.p*0.4+time*1.5)*1.8;
+
+        vy+=(init.y+rWave+pWave-py)*0.012;
+
+        for(let b of bloom){
+            const dx=px-b.x;
+            const dy=pz-b.life;
+            const d=Math.sqrt(dx*dx+dy*dy)+1;
+            const f=0.2*b.life/d;
+            vx+=dx*f;
+            vy+=dy*f;
+        }
+
+        vx*=0.985;
+        vy*=0.985;
+        vz*=0.985;
+        vx+=gyroX*0.001;
+        vy+=gyroY*0.001;
+        px+=vx;
+        py+=vy;
+        pz+=vz;
+
+        if(px>140)px=-140; if(px<-140)px=140;
+        if(py>140)py=-140; if(py<-140)py=140;
+        if(pz>140)pz=-140; if(pz<-140)pz=140;
+
+        velocities[i].x=vx; velocities[i].y=vy; velocities[i].z=vz;
+        positions[i*3]=px; positions[i*3+1]=py; positions[i*3+2]=pz;
+
+        const t=time+(px+py+pz)*0.01;
+        col[i*3]=0.5+0.5*Math.sin(t);
+        col[i*3+1]=0.5+0.5*Math.sin(t+2.094);
+        col[i*3+2]=0.5+0.5*Math.sin(t+4.188);
+    }
+
+    posAttr.needsUpdate=true;
+    colorsAttr.needsUpdate=true;
+
+    renderer.render(scene,camera);
+}
+animate();
+
+addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+<script>
+(function(){
+  if(location.search.indexOf('embed')>-1){document.body.classList.add('embed');return;}
+  var a=document.createElement('div');a.id='arrive';document.body.appendChild(a);
+  var d=document.createElement('div');d.id='depart';document.body.appendChild(d);
+  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});}
+  if(document.readyState!=='loading')go();else document.addEventListener('DOMContentLoaded',go);
+  window.addEventListener('pageshow',function(e){if(e.persisted){a.style.opacity='0';d.style.opacity='0';}});
+  document.addEventListener('click',function(e){
+    var el=e.target.closest?e.target.closest('a[href]'):null;
+    if(!el)return;
+    var href=el.getAttribute('href');
+    if(!href)return;
+    if(href.indexOf('http')===0||href.charAt(0)==='#'||el.hasAttribute('onclick'))return;
+    e.preventDefault();
+    d.style.opacity='1';
+    setTimeout(function(){location.href=href;},650);
+  },true);
+})();
+</script>
+<script>
+
+(function(){
+  var s=sessionStorage.getItem('universe_seed');
+  if(!s){s=Math.floor(Math.random()*16777216).toString(16).padStart(6,'0').toUpperCase();sessionStorage.setItem('universe_seed',s);}
+  window.UNIVERSE_SEED=s;
+  var lbl=document.getElementById('universe-label');
+  if(lbl){lbl.textContent='#'+s;return;}
+  var el=document.createElement('div');
+  el.id='universe-id';
+  el.textContent='UNIVERSE #'+s;
+  document.body.appendChild(el);
+})();
+</script>
+<nav id="voyage-line" aria-label="Voyage" onpointerdown="event.stopPropagation()" ontouchstart="event.stopPropagation()">
+<a href="index.html" class="home" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"/></svg></a>
+<div class="vl-div"></div>
+
+<a href="01-RGB_Galaxy.html" class="vt" title="01 · RGB Galaxy Engine"></a>
+<a href="02-Hyperbolic_Nebula.html" class="vt" title="02 · Hyperbolic Nebula"></a>
+<a href="03-Riemann_dream.html" class="vt on" title="03 · Riemann Dreams"></a>
+<a href="04-Quantum_sing.html" class="vt" title="04 · Quantum Singularity"></a>
+<a href="05-Dual_Galaxy.html" class="vt" title="05 · Dual Galaxy"></a>
+<a href="06-Lambert_Essential.html" class="vt" title="06 · Lambert Nebula: Essential"></a>
+<a href="07-Lambert_Archive.html" class="vt" title="07 · Lambert Nebula: Archive"></a>
+<a href="08-Lambert_nebu.html" class="vt" title="08 · Lambert Nebula"></a>
+<a href="09-Bessel_bloom.html" class="vt" title="09 · Bessel Bloom"></a>
+<a href="10-Lorenz_butt.html" class="vt" title="10 · Lorenz Butterfly"></a>
+<a href="11-Odyssey_Essential.html" class="vt" title="11 · Odyssey: Essential"></a>
+<a href="12-Odyssey_Archive.html" class="vt" title="12 · Odyssey: Archive"></a>
+<a href="13-Event_Horizon.html" class="vt" title="13 · Event Horizon"></a>
+<a href="14-Black_Voyage.html" class="vt" title="14 · Black Hole Voyage"></a>
+<a href="15-Kerr_Plasma.html" class="vt" title="15 · Kerr Plasma Cathedral"></a>
+</nav>
+<script>
+(function(){
+  if(location.search.indexOf('embed')>-1)return;
+  var tries=0;
+  var iv=setInterval(function(){
+    tries++;
+    if(window.__THREE_OK){clearInterval(iv);var o=document.getElementById('net-fail');if(o)o.remove();return;}
+    if(tries===7){
+      var o=document.createElement('div');
+      o.id='net-fail';
+      o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(1,2,6,.94);color:rgba(255,255,255,.85);font-family:Inter,\'Noto Sans KR\',sans-serif;font-size:13px;letter-spacing:.08em;text-align:center;padding:0 24px;line-height:1.8';
+      o.innerHTML='<div>\uc791\ud488\uc744 \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.<br><span style="font-size:11px;color:rgba(255,255,255,.5)">\ub124\ud2b8\uc6cc\ud06c \uc5f0\uacb0\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694 \u00b7 Unable to load \u2014 check your connection</span></div><button onclick="location.reload()" style="background:none;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7);padding:8px 18px;border-radius:4px;font-size:11px;letter-spacing:.2em;cursor:pointer">RETRY</button>';
+      document.body.appendChild(o);
+    }
+  },1000);
+})();
+</script>
+<script id="vp-resync">
+(function(){
+  var w=innerWidth,h=innerHeight;
+  window.addEventListener('resize',function(){w=innerWidth;h=innerHeight});
+  var kick=function(){window.dispatchEvent(new Event('resize'))};
+  var kicks=function(){setTimeout(kick,120);setTimeout(kick,450);setTimeout(kick,1000)};
+  window.addEventListener('orientationchange',kicks);
+  window.addEventListener('pageshow',kicks);
+  if(window.visualViewport)visualViewport.addEventListener('resize',kick);
+  if(window.matchMedia){try{matchMedia('(orientation:landscape)').addEventListener('change',kicks)}catch(e){}}
+  setInterval(function(){if(innerWidth!==w||innerHeight!==h)kick()},700);
+  if(document.readyState==='complete'){kicks();}else{window.addEventListener('load',kicks);}
+})();
+</script>
+<script>
+(function(){
+  if(location.search.indexOf('embed')>-1)return;
+  try{
+    var f=location.pathname.split('/').pop();
+    var v=JSON.parse(sessionStorage.getItem('odyssey_visited')||'[]');
+    if(v.indexOf(f)<0){v.push(f);sessionStorage.setItem('odyssey_visited',JSON.stringify(v));}
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

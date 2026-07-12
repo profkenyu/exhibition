@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPERATOR'S CODEX · 2026: a digital odyssey</title>
+<meta name="description" content="김건우교수 제19회 개인전 홈페이지 사용설명서 — 관람 가이드 및 운영·유지보수 코덱스.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --paper:#fefefe;
+    --paper-2:#cecece;
+    --ink:#161616;
+    --muted:#565656;
+    --faint:#9a9a9a;
+    --line:rgba(0,0,0,.13);
+    --line-2:rgba(0,0,0,.06);
+    --accent:#161616;
+    --accent-2:#3a3a3a;
+    --panel:rgba(0,0,0,.022);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:96px; }
+body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.72;
+    letter-spacing:.005em;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+body::before{
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+        radial-gradient(120% 80% at 12% -8%, rgba(0,0,0,.05), transparent 46%),
+        radial-gradient(90% 70% at 108% 4%, rgba(0,0,0,.03), transparent 50%),
+        var(--paper);
+}
+body::after{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    opacity:.045; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+#back-btn{
+    position:fixed; bottom:30px; right:clamp(20px,4vw,56px); z-index:70;
+    background:var(--paper);
+    color:rgba(22,22,22,.6); text-decoration:none;
+    font-size:10px; letter-spacing:.25em;
+    border:1px solid rgba(22,22,22,.2);
+    padding:6px 12px; border-radius:4px;
+    min-width:68px; text-align:center; box-sizing:border-box;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:all .3s ease;
+}
+#back-btn:hover{
+    color:var(--ink); background:#f4f4f4;
+    border-color:rgba(22,22,22,.5);
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+}
+@media (max-width:640px){
+    #back-btn{ bottom:20px; right:16px; padding:5px 10px; font-size:9px; min-width:58px; }
+}
+.shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
+header.mast{ padding:clamp(42px,7vh,76px) 0 clamp(40px,6vh,72px); border-bottom:1px solid var(--line); }
+.eyebrow{
+    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
+    letter-spacing:.42em; text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:12px;
+}
+.eyebrow::before{ content:''; width:26px; height:1px; background:var(--accent); display:inline-block; }
+h1.codex{
+    margin-top:22px;
+    font-family:'Inter',sans-serif; font-weight:700;
+    font-size:clamp(26px,3.8vw,46px); line-height:1; letter-spacing:-.045em;
+    color:var(--ink);
+}
+h1.codex .thin{ font-weight:300; color:var(--muted); letter-spacing:-.02em; }
+.mast-sub{
+    margin-top:22px; max-width:60ch; color:var(--muted);
+    font-size:clamp(12px,1.05vw,14px); line-height:1.85;
+}
+.mast-sub b{ color:var(--ink); font-weight:500; }
+.mast-meta{
+    margin-top:34px; display:flex; flex-wrap:wrap; gap:10px 26px;
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em;
+    color:var(--faint); text-transform:uppercase;
+}
+.mast-meta span{ display:inline-flex; align-items:center; gap:9px; }
+.mast-meta .dot{ width:4px; height:4px; border-radius:50%; background:var(--ink); }
+.mast-meta .dot.cy{ background:var(--faint); }
+.layout{ display:grid; grid-template-columns:230px 1fr; gap:clamp(30px,5vw,84px); padding:clamp(38px,6vh,64px) 0 140px; align-items:start; }
+nav.index{ position:sticky; top:52px; }
+nav.index .idx-title{
+    font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--faint); padding:0 0 16px 14px;
+}
+.idx-row{
+    display:flex; align-items:baseline; gap:11px;
+    padding:6px 10px 6px 12px; cursor:pointer; text-decoration:none;
+    border-left:2px solid transparent;
+    font-family:'DM Mono',monospace;
+    transition:border-color .28s ease, background .28s ease;
+}
+.idx-row .n{ font-size:9.5px; color:var(--faint); width:20px; flex-shrink:0; letter-spacing:.1em; }
+.idx-row .t{ font-size:11px; color:var(--muted); font-family:'Inter','Noto Sans KR',sans-serif; letter-spacing:.02em; transition:color .28s ease; }
+.idx-row:hover{ background:rgba(0,0,0,.045); }
+.idx-row:hover .t{ color:var(--ink); }
+.idx-row.active{ border-left-color:var(--accent); background:rgba(0,0,0,.05); }
+.idx-row.active .n{ color:var(--accent); }
+.idx-row.active .t{ color:var(--ink); }
+main.body{ min-width:0; max-width:820px; }
+section.sec{ padding:clamp(20px,4vh,40px) 0 clamp(40px,7vh,74px); border-bottom:1px solid var(--line-2); scroll-margin-top:80px; }
+section.sec:last-child{ border-bottom:none; }
+.sec-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:8px; }
+.sec-head .sn{
+    font-family:'Space Mono',monospace; font-size:10.5px; font-weight:700;
+    color:var(--accent); letter-spacing:.1em; flex-shrink:0;
+}
+.sec-head h2{
+    font-family:'Inter','Noto Sans KR',sans-serif; font-weight:600;
+    font-size:clamp(15px,1.9vw,21px); line-height:1.15; letter-spacing:-.02em;
+}
+.sec-head .en{
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--faint); margin-left:auto; align-self:center;
+    white-space:nowrap;
+}
+.sec > p{ color:var(--muted); font-size:13.5px; line-height:1.85; margin:18px 0; max-width:68ch; }
+.sec > p b{ color:var(--ink); font-weight:500; }
+.sec strong.hl{ color:var(--ink); font-weight:600; text-decoration:underline; text-decoration-color:rgba(0,0,0,.3); text-underline-offset:3px; }
+.lede{ font-size:15px !important; color:var(--ink) !important; font-weight:300; line-height:1.9 !important; }
+.data{ margin:26px 0; border-top:1px solid var(--line); }
+.d-row{
+    display:grid; grid-template-columns:min(38%,240px) 1fr; gap:20px;
+    padding:15px 4px 15px 14px; border-bottom:1px solid var(--line-2);
+    border-left:2px solid transparent;
+    transition:border-color .25s ease, background .25s ease;
+}
+.d-row:hover{ border-left-color:rgba(0,0,0,.45); background:rgba(0,0,0,.028); }
+.d-row .k{ display:flex; align-items:baseline; gap:10px; }
+.d-row .k .kv{ color:var(--faint); font-size:9px; opacity:.9; }
+.d-row .k .kt{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:12.5px; color:var(--ink); font-weight:500; letter-spacing:.01em; }
+.d-row .val{ color:var(--muted); font-size:12.5px; line-height:1.7; }
+.d-row .val small{ display:block; margin-top:4px; color:var(--faint); font-size:10.5px; }
+.d-row.head{ border-left:none; }
+.d-row.head:hover{ background:none; }
+.d-row.head .k .kt, .d-row.head .val{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--faint); font-weight:400; }
+code, .chip{
+    font-family:'DM Mono','Space Mono',monospace; font-size:.86em;
+    background:rgba(0,0,0,.06); color:#2b2b2b;
+    padding:2px 7px; border-radius:3px; letter-spacing:.02em;
+    border:1px solid rgba(0,0,0,.12);
+}
+code.cr{ background:rgba(0,0,0,.1); color:#111; border-color:rgba(0,0,0,.24); }
+pre{
+    margin:22px 0; padding:20px 22px; border-radius:8px; overflow-x:auto;
+    background:linear-gradient(180deg,#fafafa,#eaeaea);
+    border:1px solid var(--line); border-left:2px solid var(--accent);
+    font-family:'DM Mono',monospace; font-size:11.5px; line-height:1.85; color:#2b2b2b;
+    scrollbar-width:thin;
+}
+pre .cm{ color:var(--faint); }
+pre .st{ color:#4a4a4a; }
+pre .kw{ color:#111; font-weight:500; }
+pre .fn{ color:#6a6a6a; }
+.map{
+    margin:26px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:2px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden;
+}
+.map .cell{ background:var(--paper-2); padding:20px 18px 22px; position:relative; transition:background .3s ease; }
+.map .cell:hover{ background:#dedede; }
+.map .cell .stage{ font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.24em; color:var(--accent); text-transform:uppercase; }
+.map .cell .nm{ margin-top:10px; font-size:13.5px; font-weight:500; color:var(--ink); letter-spacing:.01em; }
+.map .cell .en2{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.14em; color:var(--faint); text-transform:uppercase; margin-top:3px; }
+.map .cell .ds{ margin-top:11px; font-size:11.5px; color:var(--muted); line-height:1.65; }
+.map .cell .arrow{ position:absolute; top:22px; right:14px; color:var(--faint); font-size:13px; }
+.keys{ margin:24px 0; display:flex; flex-direction:column; gap:2px; }
+.krow{ display:grid; grid-template-columns:180px 1fr; gap:20px; align-items:center; padding:11px 14px; border-radius:6px; transition:background .2s ease; }
+.krow:hover{ background:rgba(0,0,0,.03); }
+.kbd{ display:inline-flex; gap:6px; flex-wrap:wrap; }
+.kbd b{
+    font-family:'DM Mono',monospace; font-size:10px; font-weight:400; letter-spacing:.06em;
+    background:#ffffff; color:var(--ink); border:1px solid var(--line);
+    border-bottom-color:rgba(0,0,0,.22); border-radius:5px; padding:5px 10px; min-width:30px; text-align:center;
+    box-shadow:0 1px 0 rgba(0,0,0,.04);
+}
+.krow .act{ color:var(--muted); font-size:12.5px; }
+.note{
+    margin:26px 0; padding:18px 22px; border-radius:8px;
+    background:rgba(0,0,0,.035); border:1px solid rgba(0,0,0,.11);
+    border-left:3px solid var(--accent); font-size:12.5px; line-height:1.75; color:#3a3a3a;
+}
+.note .lbl{ font-family:'Space Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+.note.cy{ background:rgba(0,0,0,.025); border-color:rgba(0,0,0,.09); border-left-color:var(--accent-2); color:#3a3a3a; }
+.note.cy .lbl{ color:var(--accent-2); }
+.note b{ color:var(--ink); font-weight:500; }
+.note code{ background:rgba(0,0,0,.05); }
+.pull{
+    margin:40px 0; padding:30px 0 34px; text-align:center; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.pull .q{ font-size:clamp(15px,1.9vw,22px); font-weight:200; line-height:1.6; letter-spacing:.01em; color:var(--ink); }
+.pull .qe{ display:block; margin-top:12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase; }
+footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
+.foot-grid{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; align-items:flex-end; }
+.foot .sig{ font-family:'Inter',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.02em; }
+.foot .sig .thin{ font-weight:300; color:var(--muted); }
+.foot .meta{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase; line-height:2; text-align:right; }
+.foot .seed{ color:var(--muted); font-style:italic; }
+#prog{ position:fixed; top:0; left:0; height:2px; width:0; background:linear-gradient(90deg,#111,#555); z-index:60; transition:width .1s linear; }
+@media (max-width:860px){
+    .layout{ grid-template-columns:1fr; gap:0; padding-top:20px; }
+    nav.index{ position:static; margin-bottom:30px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+    nav.index .idx-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:2px 16px; }
+    main.body{ max-width:none; }
+    .sec-head .en{ display:none; }
+    .d-row{ grid-template-columns:1fr; gap:6px; }
+    .map{ grid-template-columns:1fr; }
+    .map .cell .arrow{ display:none; }
+    .krow{ grid-template-columns:1fr; gap:8px; }
+}
+@media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    *{ transition:none !important; }
+}
+</style>
+</head>
+<body>
+<a id="back-btn" href="index.html">BACK</a>
+<div id="prog"></div>
+
+<div class="shell">
+
+<header class="mast">
+    <div class="eyebrow">심연의 방정식 · 홈페이지 사용·제작 설명서</div>
+    <h1 class="codex"><span class="thin">Operator's</span> Codex</h1>
+    <p class="mast-sub">
+        <b>김건우교수 제19회 개인전</b> 사이트의 관람과 운영을 위한 통합 안내서다. <br>
+        이 사이트는 정적 페이지가 아니라 <b>Opening → DEPART → Observatory → Voyage</b>로 흐르는 하나의 시네마틱 시퀀스다.<br>
+        또한 이 페이지는 작품 관리와 배포 방법까지 포함한 운영 절차를 간단히 정리한 사양서이기도 하다.
+        <b>울산대학교 디지털콘텐츠디자인 전공 학생</b> 및 디지털 아티스트의 작품 제작에 도움이 되었으면 한다.
+    </p>
+    <div class="mast-meta">
+        <span><i class="dot"></i>Equations of the Abyss</span>
+        <span><i class="dot cy"></i> 2026.08.24 – 09.05 · 갤러리한빛</span>
+        <span><i class="dot"></i> kimgunwoo.kr/19th/</span>
+    </div>
+</header>
+
+<div class="layout">
+
+    <nav class="index">
+        <div class="idx-title">Index</div>
+        <div class="idx-wrap">
+            <a class="idx-row" href="#s0"><span class="n">00</span><span class="t">개요</span></a>
+            <a class="idx-row" href="#s1"><span class="n">01</span><span class="t">화면 지도</span></a>
+            <a class="idx-row" href="#s2"><span class="n">02</span><span class="t">관람 가이드</span></a>
+            <a class="idx-row" href="#s3"><span class="n">03</span><span class="t">인터랙션 명세</span></a>
+            <a class="idx-row" href="#s4"><span class="n">04</span><span class="t">데이터 · URL</span></a>
+            <a class="idx-row" href="#s5"><span class="n">05</span><span class="t">작품 편집</span></a>
+            <a class="idx-row" href="#s6"><span class="n">06</span><span class="t">성능 · 호환</span></a>
+            <a class="idx-row" href="#s7"><span class="n">07</span><span class="t">배포 · 메타</span></a>
+            <a class="idx-row" href="#s8"><span class="n">08</span><span class="t">운영 원칙</span></a>
+        </div>
+    </nav>
+
+    <main class="body">
+
+        <section class="sec" id="s0">
+            <div class="sec-head"><span class="sn">00</span><h2>개요</h2><span class="en">Overview</span></div>
+            <p class="lede">보이지 않는 계산은 어떻게 세계를 움직이는가. 이 사이트는 15개의 제너러티브 아트를 하나의 우주로 연결한 <b>디지털 관측소(Observatory)</b>다.</p>
+            <p>방문자는 블랙홀 오프닝에서 <code class="cr">DEPART</code>를 눌러 우주로 진입하고, 원하는 작품을 선택하여 각기 다른 수학적 우주로 <b>항해(Voyage)</b>한다. 모든 화면은 Black 기반 컬러 시스템과 Graphite 계조, Swiss 타이포그래피, Breathing motion이라는 하나의 비주얼 언어를 공유한다.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">항목</span></div><div class="val">값</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">진입점</span></div><div class="val"><code>index.html</code><small>세션당 1회 오프닝 재생 후 자동 스킵</small></div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">작품 수</span></div><div class="val">15편 + Coda(∞) 1개 오버레이</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">아키텍처</span></div><div class="val">각 작품은 독립 단일 HTML — 프레임워크·빌드 없음</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rendering Pipeline</span></div><div class="val">WebGL/GLSL 중력렌즈 셰이더 + Canvas 2D 폴백</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">운영 모드</span></div><div class="val">Cinematic(기본) · Archive(<code>all/index.html</code>)</div></div>
+            </div>
+        </section>
+
+        <section class="sec" id="s1">
+            <div class="sec-head"><span class="sn">01</span><h2>화면 지도</h2><span class="en">Screen Map</span></div>
+            <p>전체 관람 흐름은 네 개의 단계(Stage)로 구성된다. 모든 화면 상태는 sessionStorage를 기반으로 복원되며, 브라우저 뒤로가기(bfcache)를 지원한다.</p>
+            <div class="map">
+                <div class="cell"><span class="arrow">→</span><div class="stage">State 01</div><div class="nm">Opening</div><div class="en2">The Void</div><div class="ds">블랙홀 관문. 제목·부제 페이드인 후 <b>DEPART</b> 트라이앵글이 호흡한다.</div></div>
+                <div class="cell"><span class="arrow">→</span><div class="stage">Transit</div><div class="nm">Depart</div><div class="en2">2.1s Warp</div><div class="ds">레터박스가 닫히며 특이점으로 확대되고, 이후 관측소 화면으로 전환된다.</div></div>
+                <div class="cell"><span class="arrow">→</span><div class="stage">State 02</div><div class="nm">Observatory</div><div class="en2">Worklist + Preview</div><div class="ds">15편의 방정식 목록. 선택 시 우측에 <b>라이브 프리뷰</b> iframe.</div></div>
+                <div class="cell"><div class="stage">State 03</div><div class="nm">Voyage · Coda</div><div class="en2">Enter / ∞</div><div class="ds">작품으로 항해하거나, ∞ 행에서 전시의 마지막 질문 <b>Coda</b>를 연다.</div></div>
+            </div>
+            <div class="note cy"><span class="lbl">고정 UI</span>
+                좌상단 <b>모드 토글</b>(Cinematic·Archive)과 전시 캡션, 좌하단 진입 힌트, 우하단 <b>Universe #ID</b>(세션마다 무작위 생성되는 우주 시드)는 모든 상태에서 유지된다.</div>
+        </section>
+
+        <section class="sec" id="s2">
+            <div class="sec-head"><span class="sn">02</span><h2>관람 가이드</h2><span class="en">Visitor Guide</span></div>
+            <p>입력 방식에 따라 조작 방식이 자동으로 나뉜다. <br>입력 장치가 <b>마우스</b>인 경우 호버 중심으로, <b>터치</b>인 경우 두 번 탭 방식으로 동작한다.</p>
+
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">데스크톱 · 마우스</span></div><div class="val">동작</div></div>
+                <div class="d-row"><div class="k"><span class="kt">작품명에 커서를 올림</span></div><div class="val">선택 + 우측 라이브 프리뷰 로드(0.22초 지연)</div></div>
+                <div class="d-row"><div class="k"><span class="kt">작품명 클릭</span></div><div class="val">해당 작품으로 <strong class="hl">항해(Voyage)</strong></div></div>
+                <div class="d-row"><div class="k"><span class="kt">∞ 행 클릭</span></div><div class="val">Coda 오버레이(전시의 마지막 질문) 열기</div></div>
+            </div>
+
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">모바일 · 터치</span></div><div class="val">동작</div></div>
+                <div class="d-row"><div class="k"><span class="kt">첫 번째 탭</span></div><div class="val">선택 — 시적 문구 펼침(세로 화면에선 프리뷰 패널 숨김)</div></div>
+                <div class="d-row"><div class="k"><span class="kt">같은 작품 다시 탭</span></div><div class="val">해당 작품으로 항해</div></div>
+            </div>
+
+            <p><b>키보드</b>만으로도 모든 기능을 사용할 수 있다. 접근성 포커스 링이 표시되며, <code>reduce-motion</code> 사용자에게는 모든 워프 애니메이션이 축약된다.</p>
+            <div class="keys">
+                <div class="krow"><span class="kbd"><b>DEPART</b> <b>Enter</b></span><span class="act">오프닝에서 우주로 진입</span></div>
+                <div class="krow"><span class="kbd"><b>↑</b> <b>↓</b></span><span class="act">작품 목록 위/아래 이동(자동 스크롤·프리뷰)</span></div>
+                <div class="krow"><span class="kbd"><b>Enter</b></span><span class="act">선택한 작품으로 항해</span></div>
+                <div class="krow"><span class="kbd"><b>Tab</b></span><span class="act">행·버튼 순차 포커스</span></div>
+                <div class="krow"><span class="kbd"><b>Esc</b></span><span class="act">Coda 오버레이 닫기</span></div>
+            </div>
+            <div class="note"><span class="lbl">되돌아오기</span>
+                작품에서 브라우저 <b>뒤로가기</b>를 누르면 오프닝을 다시 보지 않고 관측소로 곧장 복귀한다(bfcache·<code>pageshow</code> 대응). 방문한 작품에는 목록에 <b>마커 ●</b>가 남는다.</div>
+        </section>
+
+        <section class="sec" id="s3"> 
+            <div class="sec-head"><span class="sn">03</span><h2>인터랙션 명세</h2><span class="en">Interaction Reference</span></div>
+            <p>상태 전이와 타이밍, 마커 동작의 기준 사양. 운영 중 동작을 검증하거나 재현할 때 참조한다.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">기능</span></div><div class="val">동작 방식</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">프리뷰 로드 지연</span></div><div class="val">호버 후 <code>220ms</code> 디바운스 — 짧은 호버에는 프리뷰를 로드하지 않음</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">프리뷰 소스</span></div><div class="val"><code>파일명 + ?embed=1</code> 로 iframe 삽입</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">DEPART 워프</span></div><div class="val"><code>2100ms</code> (reduce-motion 시 <code>900ms</code>) → settle</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">항해 트랜지션</span></div><div class="val">검정 레이어 <code>900ms</code> 페이드 후 페이지 이동</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">방문 마커</span></div><div class="val">● 마커 — <code>odyssey_visited</code>에 파일명 누적</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">Universe Seed</span></div><div class="val">세션당 무작위 6자리 HEX — 배경 우주 형상 결정</div></div>
+            </div>
+        </section>
+
+        <section class="sec" id="s4">
+            <div class="sec-head"><span class="sn">04</span><h2>데이터 · URL</h2><span class="en">State &amp; Params</span></div>
+            <p>사용자 상태는 서버가 아닌 <b>브라우저 sessionStorage</b>에서 관리하며, 탭을 닫으면 초기화된다. 딥링크 파라미터로 특정 상태에 바로 진입할 수 있다.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">sessionStorage 키</span></div><div class="val">의미</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>odyssey_entered</code></span></div><div class="val">오프닝 통과 여부 — 존재 시 오프닝 스킵</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>odyssey_visited</code></span></div><div class="val">방문 작품 파일명 배열(JSON) — ● 마커 근거</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>universe_seed</code></span></div><div class="val">현재 세션의 우주 시드(HEX)</div></div>
+            </div>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">URL 파라미터</span></div><div class="val">효과</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>?embed=1</code></span></div><div class="val">작품을 프리뷰용(무포인터·경량)으로 로드</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>#coda</code></span></div><div class="val">관측소 진입 + Coda 자동 오픈(공유용 딥링크)</div></div>
+            </div>
+            <div class="note"><span class="lbl">운영 팁</span>
+                동작을 처음부터 다시 보려면 개발자 콘솔에서 <code>sessionStorage.clear()</code> 후 새로고침. 관람객에게 오프닝을 항상 노출하려면 이 방식을 데모 리셋 절차로 사용한다.</div>
+        </section>
+
+        <section class="sec" id="s5">
+            <div class="sec-head"><span class="sn">05</span><h2>작품 편집</h2><span class="en">Editing Works</span></div>
+            <p>모든 <b>작품 목록의 단일 관리 지점(Single Source of Truth)</b>은 <code>index.html</code>의 <code>works</code> 배열이다. 새 작품은 반드시 이 배열에 등록하며, 배열 순서는 작품 번호를 결정한다. 등록 즉시 목록 UI, Preview, 방문 마커가 자동으로 갱신된다. 단, 각 작품 하단의 항해 타임라인(voyage-line)과 Archive(<code>all/index.html</code>)의 카드는 별도로 갱신해야 한다.</p>
+            <pre>{ <span class="fn">title</span>:<span class="st">"Kerr Plasma Cathedral"</span>,
+  <span class="fn">poetic</span>:<span class="st">"모든 입자는 결국 침묵 속으로 사라진다."</span>,
+  <span class="fn">formula</span>:<span class="st">"ds² = −(1 − rs·r/ρ²)dt² + …"</span>,
+  <span class="fn">file</span>:<span class="st">"15-Kerr_Plasma.html"</span> },</pre>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">필드</span></div><div class="val">역할</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>title</code></span></div><div class="val">목록·프리뷰 헤더 제목</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>poetic</code></span></div><div class="val">한글 시적 문구(선택 시 노출)</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>formula</code></span></div><div class="val">우측 정렬 방정식 라벨(데이터 톤)</div></div>
+                <div class="d-row"><div class="k"><span class="kt"><code>file</code></span></div><div class="val">작품 HTML 경로 — <strong class="hl">실제 파일명과 정확히 일치해야 함</strong></div></div>
+            </div>
+            <div class="note"><span class="lbl">명명 규칙</span>
+                <b>번호-이름.html</b> (예: <code>08-Lambert_nebu.html</code>). 순서를 바꾸려면 배열 순서만 바꾸면 되고, 파일명 앞 번호는 정렬·아카이브 식별용이다. 배열 순서와 파일명 앞 번호를 일치시키면 관리와 유지보수가 훨씬 수월하다.</div>
+            <p><b>Archive 모드</b>는 좌상단 토글의 <code>all/index.html</code>로 연결된다. Cinematic이 큐레이션된 관람 동선이라면, Archive는 전작을 한눈에 보는 격자형 목록으로 운영한다.</p>
+        </section>
+
+        <section class="sec" id="s6">
+            <div class="sec-head"><span class="sn">06</span><h2>성능 · 호환</h2><span class="en">Performance</span></div>
+            <p>기기 등급을 감지해 셰이더 옥타브·별 파티클 수·전력 프로파일을 자동 조절한다. 저사양·WebGL 미지원 환경에서도 기본 화면은 항상 유지된다.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">계층</span></div><div class="val">처리</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">저전력 판정</span></div><div class="val">Android · 폭 ≤768px · 코어 ≤4 · 메모리 ≤4GB 중 하나</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">고사양</span></div><div class="val">FBM 옥타브 5–7, 별 스트릭 3레이어, high-performance</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">저사양</span></div><div class="val">옥타브 4–5, 레이어 축소, low-power</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">WebGL 불가</span></div><div class="val">Canvas 2D 폴백 — 별 + 방사형 그라데이션 블랙홀</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">reduce-motion</span></div><div class="val">breathing·grain·워프 축약, 목록 등장 애니메이션 생략</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">브라우저 탭 비활성화</span></div><div class="val"><code>visibilitychange</code> 시 렌더 루프 정지 → 배터리 절약</div></div>
+            </div>
+            <div class="note cy"><span class="lbl">물리 검증</span>
+                배경 셰이더는 슈바르츠실트 반경(<code>Rs = 2GM/c²</code>) 기반의 중력렌즈 근사를 사용한다. 새 작품의 방정식 라벨은 임의 근사치가 아닌 검증된 식으로 유지할 것 — 이는 이 전시의 개념적 정합성의 핵심이다.</div>
+        </section>
+
+        <section class="sec" id="s7">
+            <div class="sec-head"><span class="sn">07</span><h2>배포 · 메타</h2><span class="en">Deploy &amp; Meta</span></div>
+            <p>정적 호스팅 환경에서는 별도의 빌드 과정 없이 업로드만으로 배포할 수 있다. 공유 시 미리보기 카드가 뜨도록 메타 자산을 함께 관리한다.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">자산</span></div><div class="val">위치 · 동작 방식</div></div>
+                <div class="d-row"><div class="k"><span class="kt">Canonical</span></div><div class="val"><code>https://kimgunwoo.kr/19th/</code></div></div>
+                <div class="d-row"><div class="k"><span class="kt">OG 이미지</span></div><div class="val"><code>og/</code> — 메인 <code>index.jpg</code> · 작품별 <code>01–15.jpg</code> · 아카이브 <code>all-index.jpg</code> (각 1200×630)</div></div>
+                <div class="d-row"><div class="k"><span class="kt">파비콘</span></div><div class="val"><code>favicon_io/</code> (16·32·apple-touch·ico)</div></div>
+                <div class="d-row"><div class="k"><span class="kt">색인</span></div><div class="val"><code>sitemap.xml</code> · <code>robots.txt</code></div></div>
+                <div class="d-row"><div class="k"><span class="kt">폰트</span></div><div class="val">Google Fonts — DM Mono · Space Mono · Inter · Noto Sans KR</div></div>
+            </div>
+            <div class="note"><span class="lbl">배포 체크리스트</span>
+                ① 새 작품 파일 업로드 → ② <code>works</code> 배열 갱신 → ③ Archive(<code>all/index.html</code>) 카드 추가 → ④ 해당 작품 OG·<code>sitemap.xml</code> 추가 → ⑤ 브라우저 캐시 무시 후 프리뷰·항해 실제 클릭 검증.</div>
+        </section>
+
+        <section class="sec" id="s8">
+            <div class="sec-head"><span class="sn">08</span><h2>운영 원칙</h2><span class="en">Operating Rules</span></div>
+            <p>프로젝트 유지보수를 위한 핵심 원칙.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">항목</span></div><div class="val">원칙</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 01</span></div><div class="val"><code>works</code> 배열만 수정한다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 02</span></div><div class="val">배열 순서와 작품 번호를 항상 일치시킨다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 03</span></div><div class="val">모든 작품은 독립 HTML로 제작한다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 04</span></div><div class="val">공통 기능은 <code>index.html</code>에서 관리한다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 05</span></div><div class="val">물리 및 수학 공식은 검증된 식만 사용한다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 06</span></div><div class="val">공통 UI를 작품 내부에 중복 구현하지 않는다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 07</span></div><div class="val">파일명과 작품 제목은 동일한 규칙을 유지한다.</div></div>
+            </div>
+            <div class="note cy"><span class="lbl">중요 참고사항</span>
+                프로젝트는 하나의 거대한 HTML이 아니라 여러 개의 독립적인 작품이 연결된 구조이다.<br>작품은 언제든 교체하거나 추가할 수 있도록 Loose Coupling 구조를 유지한다.</div>
+        </section>
+
+    </main>
+</div>
+
+<footer class="foot">
+    <div class="foot-grid">
+        <div class="sig">2026: <span class="thin">a digital odyssey</span></div>
+        <div class="meta">
+            김건우교수 제19회 개인전 · Operator's Codex<br>
+            Equations of the Abyss — 심연의 방정식<br>
+            <span class="seed">Universe · Cinematic Portal</span>
+        </div>
+    </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+    var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var idxRows = Array.prototype.slice.call(document.querySelectorAll('.idx-row'));
+    var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+    var prog = document.getElementById('prog');
+
+    function onScroll(){
+        var h = document.documentElement;
+        var p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+        prog.style.width = (p*100).toFixed(2) + '%';
+    }
+    addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    if('IntersectionObserver' in window){
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if(e.isIntersecting){
+                    var id = e.target.id;
+                    idxRows.forEach(function(r){
+                        r.classList.toggle('active', r.getAttribute('href') === '#'+id);
+                    });
+                }
+            });
+        }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+        secs.forEach(function(s){ io.observe(s); });
+    }
+})();
+</script>
+</body>
+</html>

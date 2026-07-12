@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>관람 안내 · 2026: a digital odyssey</title>
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="favicon_io/favicon.ico">
+<meta name="description" content="김건우교수 제19회 개인전 관람 안내 — 우주로 들어가 방정식을 항해하는 법.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="관람 안내 · 2026: a digital odyssey">
+<meta property="og:description" content="김건우교수 제19회 개인전 관람 안내 — 2026.08.24–09.05 · 갤러리한빛">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/guide.html">
+<link rel="canonical" href="https://kimgunwoo.kr/19th/guide.html">
+<meta property="og:image" content="https://kimgunwoo.kr/19th/og/index.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/index.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --paper:#f5f7fa;
+    --paper-2:#eef1f6;
+    --card:#ffffff;
+    --ink:#14181e;
+    --graphite:#3d4653;
+    --muted:#6b7686;
+    --faint:#98a2b1;
+    --line:rgba(20,24,30,.10);
+    --line-2:rgba(20,24,30,.06);
+    --crimson:#0891b2;
+    --crimson-lit:#06a8c4;
+    --crimson-soft:rgba(8,145,178,.08);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.72;
+    letter-spacing:.004em;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+body::before{
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+        radial-gradient(90% 55% at 8% -6%, rgba(8,145,178,.055), transparent 44%),
+        radial-gradient(80% 60% at 106% 100%, rgba(20,24,30,.035), transparent 52%);
+}
+body::after{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    opacity:.028; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+#back-btn{
+    position:fixed; bottom:30px; right:clamp(20px,4vw,56px); z-index:70;
+    background:var(--card);
+    color:rgba(20,24,30,.6); text-decoration:none;
+    font-size:10px; letter-spacing:.25em;
+    border:1px solid rgba(20,24,30,.2);
+    padding:6px 12px; border-radius:4px;
+    min-width:68px; text-align:center; box-sizing:border-box;
+    box-shadow:0 4px 12px rgba(8,145,178,.08);
+    transition:all .3s ease;
+}
+#back-btn:hover{
+    color:var(--ink); background:#fbfcfe;
+    border-color:rgba(20,24,30,.5);
+    box-shadow:0 4px 16px rgba(8,145,178,.15);
+}
+@media (max-width:640px){
+    #back-btn{ bottom:20px; right:16px; padding:5px 10px; font-size:9px; min-width:58px; }
+}
+.wrap{ max-width:760px; margin:0 auto; padding:0 clamp(22px,5vw,44px); }
+header.hero{ padding:clamp(40px,7vh,72px) 0 clamp(24px,4vh,44px); }
+.kicker{
+    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
+    letter-spacing:.4em; text-transform:uppercase; color:var(--crimson);
+    display:flex; align-items:center; gap:12px;
+}
+.kicker::before{ content:''; width:24px; height:1px; background:var(--crimson); }
+h1{
+    margin-top:24px;
+    font-family:'Inter',sans-serif; font-weight:700;
+    font-size:clamp(30px,5.4vw,64px); line-height:1.0; letter-spacing:-.055em;
+    color:var(--ink);
+}
+h1 .thin{ font-weight:300; color:var(--graphite); }
+.welcome{
+    margin-top:24px; max-width:52ch; color:var(--graphite);
+    font-size:clamp(13.5px,1.3vw,16px); font-weight:300; line-height:1.9;
+}
+.welcome b{ color:var(--ink); font-weight:500; }
+.stitle{ display:flex; align-items:baseline; gap:14px; margin:clamp(46px,8vh,80px) 0 8px; }
+.stitle .en{
+    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
+    letter-spacing:.14em; color:var(--crimson-lit); text-transform:uppercase;
+}
+.stitle h2{
+    font-family:'Inter','Noto Sans KR',sans-serif; font-weight:600;
+    font-size:clamp(16px,2vw,21px); letter-spacing:-.02em; line-height:1.2;
+}
+.sdesc{ color:var(--muted); font-size:13.5px; margin:14px 0 4px; max-width:60ch; }
+.steps{ margin:34px 0 10px; position:relative; }
+.steps::before{
+    content:''; position:absolute; left:26px; top:14px; bottom:26px; width:2px;
+    background:linear-gradient(180deg, var(--crimson) 0%, rgba(8,145,178,.25) 100%);
+}
+.step{ position:relative; display:grid; grid-template-columns:54px 1fr; gap:22px; padding:0 0 34px; }
+.step:last-child{ padding-bottom:0; }
+.step .num{
+    position:relative; z-index:1;
+    width:54px; height:54px; border-radius:50%;
+    background:var(--card); border:2px solid var(--crimson);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-weight:700; font-size:15px; color:var(--crimson);
+    box-shadow:0 4px 18px rgba(8,145,178,.12);
+}
+.step.coda .num{ border-color:var(--graphite); color:var(--graphite); font-size:18px; box-shadow:0 4px 18px rgba(20,24,30,.08); }
+.step .body{ padding-top:4px; }
+.step .body h3{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:clamp(13.5px,1.6vw,16px); font-weight:600; letter-spacing:-.01em; }
+.step .body h3 .en2{ font-family:'DM Mono',monospace; font-size:10px; font-weight:400; letter-spacing:.16em; color:var(--faint); text-transform:uppercase; margin-left:9px; }
+.step .body p{ margin-top:8px; color:var(--graphite); font-size:13px; line-height:1.8; }
+.step .body p .tag{
+    font-family:'DM Mono',monospace; font-size:10.5px; color:var(--crimson);
+    background:var(--crimson-soft); padding:2px 8px; border-radius:20px; letter-spacing:.02em;
+    white-space:nowrap;
+}
+.shot{ margin:26px 0 4px; }
+.shot-frame{
+    position:relative; border-radius:14px; overflow:hidden; line-height:0;
+    border:1px solid var(--line); background:#0b0d12;
+    box-shadow:0 10px 34px rgba(20,24,30,.10);
+}
+.shot-frame img{ width:100%; height:auto; display:block; }
+.shot .hot{
+    position:absolute; left:50%; top:84%; width:clamp(72px,11%,118px); aspect-ratio:1;
+    transform:translate(-50%,-50%); border:2px solid var(--crimson-lit); border-radius:50%;
+    box-shadow:0 0 0 4px rgba(6,168,196,.16), 0 0 22px rgba(6,168,196,.5);
+    animation:hotPulse 2.4s ease-in-out infinite; pointer-events:none;
+}
+@keyframes hotPulse{
+    0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.9; }
+    50%{ transform:translate(-50%,-50%) scale(1.12); opacity:1; }
+}
+.shot .hot-label{
+    position:absolute; left:63%; top:84%; transform:translateY(-50%);
+    font-family:'Space Mono',monospace; font-size:clamp(9px,1.3vw,11px); font-weight:700;
+    letter-spacing:.06em; color:#fff; background:var(--crimson);
+    padding:5px 11px; border-radius:20px; white-space:nowrap;
+    box-shadow:0 4px 14px rgba(8,145,178,.4); pointer-events:none;
+}
+.shot .hot-label::before{
+    content:''; position:absolute; left:-6px; top:50%; transform:translateY(-50%);
+    border:5px solid transparent; border-right-color:var(--crimson);
+}
+.shot figcaption{
+    margin-top:13px; color:var(--muted); font-size:12.5px; line-height:1.75; text-align:center;
+}
+.shot figcaption b{ color:var(--graphite); font-weight:600; }
+.shot figcaption .en3{
+    display:block; margin-top:4px; font-family:'DM Mono',monospace;
+    font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--faint);
+}
+.shot .pin{
+    position:absolute; transform:translate(-50%,-50%);
+    width:23px; height:23px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:11px; font-weight:700; line-height:1;
+    color:#fff; background:var(--crimson); border:2px solid #fff;
+    box-shadow:0 2px 9px rgba(20,24,30,.4); pointer-events:none;
+}
+.uilist{ margin:20px 0 6px; display:flex; flex-direction:column; gap:2px; }
+.uilist .ui{
+    display:grid; grid-template-columns:26px 1fr; gap:14px; align-items:start;
+    padding:13px 4px; border-bottom:1px solid var(--line-2);
+}
+.uilist .ui:last-child{ border-bottom:none; }
+.uilist .ui .n{
+    width:23px; height:23px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:11px; font-weight:700; color:#fff; background:var(--crimson);
+}
+.uilist .ui .nm{ font-weight:600; font-size:14px; letter-spacing:-.01em; color:var(--ink); }
+.uilist .ui .nm .en4{ font-family:'DM Mono',monospace; font-size:10px; font-weight:400; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-left:8px; }
+.uilist .ui .ds{ margin-top:4px; font-size:12.5px; color:var(--graphite); line-height:1.75; }
+.ctrls{ margin:30px 0 6px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.cc{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 24px 26px; box-shadow:0 8px 30px rgba(20,24,30,.05); }
+.cc .h{ display:flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+.cc .h .ico{ width:8px; height:8px; border-radius:50%; background:var(--crimson); }
+.cc .h .ico.g{ background:var(--graphite); }
+.cc .name{ margin-top:6px; font-size:17px; font-weight:600; letter-spacing:-.01em; }
+.cc ul{ list-style:none; margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+.cc li{ display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:baseline; font-size:12.5px; color:var(--graphite); line-height:1.6; }
+.cc li .act{ font-family:'Space Mono',monospace; font-size:10px; font-weight:700; color:var(--crimson-lit); white-space:nowrap; padding-top:1px; }
+.cc.kb li .act{ color:var(--graphite); }
+.cc .key{ display:inline-block; font-family:'DM Mono',monospace; font-size:10px; background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:3px 8px; margin-right:4px; }
+.gtk{ margin:32px 0 6px; display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:2px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.gtk .g{ background:var(--card); padding:22px 22px 24px; transition:background .3s ease; }
+.gtk .g:hover{ background:#fbfcfe; }
+.gtk .g .t{ display:flex; align-items:center; gap:9px; font-weight:600; font-size:13.5px; letter-spacing:-.01em; }
+.gtk .g .t .mk{ font-family:'Space Mono',monospace; color:var(--crimson-lit); font-size:13px; font-weight:700; }
+.gtk .g p{ margin-top:9px; font-size:12px; color:var(--muted); line-height:1.7; }
+.quote{ margin:clamp(50px,9vh,90px) 0; text-align:center; }
+.quote .q{ font-size:clamp(17px,2.2vw,26px); font-weight:200; line-height:1.55; letter-spacing:-.01em; color:var(--ink); }
+.quote .q .cr{ color:var(--crimson); }
+.quote .qe{ display:block; margin-top:14px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.22em; color:var(--faint); text-transform:uppercase; }
+.info{ margin:20px 0 90px; background:#272e38; color:#eef1f5; border-radius:16px; padding:clamp(30px,5vw,46px); position:relative; overflow:hidden; }
+.info::before{ content:''; position:absolute; inset:0; background:radial-gradient(80% 120% at 100% 0%, rgba(8,145,178,.30), transparent 55%); pointer-events:none; }
+.info .il{ position:relative; }
+.info .ttl{ font-family:'Inter',sans-serif; font-weight:600; font-size:clamp(18px,2.6vw,24px); letter-spacing:-.02em; }
+.info .ttl .thin{ font-weight:300; color:#aeb7c4; }
+.info .sub{ margin-top:6px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#8b95a4; }
+.info .rows{ margin-top:26px; display:flex; flex-wrap:wrap; gap:14px 46px; }
+.info .rows div{ }
+.info .rows .lb{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:#7b8593; }
+.info .rows .vv{ margin-top:5px; font-size:14px; font-weight:500; color:#f5f7fa; letter-spacing:.01em; }
+.info .rows .vv .cr{ color:var(--crimson-lit); }
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.reveal.in{ opacity:1; transform:none; }
+@media (max-width:640px){
+    .ctrls{ grid-template-columns:1fr; }
+    .step{ grid-template-columns:44px 1fr; gap:16px; }
+    .steps::before{ left:21px; }
+    .step .num{ width:44px; height:44px; font-size:15px; }
+    .info .rows{ gap:16px 30px; }
+    .shot .hot-label{ left:62%; padding:4px 8px; }
+}
+@media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .shot .hot{ animation:none; }
+}
+</style>
+</head>
+<body>
+<a id="back-btn" href="index.html">BACK</a>
+<div class="wrap">
+    <header class="hero reveal">
+        <div class="kicker">관람 안내 · Viewing Guide</div>
+        <h1>우주를 <span class="thin">항해하는 법</span></h1>
+        <p class="welcome">
+            <b>김건우교수 제19회 개인전</b>에 오신 것을 환영합니다. 본 전시는 하나의 별을 지나 다음 별로 이동하는
+            <b>여정</b>입니다. 다섯 단계만 알면 15편의 방정식 우주를 자유롭게 항해할 수 있습니다.
+        </p>
+    </header>
+    <div class="stitle reveal"><span class="en">A</span><h2>관람 순서</h2></div>
+    <p class="sdesc reveal">화면에 나타나는 순서 그대로 따라오세요. 언제든 되돌아올 수 있으니 마음껏 헤매도 좋습니다.</p>
+    <figure class="shot reveal">
+        <div class="shot-frame">
+            <img src="img/guide-opening.jpg" alt="첫 화면 — 블랙홀과 제목 아래에 놓인 DEPART 버튼" loading="lazy" decoding="async">
+            <span class="hot"></span>
+            <span class="hot-label">여기를 누르세요</span>
+        </div>
+        <figcaption>
+            처음 만나는 화면입니다. 제목 아래 <b>▽ DEPART</b> 버튼을 누르면 여정이 시작됩니다(아래 <b>Step 1</b>).
+            <span class="en3">The opening · Press DEPART to begin</span>
+        </figcaption>
+    </figure>
+    <div class="steps">
+        <div class="step reveal">
+            <div class="num">1</div>
+            <div class="body">
+                <h3>진입하기<span class="en2">Depart</span></h3>
+                <p>첫 화면의 블랙홀 아래 <span class="tag">▽ DEPART</span> 를 누르면 레터박스가 닫히며 우주 안으로 빨려 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="step reveal">
+            <div class="num">2</div>
+            <div class="body">
+                <h3>목록 만나기<span class="en2">Observatory</span></h3>
+                <p>관측소에 도착하면 15편의 작품이 방정식과 함께 목록으로 펼쳐집니다. 각 줄이 하나의 우주입니다.</p>
+            </div>
+        </div>
+        <div class="step reveal">
+            <div class="num">3</div>
+            <div class="body">
+                <h3>미리 보기<span class="en2">Preview</span></h3>
+                <p>작품명에 <b>커서를 올리면</b>(휴대폰은 <b>한 번 탭</b>) 오른쪽에 살아 움직이는 미리보기와 시적 문구가 나타납니다.</p>
+            </div>
+        </div>
+        <div class="step reveal">
+            <div class="num">4</div>
+            <div class="body">
+                <h3>항해하기<span class="en2">Enter</span></h3>
+                <p>작품명을 <b>클릭</b>하면(휴대폰은 <b>한 번 더 탭</b>) 화면이 어두워지며 그 작품의 우주로 진입합니다.</p>
+            </div>
+        </div>
+        <div class="step reveal">
+            <div class="num">5</div>
+            <div class="body">
+                <h3>돌아오기<span class="en2">Return</span></h3>
+                <p>화면 오른쪽 아래 <span class="tag">BACK</span> 또는 브라우저 <b>뒤로가기</b>로 언제든 관측소로 돌아옵니다. 다녀온 작품에는 작은 점 <span class="tag">●</span> 이 남아 어디까지 봤는지 알려줍니다.</p>
+            </div>
+        </div>
+        <div class="step coda reveal">
+            <div class="num">∞</div>
+            <div class="body">
+                <h3>마지막 질문<span class="en2">Coda</span></h3>
+                <p>목록 맨 아래 <b>∞</b> 를 열면 전시가 던지는 하나의 질문과 만납니다. 여정의 마침표입니다.</p>
+            </div>
+        </div>
+    </div>
+    <div class="stitle reveal"><span class="en">B</span><h2>작품 화면에서</h2></div>
+    <p class="sdesc reveal">작품에 들어서면 화면 가장자리에 옅은 안내가 떠오릅니다. 감상을 방해하지 않도록 흐릿하게 표시되니, 길을 옮기고 싶을 때만 살펴보면 됩니다.</p>
+    <figure class="shot reveal" id="ui-shot">
+        <div class="shot-frame">
+            <img src="img/UI.jpg" alt="작품 화면 인터페이스 — 제목·BACK·NEXT·항해 타임라인·우주 번호" loading="lazy" decoding="async">
+            <span class="pin" style="left:3%;top:5%">1</span>
+            <span class="pin" style="left:88%;top:95%">2</span>
+            <span class="pin" style="left:95.5%;top:95%">3</span>
+            <span class="pin" style="left:49%;top:94%">4</span>
+            <span class="pin" style="left:92%;top:90%">5</span>
+        </div>
+        <figcaption>
+            작품 화면에 표시되는 다섯 가지 안내
+            <span class="en3">Lambert Nebula: Archive — in-work interface</span>
+        </figcaption>
+    </figure>
+    <div class="uilist">
+        <div class="ui reveal"><span class="n">1</span><div>
+            <div class="nm">작품 제목 · 감상법<span class="en4">Title / Hint</span></div>
+            <div class="ds">왼쪽 위에 지금 보고 있는 작품의 이름과, 그 작품을 즐기는 방법이 함께 적혀 있습니다. 예를 들어 <b>Move Mouse</b>(마우스 움직이기)·<b>Click</b>(누르기)처럼 작품마다 반응하는 동작이 다릅니다.</div>
+        </div></div>
+        <div class="ui reveal"><span class="n">2</span><div>
+            <div class="nm">BACK<span class="en4">돌아가기</span></div>
+            <div class="ds">오른쪽 아래, <b>NEXT</b> 바로 왼쪽의 <b>BACK</b>을 누르면 작품 목록(관측소)으로 돌아갑니다. 브라우저 뒤로가기와 같은 역할입니다.</div>
+        </div></div>
+        <div class="ui reveal"><span class="n">3</span><div>
+            <div class="nm">NEXT<span class="en4">다음 작품</span></div>
+            <div class="ds">오른쪽 아래 <b>NEXT</b>를 누르면 바로 다음 순서의 작품으로 이어집니다. 순서대로 감상하고 싶을 때 편리합니다. (마지막 작품에서는 NEXT 대신 <b>FIN</b>이 나타나 마지막 질문으로 이어집니다.)</div>
+        </div></div>
+        <div class="ui reveal"><span class="n">4</span><div>
+            <div class="nm">항해 타임라인<span class="en4">Voyage</span></div>
+            <div class="ds">화면 아래 가운데의 눈금은 15편 전체의 지도입니다. 밝게 표시된 눈금이 지금 위치이며, 다른 눈금을 누르면 그 작품으로 곧바로 건너뜁니다. 맨 왼쪽 지구본 아이콘은 목록으로 가는 길입니다.</div>
+        </div></div>
+        <div class="ui reveal"><span class="n">5</span><div>
+            <div class="nm">우주 번호<span class="en4">Universe #ID</span></div>
+            <div class="ds">오른쪽 아래 <b>UNIVERSE #</b>는 이 감상만의 우주 좌표입니다. 접속할 때마다 새로 생성되며, 모든 작품이 같은 번호의 우주를 공유합니다.</div>
+        </div></div>
+    </div>
+    <div class="stitle reveal"><span class="en">C</span><h2>조작 요령</h2></div>
+    <p class="sdesc reveal">사용하는 기기에 맞춰 자동으로 동작합니다. 익숙한 방식으로 편하게 둘러보세요.</p>
+    <div class="ctrls">
+        <div class="cc reveal">
+            <div class="h"><span class="ico"></span>Desktop</div>
+            <div class="name">PC · 마우스</div>
+            <ul>
+                <li><span class="act">HOVER</span><span>작품명에 올리면 선택 + 미리보기</span></li>
+                <li><span class="act">CLICK</span><span>작품명을 누르면 그 우주로 진입</span></li>
+                <li><span class="act">KEYS</span><span><span class="key">↑</span><span class="key">↓</span> 이동  · <span class="key">Enter</span> 진입  · <span class="key">Esc</span> 닫기</span></li>
+            </ul>
+        </div>
+        <div class="cc reveal">
+            <div class="h"><span class="ico g"></span>Mobile</div>
+            <div class="name">휴대폰 · 터치</div>
+            <ul>
+                <li><span class="act">TAP 1</span><span>한 번 탭하면 선택 + 문구 펼침</span></li>
+                <li><span class="act">TAP 2</span><span>같은 작품을 한 번 더 탭하면 진입</span></li>
+                <li><span class="act">TIP</span><span>세로 화면에서는 미리보기가 숨겨져 목록에 집중됩니다</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="stitle reveal"><span class="en">D</span><h2>알아두면 좋은 것</h2></div>
+    <div class="gtk">
+        <div class="g reveal"><div class="t"><span class="mk">◐</span>나의 우주 번호</div><p>화면 오른쪽 아래 <b>Universe #ID</b>는 접속할 때마다 새로 생성되는 당신만의 우주 좌표입니다.</p></div>
+        <div class="g reveal"><div class="t"><span class="mk">◑</span>두 가지 모드</div><p>왼쪽 위에서 <b>Cinematic</b>(추천 여정)과 <b>Archive</b>(전작 모아보기)를 오갈 수 있습니다.</p></div>
+        <div class="g reveal"><div class="t"><span class="mk">◒</span>소리와 움직임</div><p>일부 작품은 마이크·앰비언트 사운드를 사용합니다. 조용한 곳이라면 소리를 켜고 감상해 보세요.</p></div>
+        <div class="g reveal"><div class="t"><span class="mk">◓</span>천천히 보기</div><p>모든 장면은 느리게 호흡하도록 설계되었습니다. 서두르지 말고 화면이 변해가는 것을 지켜보세요.</p></div>
+    </div>
+    <div class="quote reveal">
+        <div class="q">“우주는 발견되는가, 혹은 생성되는가”
+            <span class="qe">Is the universe discovered, or is it generated?</span>
+        </div>
+    </div>
+    <div class="info reveal">
+        <div class="il">
+            <div class="ttl">2026: <span class="thin">a digital odyssey</span></div>
+            <div class="sub">Equations of the Abyss — 심연의 방정식</div>
+            <div class="rows">
+                <div><div class="lb">Exhibition</div><div class="vv">김건우교수 제19회 개인전</div></div>
+                <div><div class="lb">Period</div><div class="vv">2026.08.24 – 09.05</div></div>
+                <div><div class="lb">Venue</div><div class="vv">갤러리한빛</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+(function(){
+    var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if(reduce || !('IntersectionObserver' in window)){
+        els.forEach(function(e){ e.classList.add('in'); });
+        return;
+    }
+    var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:.08 });
+    els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+</body>
+</html>
