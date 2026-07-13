@@ -238,7 +238,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
     <h1 class="codex"><span class="thin">Operator's</span> Codex</h1>
     <p class="mast-sub">
         <b>김건우교수 제19회 개인전</b> 사이트의 관람과 운영을 위한 통합 안내서다. <br>
-        이 사이트는 정적 페이지가 아니라 <b>Opening → DEPART → Observatory → Voyage</b>로 흐르는 하나의 시네마틱 시퀀스다.<br>
+        이 사이트는 정적 페이지가 아니라 <b>Opening → DEPART → Observatory → Voyage</b>로 흐르는 하나의 시네마틱 시퀀스다.
         또한 이 페이지는 작품 관리와 배포 방법까지 포함한 운영 절차를 간단히 정리한 사양서이기도 하다.
         <b>울산대학교 디지털콘텐츠디자인 전공 학생</b> 및 디지털 아티스트의 작품 제작에 도움이 되었으면 한다.
     </p>
@@ -270,7 +270,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
 
         <section class="sec" id="s0">
             <div class="sec-head"><span class="sn">00</span><h2>개요</h2><span class="en">Overview</span></div>
-            <p class="lede">보이지 않는 계산은 어떻게 세계를 움직이는가. 이 사이트는 15개의 제너러티브 아트를 하나의 우주로 연결한 <b>디지털 관측소(Observatory)</b>다.</p>
+            <p class="lede">보이지 않는 계산은 어떻게 세계를 움직이는가. 
+                <br>이 사이트는 15개의 제너러티브 아트를 하나의 우주로 연결한 <b>디지털 관측소(Observatory)</b>다.</p>
             <p>방문자는 블랙홀 오프닝에서 <code class="cr">DEPART</code>를 눌러 우주로 진입하고, 원하는 작품을 선택하여 각기 다른 수학적 우주로 <b>항해(Voyage)</b>한다. 모든 화면은 Black 기반 컬러 시스템과 Graphite 계조, Swiss 타이포그래피, Breathing motion이라는 하나의 비주얼 언어를 공유한다.</p>
             <div class="data">
                 <div class="d-row head"><div class="k"><span class="kt">항목</span></div><div class="val">값</div></div>
@@ -284,7 +285,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
 
         <section class="sec" id="s1">
             <div class="sec-head"><span class="sn">01</span><h2>화면 지도</h2><span class="en">Screen Map</span></div>
-            <p>전체 관람 흐름은 네 개의 단계(Stage)로 구성된다. 모든 화면 상태는 sessionStorage를 기반으로 복원되며, 브라우저 뒤로가기(bfcache)를 지원한다.</p>
+            <p>전체 관람 흐름은 네 개의 단계(Stage)로 구성된다. 
+                <br>모든 화면 상태는 sessionStorage를 기반으로 복원되며, 브라우저 뒤로가기(bfcache)를 지원한다.</p>
             <div class="map">
                 <div class="cell"><span class="arrow">→</span><div class="stage">State 01</div><div class="nm">Opening</div><div class="en2">The Void</div><div class="ds">블랙홀 관문. 제목·부제 페이드인 후 <b>DEPART</b> 트라이앵글이 호흡한다.</div></div>
                 <div class="cell"><span class="arrow">→</span><div class="stage">Transit</div><div class="nm">Depart</div><div class="en2">2.1s Warp</div><div class="ds">레터박스가 닫히며 특이점으로 확대되고, 이후 관측소 화면으로 전환된다.</div></div>
@@ -312,7 +314,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kt">같은 작품 다시 탭</span></div><div class="val">해당 작품으로 항해</div></div>
             </div>
 
-            <p><b>키보드</b>만으로도 모든 기능을 사용할 수 있다. 접근성 포커스 링이 표시되며, <code>reduce-motion</code> 사용자에게는 모든 워프 애니메이션이 축약된다.</p>
+            <p><b>키보드</b>만으로도 모든 기능을 사용할 수 있다. 
+                <br>접근성 포커스 링이 표시되며, <code>reduce-motion</code> 사용자에게는 모든 워프 애니메이션이 축약된다.</p>
             <div class="keys">
                 <div class="krow"><span class="kbd"><b>DEPART</b> <b>Enter</b></span><span class="act">오프닝에서 우주로 진입</span></div>
                 <div class="krow"><span class="kbd"><b>↑</b> <b>↓</b></span><span class="act">작품 목록 위/아래 이동(자동 스크롤·프리뷰)</span></div>
@@ -321,7 +324,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="krow"><span class="kbd"><b>Esc</b></span><span class="act">Coda 오버레이 닫기</span></div>
             </div>
             <div class="note"><span class="lbl">되돌아오기</span>
-                작품에서 브라우저 <b>뒤로가기</b>를 누르면 오프닝을 다시 보지 않고 관측소로 곧장 복귀한다(bfcache·<code>pageshow</code> 대응). 방문한 작품에는 목록에 <b>마커 ●</b>가 남는다.</div>
+                작품에서 브라우저 <b>뒤로가기</b>를 누르면 오프닝을 다시 보지 않고 관측소로 곧장 복귀한다.(bfcache·<code>pageshow</code> 대응) 
+                <br>방문한 작품의 목록에 <b>마커 ●</b>가 남는다.</div>
         </section>
 
         <section class="sec" id="s3"> 
@@ -353,7 +357,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kt"><code>#coda</code></span></div><div class="val">관측소 진입 + Coda 자동 오픈(공유용 딥링크)</div></div>
             </div>
             <div class="note"><span class="lbl">운영 팁</span>
-                동작을 처음부터 다시 보려면 개발자 콘솔에서 <code>sessionStorage.clear()</code> 후 새로고침. 관람객에게 오프닝을 항상 노출하려면 이 방식을 데모 리셋 절차로 사용한다.</div>
+                동작을 처음부터 다시 보려면 개발자 콘솔에서 <code>sessionStorage.clear()</code> 후 새로고침. 
+                <br>관람객에게 오프닝을 항상 노출하려면 이 방식을 데모 리셋 절차로 사용한다.</div>
         </section>
 
         <section class="sec" id="s5">
@@ -371,7 +376,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kt"><code>file</code></span></div><div class="val">작품 HTML 경로 — <strong class="hl">실제 파일명과 정확히 일치해야 함</strong></div></div>
             </div>
             <div class="note"><span class="lbl">명명 규칙</span>
-                <b>번호-이름.html</b> (예: <code>08-Lambert_nebu.html</code>). 순서를 바꾸려면 배열 순서만 바꾸면 되고, 파일명 앞 번호는 정렬·아카이브 식별용이다. 배열 순서와 파일명 앞 번호를 일치시키면 관리와 유지보수가 훨씬 수월하다.</div>
+                <b>번호-이름.html</b> (예: <code>08-Lambert_nebu.html</code>). 순서를 바꾸려면 배열 순서만 바꾸면 되고, 파일명 앞 번호는 정렬·아카이브 식별용이다. 
+                <br>배열 순서와 파일명 앞 번호를 일치시키면 관리와 유지보수가 훨씬 수월하다.</div>
             <p><b>Archive 모드</b>는 좌상단 토글의 <code>all/index.html</code>로 연결된다. Cinematic이 큐레이션된 관람 동선이라면, Archive는 전작을 한눈에 보는 격자형 목록으로 운영한다.</p>
         </section>
 
@@ -388,7 +394,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kv">▲</span><span class="kt">브라우저 탭 비활성화</span></div><div class="val"><code>visibilitychange</code> 시 렌더 루프 정지 → 배터리 절약</div></div>
             </div>
             <div class="note cy"><span class="lbl">물리 검증</span>
-                배경 셰이더는 슈바르츠실트 반경(<code>Rs = 2GM/c²</code>) 기반의 중력렌즈 근사를 사용한다. 새 작품의 방정식 라벨은 임의 근사치가 아닌 검증된 식으로 유지할 것 — 이는 이 전시의 개념적 정합성의 핵심이다.</div>
+                배경 셰이더는 슈바르츠실트 반경(<code>Rs = 2GM/c²</code>) 기반의 중력렌즈 근사를 사용한다. 
+                <br>새 작품의 방정식 라벨은 임의 근사치가 아닌 검증된 식으로 유지할 것 — 이는 이 전시의 개념적 정합성의 핵심이다.</div>
         </section>
 
         <section class="sec" id="s7">
@@ -414,13 +421,15 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 01</span></div><div class="val"><code>works</code> 배열만 수정한다.</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 02</span></div><div class="val">배열 순서와 작품 번호를 항상 일치시킨다.</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 03</span></div><div class="val">모든 작품은 독립 HTML로 제작한다.</div></div>
-                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 04</span></div><div class="val">공통 기능은 <code>index.html</code>에서 관리한다.</div></div>
+                <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 04</span></div><div class="val">공통 기능은 <code>index.html</code> 에서 관리한다.</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 05</span></div><div class="val">물리 및 수학 공식은 검증된 식만 사용한다.</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 06</span></div><div class="val">공통 UI를 작품 내부에 중복 구현하지 않는다.</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">Rule 07</span></div><div class="val">파일명과 작품 제목은 동일한 규칙을 유지한다.</div></div>
             </div>
             <div class="note cy"><span class="lbl">중요 참고사항</span>
-                프로젝트는 하나의 거대한 HTML이 아니라 여러 개의 독립적인 작품이 연결된 구조이다.<br>작품은 언제든 교체하거나 추가할 수 있도록 Loose Coupling 구조를 유지한다.</div>
+                프로젝트는 하나의 거대한 HTML이 아니라 여러 개의 독립적인 작품이 연결된 구조이다.
+                <br>작품은 언제든 교체하거나 추가할 수 있도록 Loose Coupling 구조를 유지한다. 
+                <br>전시장 네트워크가 불안정한 문제 발생을 대비 — <code>three.module.js</code> 를 사이트에 업로드</div>
         </section>
 
     </main>
