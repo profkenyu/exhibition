@@ -30,13 +30,14 @@ canvas{display:block;width:100%;height:100%;}
 #title{position:fixed;top:24px;left:24px;color:rgba(255,255,255,0.95);letter-spacing:.25em;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;pointer-events:none;z-index:10;right:120px;text-shadow:0 2px 4px rgba(0,0,0,0.8);}
 #title span{display:block;font-size:28px;font-weight:200;margin-bottom:6px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.9);}
 #title .accent{color:#ff334b;font-weight:bold;}
-#coord{position:fixed;bottom:24px;left:24px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,0.8);z-index:10;background:rgba(0,0,0,0.5);padding:6px 12px;border-radius:4px;backdrop-filter:blur(4px);}
+#coord{position:fixed;bottom:48px;left:24px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,0.8);z-index:10;background:rgba(0,0,0,0.5);padding:6px 12px;border-radius:4px;backdrop-filter:blur(4px);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;max-width:calc(100vw - 48px);box-sizing:border-box;}
+#coord .cell{display:inline-flex;align-items:baseline;white-space:nowrap;}
 #coord .lbl{color:rgba(255,255,255,0.5);margin-right:.6em}
 #coord .val{color:#fff;font-weight:bold;}
 #coord .phase{color:#ff334b;font-weight:bold;}
 #back-btn{position:fixed;bottom:24px;right:104px;color:rgba(255,255,255,.5);text-decoration:none;font-size:10px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:4px;z-index:10;transition:all .3s ease}
 #back-btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
-@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#coord{bottom:20px;left:20px;font-size:9px;padding:4px 8px;}#back-btn{bottom:20px;right:90px;padding:5px 10px;font-size:9px}}
+@media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#coord{bottom:52px;left:20px;font-size:9px;padding:4px 8px;gap:3px 10px;}#back-btn{bottom:20px;right:90px;padding:5px 10px;font-size:9px}}
 
 #next-btn{position:fixed;bottom:24px;right:24px;color:rgba(255,255,255,.5);text-decoration:none;font-size:10px;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:4px;transition:all .3s ease;z-index:10}
 #next-btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
@@ -81,7 +82,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:767px), (orientation:landscape) and (max-height:500px){
   #title{top:20px;left:max(20px,env(safe-area-inset-left,0px));right:96px;font-size:9px;letter-spacing:.15em}
   #title span{font-size:16px;margin-bottom:4px}
-  #coord{bottom:calc(12px + env(safe-area-inset-bottom,0px));left:max(12px,env(safe-area-inset-left,0px));font-size:9px;padding:4px 8px}
+  #coord{bottom:calc(48px + env(safe-area-inset-bottom,0px));left:max(12px,env(safe-area-inset-left,0px));font-size:9px;padding:4px 8px;gap:3px 10px;max-width:calc(100vw - 24px)}
   #back-btn,#next-btn{font-size:7px;padding:5px 9px;border-radius:3px;letter-spacing:.18em;min-width:48px}
   #back-btn{bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(68px + env(safe-area-inset-right,0px))}
   #next-btn{bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
@@ -101,12 +102,12 @@ var LOWP=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)||matchMedia('(m
 <div id="flash"></div>
 <div id="title">
 <span>EVENT HORIZON</span>
-ω ∝ r⁻³ᐟ² &nbsp;·&nbsp; Keplerian Rotation &amp; Gravitational Lensing &nbsp;·&nbsp; Drag to Drift Gaze
+ω ∝ r⁻³ᐟ² &nbsp;·&nbsp; dτ = √(1−R<sub>s</sub>/r)·dt &nbsp;·&nbsp; Gravitational Time Dilation &nbsp;·&nbsp; Drag to Drift Gaze
 </div>
 <div id="coord">
-<span class="lbl">R / Rs</span><span class="val" id="radius-label">—</span>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<span class="lbl">PHASE</span><span class="phase" id="phase-label">—</span>
+<span class="cell"><span class="lbl">R / R<sub>s</sub></span><span class="val" id="radius-label">—</span></span>
+<span class="cell"><span class="lbl">dτ/dt</span><span class="val" id="tau-label">—</span></span>
+<span class="cell"><span class="lbl">PHASE</span><span class="phase" id="phase-label">—</span></span>
 </div>
 <a href="index.html" onclick="if(history.length>1){history.back();return false}" id="back-btn">BACK</a>
 <a href="14-Black_Voyage.html" id="next-btn">NEXT</a>
@@ -115,7 +116,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 window.__THREE_OK=1;
 const RS=60.0;
 const PHOTON_R=90.0;
-const ISCO=170.0;
+const ISCO=180.0;/* ISCO = 3Rs (Schwarzschild) */
 const DISK_OUTER=950.0;
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,60000);
@@ -133,8 +134,8 @@ vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0
 fragmentShader:`uniform sampler2D tScene;uniform vec2 uResolution;uniform float uTime;uniform vec2 uMouse;uniform float uProximity;varying vec2 vUv;void main(){vec2 uv=vUv;vec2 center=uMouse;vec2 aspect=vec2(uResolution.x/uResolution.y,1.0);vec2 dir=uv-center;float dist=length(dir*aspect);float r_g=0.085+uProximity*0.24;vec3 color;if(dist<r_g){color=vec3(0.0);}else{float offset=(r_g*r_g)/(dist-r_g*0.35);vec2 lensedUv=center+normalize(dir)*offset;float ringFactor=smoothstep(r_g*1.8,r_g,dist);vec2 ca=normalize(dir)*ringFactor*0.0035;float rC=texture2D(tScene,lensedUv+ca).r;float gC=texture2D(tScene,lensedUv).g;float bC=texture2D(tScene,lensedUv-ca).b;color=vec3(rC,gC,bC);float pulse=0.85+0.15*sin(uTime*0.6);float ring=exp(-pow((dist-r_g*1.05)*36.0,2.0))*(0.45+uProximity*1.7)*pulse;color+=vec3(1.0,0.45,0.32)*ring;}vec2 p=vUv-0.5;color+=vec3(0.012,0.005,0.012)*(1.0-length(p));color=pow(color,vec3(0.92-uProximity*0.06));gl_FragColor=vec4(color,1.0);}`
 });
 postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),postMaterial));
-const KEPLER_VERTEX=`attribute vec3 aInfo;attribute vec3 aColor;uniform float uTime;uniform float uPixelRatio;uniform float uSizeMul;uniform vec3 uCameraPos;varying vec3 vColor;varying float vDistance;varying float vBeam;void main(){float r=aInfo.x;float omega=900.0/pow(r,1.5);float theta=aInfo.y+omega*uTime;vec3 p;p.x=cos(theta)*r;p.z=sin(theta)*r;p.y=position.y;vec3 velDir=normalize(vec3(-sin(theta),0.0,cos(theta)));vec3 worldPos=(modelMatrix*vec4(p,1.0)).xyz;vec3 toCam=normalize(uCameraPos-worldPos);vBeam=dot(velDir,toCam);vColor=aColor;vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;vDistance=-mv.z;gl_Position.z-=0.001;gl_PointSize=min(70.0,(1.0+aInfo.z*1.7)*uSizeMul*uPixelRatio*(600.0/vDistance));}`;
-const KEPLER_FRAGMENT=`varying vec3 vColor;varying float vDistance;varying float vBeam;void main(){vec2 pt=gl_PointCoord-0.5;float d=length(pt);if(d>0.5)discard;float core=smoothstep(0.5,0.0,d);float halo=exp(-d*6.0);float boost=clamp(1.0+vBeam*1.9,0.12,3.4);vec3 shift=mix(vec3(0.5,0.04,0.1),vec3(1.0,0.96,0.88),clamp(vBeam*0.5+0.5,0.0,1.0));vec3 col=mix(vColor,shift,0.45)*boost;float atten=min(1.0,1300.0/vDistance);gl_FragColor=vec4(col*(0.8+halo*1.2),(core*0.24+halo*0.085)*atten);}`;
+const KEPLER_VERTEX=`attribute vec3 aInfo;attribute vec3 aColor;uniform float uTime;uniform float uPixelRatio;uniform float uSizeMul;uniform vec3 uCameraPos;uniform float uRS;varying vec3 vColor;varying float vDistance;varying float vBeam;varying float vLapse;varying float vPulse;void main(){float r=aInfo.x;float omega=900.0/pow(r,1.5);float theta=aInfo.y+omega*uTime;vLapse=sqrt(max(1.0-1.5*uRS/r,0.0));vPulse=0.85+0.15*sin(uTime*2.4*vLapse+aInfo.z*40.0);vec3 p;p.x=cos(theta)*r;p.z=sin(theta)*r;p.y=position.y;vec3 velDir=normalize(vec3(-sin(theta),0.0,cos(theta)));vec3 worldPos=(modelMatrix*vec4(p,1.0)).xyz;vec3 toCam=normalize(uCameraPos-worldPos);vBeam=dot(velDir,toCam);vColor=aColor;vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;vDistance=-mv.z;gl_Position.z-=0.001;gl_PointSize=min(70.0,(1.0+aInfo.z*1.7)*uSizeMul*uPixelRatio*(600.0/vDistance));}`;
+const KEPLER_FRAGMENT=`varying vec3 vColor;varying float vDistance;varying float vBeam;varying float vLapse;varying float vPulse;void main(){vec2 pt=gl_PointCoord-0.5;float d=length(pt);if(d>0.5)discard;float core=smoothstep(0.5,0.0,d);float halo=exp(-d*6.0);float boost=clamp(1.0+vBeam*1.9,0.12,3.4);vec3 shift=mix(vec3(0.5,0.04,0.1),vec3(1.0,0.96,0.88),clamp(vBeam*0.5+0.5,0.0,1.0));vec3 col=mix(vColor,shift,0.45)*boost;col*=vec3(1.0,0.55+0.45*vLapse,0.32+0.68*vLapse);col*=0.35+0.65*vLapse*vLapse;float atten=min(1.0,1300.0/vDistance);gl_FragColor=vec4(col*(0.8+halo*1.2),(core*0.24+halo*0.085)*atten*vPulse);}`;
 function diskColor(ratio){
 const stops=[[0.00,[1.00,0.97,0.88]],[0.15,[1.00,0.55,0.25]],[0.40,[0.78,0.10,0.17]],[0.70,[0.45,0.03,0.07]],[1.00,[0.12,0.02,0.05]]];
 for(let i=0;i<stops.length-1;i++){
@@ -161,7 +162,7 @@ dColor[i*3]=c[0];dColor[i*3+1]=c[1];dColor[i*3+2]=c[2];
 diskGeo.setAttribute('position',new THREE.BufferAttribute(dPos,3));
 diskGeo.setAttribute('aColor',new THREE.BufferAttribute(dColor,3));
 diskGeo.setAttribute('aInfo',new THREE.BufferAttribute(dInfo,3));
-const diskMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.0},uCameraPos:{value:new THREE.Vector3()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
+const diskMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.0},uCameraPos:{value:new THREE.Vector3()},uRS:{value:RS}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
 const accretionDisk=new THREE.Points(diskGeo,diskMaterial);
 scene.add(accretionDisk);
 const SPOKES=14;
@@ -186,7 +187,7 @@ ti++;
 tGeo.setAttribute('position',new THREE.BufferAttribute(tPos,3));
 tGeo.setAttribute('aColor',new THREE.BufferAttribute(tColor,3));
 tGeo.setAttribute('aInfo',new THREE.BufferAttribute(tInfo,3));
-const tracerMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.8},uCameraPos:{value:new THREE.Vector3()}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
+const tracerMaterial=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPixelRatio:{value:renderer.getPixelRatio()},uSizeMul:{value:1.8},uCameraPos:{value:new THREE.Vector3()},uRS:{value:RS}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexShader:KEPLER_VERTEX,fragmentShader:KEPLER_FRAGMENT});
 const tracers=new THREE.Points(tGeo,tracerMaterial);
 scene.add(tracers);
 const JET_COUNT=LOWP?2500:6000;
@@ -237,7 +238,7 @@ else{target.x=(e.clientX/innerWidth-0.5)*0.5;target.y=(e.clientY/innerHeight-0.5
 });
 addEventListener('pointerdown',()=>{isTargeting=true;});
 addEventListener('pointerup',()=>{isTargeting=false;});
-const flashEl=document.getElementById('flash');const radiusLabel=document.getElementById('radius-label');const phaseLabel=document.getElementById('phase-label');
+const flashEl=document.getElementById('flash');const radiusLabel=document.getElementById('radius-label');const phaseLabel=document.getElementById('phase-label');const tauLabel=document.getElementById('tau-label');
 function animate(){
 requestAnimationFrame(animate);
 const t=clock.getElapsedTime();
@@ -255,6 +256,7 @@ postMaterial.uniforms.uTime.value=t;postMaterial.uniforms.uMouse.value.set((scre
 renderer.render(postScene,postCamera);
 flashEl.style.opacity=Math.pow(proximity,3.5)*0.55;
 radiusLabel.textContent=(r/RS).toFixed(2);
+tauLabel.textContent=Math.sqrt(Math.max(1-RS/r,0)).toFixed(3);
 const dr=r-prevR;let phase;
 if(proximity>0.78)phase='HORIZON SKIM';else if(dr<0)phase='APPROACH';else phase='DEPARTURE';
 phaseLabel.textContent=phase;prevR=r;
