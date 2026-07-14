@@ -98,7 +98,7 @@ var LOWP=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)||matchMedia('(m
 </script>
 <div id="title">
     <span>KERR PLASMA CATHEDRAL</span>
-    ds² = -(1 - r_s r/ρ²)dt² - (2r_s r a sin²θ/ρ²)dtdϕ + (ρ²/Δ)dr² + ρ²dθ² + (r² + a² + r_s r a² sin²θ/ρ²)sin²θdϕ²
+    ds² = −(1 − r<sub>s</sub>r/ρ²)dt² − (2r<sub>s</sub>ra·sin²θ/ρ²)dtdϕ + (ρ²/Δ)dr² + ρ²dθ² + (r² + a² + r<sub>s</sub>ra²sin²θ/ρ²)sin²θdϕ²
 </div>
 <div id="ui-container">
     <button id="audio-btn" class="btn">AUDIO INPUT: OFF</button>
@@ -118,6 +118,8 @@ uniform vec2 resolution;uniform float time;uniform vec2 mouse;
 uniform float u_bass;
 uniform float u_treble;
 uniform float u_wake;
+uniform float u_spin;
+uniform float u_fin;
 #define PI 3.14159265359
 #define MAX_STEPS 90
 #define STEP_SIZE 0.06
@@ -126,26 +128,74 @@ float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);float a=hash(i),b=hash(i+vec2(1.0,0.0)),c=hash(i+vec2(0.0,1.0)),d=hash(i+vec2(1.0,1.0));vec2 u=f*f*(3.0-2.0*f);return mix(a,b,u.x)+(c-a)*u.y*(1.0-u.x)+(d-b)*u.x*u.y;}
 float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<4;i++){v+=noise(p)*a;p*=2.0;a*=0.5;}return v;}
 mat2 rot(float a){float s=sin(a),c=cos(a);return mat2(c,-s,s,c);}
-vec3 integrateRay(vec3 ro,vec3 rd, out float outR){vec3 pos=ro,dir=rd;float rs=1.15,spin=0.9;for(int i=0;i<MAX_STEPS;i++){float r=max(length(pos),0.24),gravity=rs/(r*r+0.22);vec3 gravDir=normalize(-pos),frameDrag=normalize(cross(vec3(0.0,1.0,0.0),pos)+0.0001);float damp=smoothstep(0.0,3.0,r);dir+=gravDir*gravity*STEP_SIZE*damp+frameDrag*gravity*spin*0.12*damp;dir=normalize(dir);pos+=dir*STEP_SIZE;}outR=length(pos);return pos;}
+vec3 integrateRay(vec3 ro,vec3 rd, out float outR){vec3 pos=ro,dir=rd;float rs=1.15*(1.0-0.9*u_fin);for(int i=0;i<MAX_STEPS;i++){float r=max(length(pos),0.24),gravity=rs/(r*r+0.22);vec3 gravDir=normalize(-pos),frameDrag=normalize(cross(vec3(0.0,1.0,0.0),pos)+0.0001);float damp=smoothstep(0.0,3.0,r);dir+=gravDir*gravity*STEP_SIZE*damp+frameDrag*gravity*u_spin*0.18*damp;dir=normalize(dir);pos+=dir*STEP_SIZE;}outR=length(pos);return pos;}
 float dotStars(vec2 uv,vec2 drift){vec2 gv=fract(uv*120.0+drift)-0.5,id=floor(uv*120.0+drift);float rnd=hash(id),size=mix(0.003,0.018,rnd);return smoothstep(size,size*0.2,length(gv))*step(0.992,rnd);}
-void main(){vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);float distFromCenter=length(uv),chromaticAberration=0.012*smoothstep(0.1,1.5,distFromCenter)*(0.25+0.75*u_wake);vec3 finalColor=vec3(0.0);vec2 drift=vec2(time*0.08+mouse.x*2.0,time*0.04+mouse.y*2.0);float camAngleX=time*0.05+mouse.x*3.5,camAngleY=mouse.y*1.2;vec3 ro=vec3(0.0,0.0,-5.8);ro.yz*=rot(camAngleY);ro.xz*=rot(camAngleX);vec3 target=vec3(0.0,0.0,0.0),forward=normalize(target-ro),right=normalize(cross(vec3(0.0,1.0,0.0),forward)),up=cross(forward,right);for(int c=0;c<3;c++){float shift=(float(c)-1.0)*chromaticAberration;vec2 shiftedUv=uv*(1.0+shift);vec3 rd=normalize(right*shiftedUv.x+up*shiftedUv.y+forward*1.75);float r;vec3 p=integrateRay(ro,rd,r);float stars=dotStars(shiftedUv*1.5,drift)+dotStars(shiftedUv*0.8+10.0,drift*0.4);vec3 sceneColor=mix(vec3(0.6,0.75,1.0),vec3(1.0,0.92,0.82),fbm(shiftedUv*4.0))*stars*1.8;vec3 starLayer=sceneColor;float disk=exp(-abs(p.y)*15.0)*exp(-abs(length(p.xz)-2.5)*2.2)*fbm(p.xz*3.5+time*0.04);vec3 diskColor=mix(vec3(0.15,0.35,1.0),vec3(1.0,0.5,0.08),disk);diskColor.r*=1.0+smoothstep(-1.0,1.0,p.x)*1.8;diskColor.b*=1.2-smoothstep(-1.0,1.0,p.x)*0.7;sceneColor+=diskColor*disk*2.3;
-
-sceneColor+=vec3(1.0,0.95,0.91)*exp(-abs(r-1.82)*14.0)*(1.0+sin(atan(p.z,p.x)*14.0-time*(1.4+u_treble*2.5))*0.45)*(3.0+u_treble*4.5);
-
-float filament=sin(atan(p.z,p.x)*18.0-time*(2.0+u_bass*3.5)+fbm(p.xz*(4.0+u_bass*5.0))*4.0);filament=smoothstep(0.65,1.0,filament)*exp(-abs(r-2.0)*7.0)*fbm(p.xz*8.0+time*0.15);sceneColor+=mix(vec3(0.2,0.5,1.0),vec3(1.0,0.45,0.08),filament)*filament*(1.8+u_bass*2.0);float t=0.0,transmittance=1.0;for(int i=0;i<VOLUME_STEPS;i++){vec3 vp=ro+rd*t;float vr=length(vp),density=exp(-abs(vr-2.1)*3.0)*fbm(vp.xz*3.0+time*0.04)*0.12;sceneColor+=mix(vec3(0.2,0.4,1.0),vec3(1.0,0.55,0.15),density*4.0)*density*transmittance;transmittance*=exp(-density*0.18);t+=0.17;}sceneColor*=1.0-smoothstep(1.08,0.78,r)*0.68;sceneColor+=vec3(0.015,0.02,0.04)*smoothstep(1.08,0.78,r);sceneColor+=vec3(0.04,0.045,0.07)*exp(-length(shiftedUv)*1.5);sceneColor+=vec3(0.04,0.06,0.1)*exp(-r*0.18);float ember=0.02+0.012*(0.5+0.5*sin(time*0.35));sceneColor=sceneColor*mix(ember,1.0,u_wake)+starLayer*(1.0-u_wake)*0.35;if(c==0)finalColor.r=sceneColor.r;else if(c==1)finalColor.g=sceneColor.g;else finalColor.b=sceneColor.b;}vec3 glow=vec3(0.0);glow+=finalColor*0.3;finalColor=mix(finalColor,finalColor+glow*0.5,0.45)*smoothstep(1.6,0.18,distFromCenter);finalColor=finalColor/(1.0+finalColor);gl_FragColor=vec4(pow(finalColor,vec3(0.88)),1.0);}`;
+void main(){
+vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);
+float distFromCenter=length(uv);
+float chromaticAberration=0.012*smoothstep(0.1,1.5,distFromCenter)*(0.25+0.75*u_wake);
+vec2 drift=vec2(time*0.08+mouse.x*2.0,time*0.04+mouse.y*2.0);
+float camAngleX=time*0.05+mouse.x*3.5,camAngleY=mouse.y*1.2;
+vec3 ro=vec3(0.0,0.0,-5.8);ro.yz*=rot(camAngleY);ro.xz*=rot(camAngleX);
+vec3 target=vec3(0.0,0.0,0.0),forward=normalize(target-ro),right=normalize(cross(vec3(0.0,1.0,0.0),forward)),up=cross(forward,right);
+/* Kerr geometry (geometric units, M scaled so rs=2M=1.15 scene units) */
+float ms=1.0-0.9*u_fin;                                             /* Hawking mass loss */
+float M=0.575*ms;
+float a=clamp(u_spin,-0.998,0.998);                                  /* Thorne limit */
+float rH=M*(1.0+sqrt(max(1.0-a*a,0.0)));                             /* r+ = M+sqrt(M^2-a^2) */
+float rpro=2.0*M*(1.0+cos(0.6666667*acos(clamp(-a,-1.0,1.0))));      /* Bardeen 1972 */
+float rret=2.0*M*(1.0+cos(0.6666667*acos(clamp(a,-1.0,1.0))));
+/* single geodesic integration; chromatic aberration on star layer only */
+vec3 rd=normalize(right*uv.x+up*uv.y+forward*1.75);
+float r;vec3 p=integrateRay(ro,rd,r);
+vec3 starLayer=vec3(0.0);
+for(int c=0;c<3;c++){float shift=(float(c)-1.0)*chromaticAberration;vec2 suv=uv*(1.0+shift);float s=dotStars(suv*1.5,drift)+dotStars(suv*0.8+10.0,drift*0.4);vec3 scol=mix(vec3(0.6,0.75,1.0),vec3(1.0,0.92,0.82),fbm(suv*4.0))*s*1.8;if(c==0)starLayer.r=scol.r;else if(c==1)starLayer.g=scol.g;else starLayer.b=scol.b;}
+vec3 sceneColor=starLayer;
+float phi=atan(p.z,p.x);
+float diskR=2.5*mix(1.0,0.45,u_fin);
+float disk=exp(-abs(p.y)*15.0)*exp(-abs(length(p.xz)-diskR)*2.2)*fbm(p.xz*3.5+time*0.04);
+vec3 diskColor=mix(vec3(0.15,0.35,1.0),vec3(1.0,0.5,0.08),disk);
+diskColor.r*=1.0+smoothstep(-1.0,1.0,p.x)*1.8;diskColor.b*=1.2-smoothstep(-1.0,1.0,p.x)*0.7;
+sceneColor+=diskColor*disk*2.3;
+/* asymmetric photon ring: prograde/retrograde orbits */
+float ringR=mix(rpro,rret,0.5+0.5*cos(phi));
+sceneColor+=vec3(1.0,0.95,0.91)*exp(-abs(r-ringR)*14.0)*(1.0+sin(phi*14.0-time*(1.4+u_treble*2.5))*0.45)*(3.0+u_treble*4.5)*(1.0+u_fin*5.0);
+float filament=sin(phi*18.0-time*(2.0+u_bass*3.5)+fbm(p.xz*(4.0+u_bass*5.0))*4.0);
+filament=smoothstep(0.65,1.0,filament)*exp(-abs(r-2.0*ms)*7.0)*fbm(p.xz*8.0+time*0.15);
+sceneColor+=mix(vec3(0.2,0.5,1.0),vec3(1.0,0.45,0.08),filament)*filament*(1.8+u_bass*2.0);
+/* volumetric fog + ergosphere membrane r_E(th)=M(1+sqrt(1-a^2 cos^2 th)) */
+float t=0.0,transmittance=1.0;
+for(int i=0;i<VOLUME_STEPS;i++){vec3 vp=ro+rd*t;float vr=max(length(vp),0.001);float density=exp(-abs(vr-2.1)*3.0)*fbm(vp.xz*3.0+time*0.04)*0.12;sceneColor+=mix(vec3(0.2,0.4,1.0),vec3(1.0,0.55,0.15),density*4.0)*density*transmittance;float ct=vp.y/vr;float rE=M*(1.0+sqrt(max(1.0-a*a*ct*ct,0.0)));float membrane=exp(-abs(vr-rE)*24.0)*(0.55+0.45*sin(atan(vp.z,vp.x)*6.0+time*0.9))*abs(a);sceneColor+=vec3(0.75,0.08,0.16)*membrane*0.38*transmittance*u_wake;transmittance*=exp(-density*0.18);t+=0.17;}
+/* spin-dependent shadow at r+ */
+sceneColor*=1.0-smoothstep(rH*1.35,rH*0.95,r)*0.68;
+sceneColor+=vec3(0.015,0.02,0.04)*smoothstep(rH*1.35,rH*0.95,r);
+sceneColor+=vec3(0.04,0.045,0.07)*exp(-distFromCenter*1.5);
+sceneColor+=vec3(0.04,0.06,0.1)*exp(-r*0.18);
+float ember=0.02+0.012*(0.5+0.5*sin(time*0.35));
+vec3 finalColor=sceneColor*mix(ember,1.0,u_wake)+starLayer*(1.0-u_wake)*0.35;
+finalColor=finalColor*1.0675*smoothstep(1.6,0.18,distFromCenter);
+finalColor=finalColor/(1.0+finalColor);
+finalColor*=1.0-smoothstep(0.82,1.0,u_fin);                          /* evaporation blackout */
+gl_FragColor=vec4(pow(finalColor,vec3(0.88)),1.0);}`;
 
 function compile(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
-const program=gl.createProgram();gl.attachShader(program,compile(gl.VERTEX_SHADER,vertex));gl.attachShader(program,compile(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);gl.useProgram(program);
+const fragSrc=LOWP?fragment.replace('MAX_STEPS 90','MAX_STEPS 56').replace('VOLUME_STEPS 28','VOLUME_STEPS 16'):fragment;
+const program=gl.createProgram();gl.attachShader(program,compile(gl.VERTEX_SHADER,vertex));gl.attachShader(program,compile(gl.FRAGMENT_SHADER,fragSrc));gl.linkProgram(program);gl.useProgram(program);
 
 const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
 const position=gl.getAttribLocation(program,"position");gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
 
 const resolutionLoc=gl.getUniformLocation(program,"resolution"),timeLoc=gl.getUniformLocation(program,"time"),mouseLoc=gl.getUniformLocation(program,"mouse"),
-bassLoc=gl.getUniformLocation(program,"u_bass"),trebleLoc=gl.getUniformLocation(program,"u_treble"),wakeLoc=gl.getUniformLocation(program,"u_wake");
+bassLoc=gl.getUniformLocation(program,"u_bass"),trebleLoc=gl.getUniformLocation(program,"u_treble"),wakeLoc=gl.getUniformLocation(program,"u_wake"),
+spinLoc=gl.getUniformLocation(program,"u_spin"),finLoc=gl.getUniformLocation(program,"u_fin");
 
-let isDragging=false,previousMouseX=0,targetX=0.0,currentX=0.0,velocityX=0.0,friction=0.96;
-window.addEventListener("pointerdown",e=>{if(e.target.closest("#ui-container"))return;isDragging=true;previousMouseX=e.clientX;velocityX=0});
-window.addEventListener("pointermove",e=>{if(!isDragging)return;let deltaX=e.clientX-previousMouseX;velocityX=deltaX*0.005;targetX+=velocityX;previousMouseX=e.clientX});
+let isDragging=false,previousMouseX=0,previousMouseY=0,targetX=0.0,currentX=0.0,velocityX=0.0,friction=0.96;
+let targetY=0.0,currentY=0.0;
+/* frame dragging: drag angular momentum feeds spin a, decays to rest (Thorne limit 0.998) */
+const SPIN_REST=0.6,SPIN_MAX=0.998;
+let spinTarget=SPIN_REST,spinCurrent=SPIN_REST;
+window.addEventListener("pointerdown",e=>{if(e.target.closest("#ui-container"))return;isDragging=true;previousMouseX=e.clientX;previousMouseY=e.clientY;velocityX=0});
+window.addEventListener("pointermove",e=>{if(!isDragging)return;let deltaX=e.clientX-previousMouseX,deltaY=e.clientY-previousMouseY;velocityX=deltaX*0.005;targetX+=velocityX;targetY=Math.max(-0.55,Math.min(0.55,targetY-deltaY*0.0035));spinTarget=Math.max(-SPIN_MAX,Math.min(SPIN_MAX,spinTarget+deltaX*0.0008));previousMouseX=e.clientX;previousMouseY=e.clientY});
 window.addEventListener("pointerup",()=>{isDragging=false});window.addEventListener("pointercancel",()=>{isDragging=false});
 
 let lastInput=performance.now(),wake=1.0,shaderTime=0,lastFrameT=0;
@@ -155,6 +205,7 @@ const noteInput=()=>{lastInput=performance.now()};
 const sleepNote=document.getElementById("sleep-note");
 
 let audioCtx = null, analyser = null, dataArray = null, mainGainNode = null;
+let oscA = null, oscB = null, oscSub = null, filterNode = null;
 let isAudioPlaying = false;
 const audioBtn = document.getElementById("audio-btn");
 
@@ -171,6 +222,7 @@ function initAudio() {
     const filter = audioCtx.createBiquadFilter();
     const mainGain = audioCtx.createGain();
     mainGainNode = mainGain;
+    oscA = baseOsc1; oscB = baseOsc2; oscSub = subOsc; filterNode = filter;
 
     baseOsc1.type = 'sawtooth'; baseOsc1.frequency.setValueAtTime(55, audioCtx.currentTime);
     baseOsc2.type = 'square'; baseOsc2.frequency.setValueAtTime(55.3, audioCtx.currentTime);
@@ -222,12 +274,29 @@ audioBtn.addEventListener("click", () => {
     }
 });
 
+/* ===== FIN = HAWKING EVAPORATION RITE =====
+   T_H ∝ 1/M : as mass evaporates, the drone's pitch rises (55Hz → ~550Hz),
+   the horizon shrinks, the ring flares once, then silence and black. */
+let finActive=false,finT0=0,finDone=false;const FIN_DUR=16000;
+const smoothJS=(a,b,x)=>{x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x)};
+document.addEventListener("click",function(e){
+    var el=e.target.closest?e.target.closest("#fin-btn"):null;
+    if(!el)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(finActive)return;
+    finActive=true;finT0=performance.now();
+    if(!audioCtx){initAudio();isAudioPlaying=true;audioBtn.textContent="AUDIO INPUT: ON";audioBtn.classList.add("active");}
+    else if(!isAudioPlaying){audioCtx.resume();isAudioPlaying=true;audioBtn.textContent="AUDIO INPUT: ON";audioBtn.classList.add("active");}
+},true);
+
 let smoothBass = 0.0, smoothTreble = 0.0;
 
 function render(t){
     if(!isDragging){velocityX*=friction;targetX+=velocityX}
     else lastInput=performance.now();
+    if(finActive)lastInput=performance.now();
     currentX+=(targetX-currentX)*0.05;
+    currentY+=(targetY-currentY)*0.05;
 
     const dt=Math.min(t-lastFrameT,100);lastFrameT=t;
     const asleep=(performance.now()-lastInput)>IDLE_DELAY;
@@ -235,7 +304,25 @@ function render(t){
     wake+=((asleep?0:1)-wake)*Math.min(1,dt/tau);
     shaderTime+=dt*0.001*(0.12+0.88*wake);
     sleepNote.style.opacity=wake<0.35?((0.35-wake)/0.35*0.65).toFixed(3):0;
-    if(mainGainNode)mainGainNode.gain.value=0.45*(0.04+0.96*wake);
+    if(mainGainNode&&!finActive)mainGainNode.gain.value=0.45*(0.04+0.96*wake);
+
+    spinTarget+=(SPIN_REST-spinTarget)*Math.min(1,dt/12000);
+    spinCurrent+=(spinTarget-spinCurrent)*0.05;
+    if(!finActive&&oscB&&isAudioPlaying)oscB.frequency.value=55.15+Math.abs(spinCurrent)*1.2;
+
+    let uFin=0;
+    if(finActive){
+        uFin=Math.min(1,(performance.now()-finT0)/FIN_DUR);
+        const mLoss=1-0.9*uFin;
+        if(audioCtx&&isAudioPlaying){
+            if(oscA)oscA.frequency.value=55/mLoss;
+            if(oscB)oscB.frequency.value=(55.3+Math.abs(spinCurrent)*1.2)/mLoss;
+            if(oscSub)oscSub.frequency.value=27.5/mLoss;
+            if(filterNode)filterNode.frequency.value=140+uFin*uFin*5200;
+            if(mainGainNode)mainGainNode.gain.value=0.45*(1-smoothJS(0.86,1,uFin));
+        }
+        if(uFin>=1&&!finDone){finDone=true;var dep=document.getElementById("depart");if(dep)dep.style.opacity="1";setTimeout(function(){location.href="index.html#coda";},900);}
+    }
 
     if(isAudioPlaying && analyser) {
         analyser.getByteFrequencyData(dataArray);
@@ -257,11 +344,13 @@ function render(t){
 
     gl.uniform2f(resolutionLoc,canvas.width,canvas.height);
     gl.uniform1f(timeLoc,shaderTime);
-    gl.uniform2f(mouseLoc,currentX,0.0);
+    gl.uniform2f(mouseLoc,currentX,currentY);
 
     gl.uniform1f(bassLoc, smoothBass * 2.2 * (0.2 + 0.8 * wake));
     gl.uniform1f(trebleLoc, smoothTreble * 3.5 * (0.2 + 0.8 * wake));
     gl.uniform1f(wakeLoc, wake);
+    gl.uniform1f(spinLoc, spinCurrent);
+    gl.uniform1f(finLoc, uFin);
 
     gl.drawArrays(gl.TRIANGLES,0,6);
     requestAnimationFrame(render);
