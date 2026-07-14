@@ -28,8 +28,8 @@ canvas{display:block;width:100%;height:100%;cursor:move}
 #ui-container{position:fixed;top:24px;right:24px;display:flex;align-items:center;gap:12px;z-index:10}
 .btn{color:rgba(255,255,255,.5);text-decoration:none;font-size:10px;letter-spacing:.25em;border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:4px;transition:all .3s ease;background:transparent;cursor:pointer}
 .btn:hover{color:rgba(255,255,255,1);background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
-#audio-btn{color:#ff3366;border-color:rgba(255,51,102,.3);}
-#audio-btn.active{color:#33ff99;border-color:rgba(51,255,153,.5);background:rgba(51,255,153,.05);}
+#audio-btn,#mic-btn{padding:6px 9px}
+#audio-btn svg,#mic-btn svg{width:12px;height:12px;stroke:#fff;fill:none;display:block}
 #sleep-note{position:fixed;left:24px;right:24px;bottom:88px;text-align:center;color:rgba(190,205,235,.85);font-size:11px;letter-spacing:.3em;line-height:2;opacity:0;transition:opacity 4s ease;pointer-events:none;z-index:10}
 @media (max-width:640px){#sleep-note{bottom:110px;font-size:9px;letter-spacing:.18em}}
 @media (max-width:640px){#title{top:20px;left:20px;right:100px}#title span{font-size:18px;margin-bottom:4px}#title{font-size:10px;letter-spacing:.15em}#ui-container{top:20px;right:20px}.btn{padding:5px 10px;font-size:9px}#ui-container a.btn{min-width:58px}}
@@ -67,7 +67,7 @@ body.embed>*:not(canvas){display:none!important}
 @media (max-width:640px){#voyage-line .home{width:22px;height:26px}#voyage-line .vl-div{width:12px;height:1px;margin:2px 0}}
 #ui-container a.btn#fin-btn{position:fixed;bottom:24px;right:24px;width:44px;height:44px;min-width:0;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;letter-spacing:.12em;text-indent:.12em}
 #ui-container a.btn#back-btn{position:fixed;bottom:33px;right:80px}
-@media (max-width:640px){#ui-container a.btn#fin-btn{bottom:20px;right:20px}#ui-container a.btn#back-btn{bottom:31px;right:76px}#audio-btn{position:fixed;bottom:20px;left:20px}}
+@media (max-width:640px){#ui-container a.btn#fin-btn{bottom:20px;right:20px}#ui-container a.btn#back-btn{bottom:31px;right:76px}#audio-btn{position:fixed;bottom:20px;left:20px}#mic-btn{position:fixed;bottom:20px;left:56px}}
 
 /* ===== MOBILE UNIFIED LAYOUT (base: 08-Lambert_nebu) ===== */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -79,7 +79,9 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .btn{font-size:7px;padding:5px 9px;border-radius:3px;letter-spacing:.18em}
   #ui-container{top:12px;right:calc(12px + env(safe-area-inset-right,0px));gap:8px}
   #ui-container a.btn{min-width:48px}
-  #audio-btn{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:max(12px,env(safe-area-inset-left,0px))}
+  #audio-btn{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:max(12px,env(safe-area-inset-left,0px));padding:5px 7px}
+  #mic-btn{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:calc(max(12px,env(safe-area-inset-left,0px)) + 32px);padding:5px 7px}
+  #audio-btn svg,#mic-btn svg{width:8px;height:8px}
   #sleep-note{bottom:76px;font-size:9px;letter-spacing:.18em}
   #universe-id{font-size:8px;bottom:calc(50px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
   #ui-container a.btn#fin-btn{width:31px;height:31px;bottom:calc(12px + env(safe-area-inset-bottom,0px));right:calc(12px + env(safe-area-inset-right,0px))}
@@ -101,7 +103,33 @@ var LOWP=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)||matchMedia('(m
     ds² = −(1 − r<sub>s</sub>r/ρ²)dt² − (2r<sub>s</sub>ra·sin²θ/ρ²)dtdϕ + (ρ²/Δ)dr² + ρ²dθ² + (r² + a² + r<sub>s</sub>ra²sin²θ/ρ²)sin²θdϕ²
 </div>
 <div id="ui-container">
-    <button id="audio-btn" class="btn">AUDIO INPUT: OFF</button>
+    <button id="audio-btn" class="btn" title="Sound on / off" aria-label="Toggle sound">
+      <svg id="icon-on" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+      <svg id="icon-off" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </button>
+    <button id="mic-btn" class="btn" title="Microphone input on / off" aria-label="Toggle microphone input">
+      <svg id="mic-on" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+      </svg>
+      <svg id="mic-off" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+        <line x1="2" y1="2" x2="22" y2="22"></line>
+      </svg>
+    </button>
     <a href="index.html" onclick="if(history.length>1){history.back();return false}" class="btn" id="back-btn">BACK</a>
     <a href="index.html#coda" class="btn" id="fin-btn">FIN</a>
 </div>
@@ -204,10 +232,17 @@ const noteInput=()=>{lastInput=performance.now()};
 ["pointerdown","pointermove","wheel","keydown","touchstart"].forEach(ev=>window.addEventListener(ev,noteInput,{passive:true}));
 const sleepNote=document.getElementById("sleep-note");
 
-let audioCtx = null, analyser = null, dataArray = null, mainGainNode = null;
+let audioCtx = null, analyser = null, dataArray = null, mainGainNode = null, outGainNode = null;
 let oscA = null, oscB = null, oscSub = null, filterNode = null;
-let isAudioPlaying = false;
+let isAudioPlaying = false, speakerOn = false, micOn = false;
+let micStream = null, micSource = null;
 const audioBtn = document.getElementById("audio-btn");
+const micBtn = document.getElementById("mic-btn");
+const audioIconOn = document.getElementById("icon-on"), audioIconOff = document.getElementById("icon-off");
+const micIconOn = document.getElementById("mic-on"), micIconOff = document.getElementById("mic-off");
+function setAudioIcon(on){audioIconOn.style.display = on ? "" : "none"; audioIconOff.style.display = on ? "none" : "";}
+function setMicIcon(on){micIconOn.style.display = on ? "" : "none"; micIconOff.style.display = on ? "none" : "";}
+function syncAudioState(){isAudioPlaying = speakerOn || micOn; if(audioCtx){ if(isAudioPlaying) audioCtx.resume(); else audioCtx.suspend(); }}
 
 function initAudio() {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -247,31 +282,44 @@ function initAudio() {
     subOsc.connect(mainGain);
     filter.connect(mainGain);
 
-    mainGain.connect(analyser);
-    analyser.connect(audioCtx.destination);
+    /* output path: mainGain -> outGain -> destination; analyser taps outGain (synth) + mic (input only, never routed to output) */
+    const outGain = audioCtx.createGain();
+    outGainNode = outGain;
+    outGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    mainGain.connect(outGain);
+    outGain.connect(analyser);
+    outGain.connect(audioCtx.destination);
 
     baseOsc1.start(); baseOsc2.start(); subOsc.start(); lfo.start();
 }
 
 audioBtn.addEventListener("click", () => {
-    if (!audioCtx) {
-        initAudio();
-        isAudioPlaying = true;
-        audioBtn.textContent = "AUDIO INPUT: ON";
-        audioBtn.classList.add("active");
-    } else {
-        if (isAudioPlaying) {
-            audioCtx.suspend();
-            isAudioPlaying = false;
-            audioBtn.textContent = "AUDIO INPUT: OFF";
-            audioBtn.classList.remove("active");
-        } else {
-            audioCtx.resume();
-            isAudioPlaying = true;
-            audioBtn.textContent = "AUDIO INPUT: ON";
-            audioBtn.classList.add("active");
-        }
+    if (!audioCtx) initAudio();
+    speakerOn = !speakerOn;
+    outGainNode.gain.setTargetAtTime(speakerOn ? 1 : 0, audioCtx.currentTime, 0.05);
+    setAudioIcon(speakerOn);
+    syncAudioState();
+});
+
+micBtn.addEventListener("click", () => {
+    if (micOn) {
+        micOn = false;
+        if (micSource) { micSource.disconnect(); micSource = null; }
+        if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+        setMicIcon(false);
+        syncAudioState();
+        return;
     }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    if (!audioCtx) initAudio();
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        micStream = stream;
+        micSource = audioCtx.createMediaStreamSource(stream);
+        micSource.connect(analyser);
+        micOn = true;
+        setMicIcon(true);
+        syncAudioState();
+    }).catch(() => { setMicIcon(false); syncAudioState(); });
 });
 
 /* ===== FIN = HAWKING EVAPORATION RITE =====
@@ -285,8 +333,8 @@ document.addEventListener("click",function(e){
     e.preventDefault();e.stopImmediatePropagation();
     if(finActive)return;
     finActive=true;finT0=performance.now();
-    if(!audioCtx){initAudio();isAudioPlaying=true;audioBtn.textContent="AUDIO INPUT: ON";audioBtn.classList.add("active");}
-    else if(!isAudioPlaying){audioCtx.resume();isAudioPlaying=true;audioBtn.textContent="AUDIO INPUT: ON";audioBtn.classList.add("active");}
+    if(!audioCtx)initAudio();
+    speakerOn=true;outGainNode.gain.setTargetAtTime(1,audioCtx.currentTime,0.05);setAudioIcon(true);syncAudioState();
 },true);
 
 let smoothBass = 0.0, smoothTreble = 0.0;
