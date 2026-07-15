@@ -63,6 +63,37 @@ body::after{
 @media (max-width:640px){
     #back-btn{ bottom:20px; right:16px; padding:5px 10px; font-size:9px; min-width:58px; }
 }
+/* ── 모드 토글 (Cinematic · Archive) — 사이트 공통 좌상단 고정 UI ── */
+#fixed-top-left{
+    position:fixed; top:18px; left:18px; z-index:99999;
+    pointer-events:none; display:flex; align-items:center; gap:14px;
+}
+#mode-toggle{
+    display:inline-flex; align-items:center;
+    border:1px solid rgba(255,255,255,.16); border-radius:3px;
+    background:rgba(2,3,5,.92);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    overflow:hidden; flex-shrink:0; pointer-events:auto;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+#mode-toggle .m-btn{
+    font-size:8px; letter-spacing:.16em; text-transform:uppercase; font-weight:500;
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    padding:5px 11px; border:none; background:transparent; cursor:pointer;
+    color:rgba(255,255,255,.35); transition:all .28s ease-in-out;
+    white-space:nowrap; text-decoration:none;
+    display:inline-flex; align-items:center; gap:5px; line-height:1;
+}
+#mode-toggle .m-btn.active{ background:rgba(255,255,255,.94); color:#020305; border-radius:2px; }
+#mode-toggle .m-btn:not(.active):hover{ color:rgba(255,255,255,.7); }
+#mode-toggle .m-dot{ width:3px; height:3px; border-radius:50%; background:currentColor; flex-shrink:0; opacity:.7; }
+#mode-toggle .m-btn.active .m-dot{ background:#c0152a; opacity:1; }
+#mode-toggle .m-divider{ width:1px; height:13px; background:rgba(255,255,255,.12); flex-shrink:0; }
+@media (max-width:768px){
+    #fixed-top-left{ top:max(14px,env(safe-area-inset-top)); left:14px; }
+    #mode-toggle .m-btn{ padding:4px 8px; font-size:7px; letter-spacing:.1em; }
+    #mode-toggle{ backdrop-filter:none; -webkit-backdrop-filter:none; }
+}
 .shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
 header.mast{ padding:clamp(42px,7vh,76px) 0 clamp(40px,6vh,72px); border-bottom:1px solid var(--line); }
 .eyebrow{
@@ -229,6 +260,13 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
 </head>
 <body>
 <a id="back-btn" href="index.html">BACK</a>
+<div id="fixed-top-left">
+    <div id="mode-toggle">
+        <a class="m-btn" href="../index.html" id="btn-cinematic"><span class="m-dot"></span>Cinematic</a>
+        <div class="m-divider"></div>
+        <a class="m-btn active" href="index.html" id="btn-archive"><span class="m-dot"></span>Archive</a>
+    </div>
+</div>
 <div id="prog"></div>
 
 <div class="shell">
@@ -263,6 +301,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <a class="idx-row" href="#s6"><span class="n">06</span><span class="t">성능 · 호환</span></a>
             <a class="idx-row" href="#s7"><span class="n">07</span><span class="t">배포 · 메타</span></a>
             <a class="idx-row" href="#s8"><span class="n">08</span><span class="t">운영 원칙</span></a>
+            <a class="idx-row" href="#s9"><span class="n">09</span><span class="t">무인 전시 · Kiosk</span></a>
+            <a class="idx-row" href="lexicon.html"><span class="n">10</span><span class="t">용어 설명 ·  Lexicon ↗</span></a>
         </div>
     </nav>
 
@@ -430,6 +470,30 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 프로젝트는 하나의 거대한 HTML이 아니라 여러 개의 독립적인 작품이 연결된 구조이다.
                 <br>작품은 언제든 교체하거나 추가할 수 있도록 Loose Coupling 구조를 유지한다. 
                 <br>전시장 네트워크가 불안정한 문제 발생을 대비 — <code>three.module.js</code> 를 사이트에 업로드</div>
+        </section>
+
+        <section class="sec" id="s9">
+            <div class="sec-head"><span class="sn">09</span><h2>무인 전시 · Kiosk</h2><span class="en">Unattended / Attract</span></div>
+            <p class="lede">전시장에서 사람이 상주하지 않아도 화면이 스스로 관람객을 부르고, 방치되면 처음 상태로 되돌아온다.</p>
+            <p><b>Cinematic(루트) 진입 주소에 <code class="cr">?kiosk=1</code></b> 을 붙여 실행한다 
+                <br><b>예:</b> <code>kimgunwoo.kr/19th/index.html?kiosk=1</code>. 
+                <br>키오스크 상태는 <code>sessionStorage(odyssey_kiosk)</code> 에 저장되어 작품 페이지까지 이어지며, 브라우저 탭을 닫으면 해제된다. 
+                <br>운영 중 해제하려면 <code>index.html?kiosk=0</code>.</p>
+            <div class="data">
+                <div class="d-row head"><div class="k"><span class="kt">동작</span></div><div class="val">기준 · 타이밍</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▸</span><span class="kt">Attract 시작</span></div><div class="val">관측소에서 <code>45s</code> 무입력 → 작품 프리뷰를 <b>자동 순회</b>(작품당 <code>9s</code>). 하단에 <code>Autoplay</code> 안내 점멸<small>ATTRACT_MS · CYCLE_MS</small></div></div>
+                <div class="d-row"><div class="k"><span class="kv">▸</span><span class="kt">관람권 이양</span></div><div class="val">순회 중 <b>화면 터치·마우스·키 입력</b> 즉시 자동재생 중단 → 관람객이 직접 조작</div></div>
+                <div class="d-row"><div class="k"><span class="kv">▸</span><span class="kt">오프닝 리셋</span></div><div class="val">관측소에서 <code>210s</code> 무입력 → 세션 초기화 후 블랙홀 오프닝으로 복귀<small>RESET_MS</small></div></div>
+                <div class="d-row"><div class="k"><span class="kv">▸</span><span class="kt">작품 자동 복귀</span></div><div class="val">작품 페이지에서 <code>90s</code> 무입력 → 관측소로 복귀(한 작품에 멈춰있지 않게)<small>IDLE (work pages)</small></div></div>
+            </div>
+            <div class="note"><span class="lbl">타이밍 조정</span>
+                값은 <code>index.html</code> 하단 <b>KIOSK / ATTRACT MODE</b> 블록의 <code>ATTRACT_MS · CYCLE_MS · RESET_MS</code>, 각 작품 <code>KIOSK IDLE-RETURN</code> 블록의 <code>IDLE</code> 상수로 조정한다. 
+                <br>키오스크가 아닐 때(<code>odyssey_kiosk</code> 미설정)와 프리뷰(<code>?embed=1</code>)에서는 <b>전부 비활성</b>이라 일반 관람에는 영향이 없다.</div>
+            <div class="note cy"><span class="lbl">권장 설정</span>
+                ① 전시용 PC를 <b>전체화면(F11)</b> · 브라우저 자동 새로고침/절전 해제. 
+                <br>② <code>?kiosk=1</code> 로 실행. 
+                <br>③ <b>reduce-motion</b> 미사용 확인. 
+                <br>④ 네트워크가 불안정하면 CDN 로드 실패 시 각 작품의 <code>net-fail</code> 감시가 <b>7초 후 재시도 안내</b>를 띄우므로, 안정적 회선 또는 캐시를 확보한다.</div>
         </section>
 
     </main>

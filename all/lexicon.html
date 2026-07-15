@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABYSSAL LEXICON · 2026: a digital odyssey</title>
+<meta name="description" content="김건우교수 제19회 개인전 작품 용어 주석 — 물리·수학·그래픽 용어 31개를 한글 가나다 순으로 풀어 정리한 심연의 용어사전.">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="../favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --paper:#fefefe;
+    --paper-2:#cecece;
+    --ink:#161616;
+    --muted:#565656;
+    --faint:#9a9a9a;
+    --line:rgba(0,0,0,.13);
+    --line-2:rgba(0,0,0,.06);
+    --accent:#161616;
+    --accent-2:#3a3a3a;
+    --panel:rgba(0,0,0,.022);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:96px; }
+body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.72;
+    letter-spacing:.005em;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+body::before{
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+        radial-gradient(120% 80% at 12% -8%, rgba(0,0,0,.05), transparent 46%),
+        radial-gradient(90% 70% at 108% 4%, rgba(0,0,0,.03), transparent 50%),
+        var(--paper);
+}
+body::after{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    opacity:.045; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+#back-btn{
+    position:fixed; bottom:30px; right:clamp(20px,4vw,56px); z-index:70;
+    background:var(--paper);
+    color:rgba(22,22,22,.6); text-decoration:none;
+    font-size:10px; letter-spacing:.25em;
+    border:1px solid rgba(22,22,22,.2);
+    padding:6px 12px; border-radius:4px;
+    min-width:68px; text-align:center; box-sizing:border-box;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:all .3s ease;
+}
+#back-btn:hover{
+    color:var(--ink); background:#f4f4f4;
+    border-color:rgba(22,22,22,.5);
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+}
+@media (max-width:640px){
+    #back-btn{ bottom:20px; right:16px; padding:5px 10px; font-size:9px; min-width:58px; }
+}
+/* ── 모드 토글 (Cinematic · Archive) — 사이트 공통 좌상단 고정 UI ── */
+#fixed-top-left{
+    position:fixed; top:18px; left:18px; z-index:99999;
+    pointer-events:none; display:flex; align-items:center; gap:14px;
+}
+#mode-toggle{
+    display:inline-flex; align-items:center;
+    border:1px solid rgba(255,255,255,.16); border-radius:3px;
+    background:rgba(2,3,5,.92);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    overflow:hidden; flex-shrink:0; pointer-events:auto;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+#mode-toggle .m-btn{
+    font-size:8px; letter-spacing:.16em; text-transform:uppercase; font-weight:500;
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    padding:5px 11px; border:none; background:transparent; cursor:pointer;
+    color:rgba(255,255,255,.35); transition:all .28s ease-in-out;
+    white-space:nowrap; text-decoration:none;
+    display:inline-flex; align-items:center; gap:5px; line-height:1;
+}
+#mode-toggle .m-btn.active{ background:rgba(255,255,255,.94); color:#020305; border-radius:2px; }
+#mode-toggle .m-btn:not(.active):hover{ color:rgba(255,255,255,.7); }
+#mode-toggle .m-dot{ width:3px; height:3px; border-radius:50%; background:currentColor; flex-shrink:0; opacity:.7; }
+#mode-toggle .m-btn.active .m-dot{ background:#c0152a; opacity:1; }
+#mode-toggle .m-divider{ width:1px; height:13px; background:rgba(255,255,255,.12); flex-shrink:0; }
+@media (max-width:768px){
+    #fixed-top-left{ top:max(14px,env(safe-area-inset-top)); left:14px; }
+    #mode-toggle .m-btn{ padding:4px 8px; font-size:7px; letter-spacing:.1em; }
+    #mode-toggle{ backdrop-filter:none; -webkit-backdrop-filter:none; }
+}
+.shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
+header.mast{ padding:clamp(42px,7vh,76px) 0 clamp(40px,6vh,72px); border-bottom:1px solid var(--line); }
+.eyebrow{
+    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
+    letter-spacing:.42em; text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:12px;
+}
+.eyebrow::before{ content:''; width:26px; height:1px; background:var(--accent); display:inline-block; }
+h1.codex{
+    margin-top:22px;
+    font-family:'Inter',sans-serif; font-weight:700;
+    font-size:clamp(26px,3.8vw,46px); line-height:1; letter-spacing:-.045em;
+    color:var(--ink);
+}
+h1.codex .thin{ font-weight:300; color:var(--muted); letter-spacing:-.02em; }
+.mast-sub{
+    margin-top:22px; max-width:62ch; color:var(--muted);
+    font-size:clamp(12px,1.05vw,14px); line-height:1.85;
+}
+.mast-sub b{ color:var(--ink); font-weight:500; }
+.mast-meta{
+    margin-top:34px; display:flex; flex-wrap:wrap; gap:10px 26px;
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em;
+    color:var(--faint); text-transform:uppercase;
+}
+.mast-meta span{ display:inline-flex; align-items:center; gap:9px; }
+.mast-meta .dot{ width:4px; height:4px; border-radius:50%; background:var(--ink); }
+.mast-meta .dot.cy{ background:var(--faint); }
+.layout{ display:grid; grid-template-columns:200px 1fr; gap:clamp(30px,5vw,84px); padding:clamp(38px,6vh,64px) 0 140px; align-items:start; }
+nav.index{ position:sticky; top:52px; }
+nav.index .idx-title{
+    font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--faint); padding:0 0 16px 14px;
+}
+.idx-row{
+    display:flex; align-items:baseline; gap:11px;
+    padding:6px 10px 6px 12px; cursor:pointer; text-decoration:none;
+    border-left:2px solid transparent;
+    font-family:'DM Mono',monospace;
+    transition:border-color .28s ease, background .28s ease;
+}
+.idx-row .n{ font-size:13px; color:var(--faint); width:18px; flex-shrink:0; letter-spacing:.02em; font-family:'Noto Sans KR',sans-serif; }
+.idx-row .t{ font-size:11px; color:var(--muted); font-family:'Inter','Noto Sans KR',sans-serif; letter-spacing:.01em; transition:color .28s ease; line-height:1.5; }
+.idx-row:hover{ background:rgba(0,0,0,.045); }
+.idx-row:hover .t{ color:var(--ink); }
+.idx-row.active{ border-left-color:var(--accent); background:rgba(0,0,0,.05); }
+.idx-row.active .n{ color:var(--accent); }
+.idx-row.active .t{ color:var(--ink); }
+main.body{ min-width:0; max-width:840px; }
+section.sec{ padding:clamp(20px,4vh,38px) 0 clamp(34px,6vh,62px); border-bottom:1px solid var(--line-2); scroll-margin-top:80px; }
+section.sec:last-child{ border-bottom:none; }
+.sec-head{ display:flex; align-items:baseline; gap:18px; margin-bottom:6px; }
+.sec-head .sn{
+    font-family:'Noto Sans KR',sans-serif; font-size:30px; font-weight:700;
+    color:var(--accent); letter-spacing:0; flex-shrink:0; line-height:1;
+}
+.sec-head h2{
+    font-family:'Inter','Noto Sans KR',sans-serif; font-weight:500;
+    font-size:clamp(13px,1.5vw,16px); line-height:1.4; letter-spacing:-.01em; color:var(--muted);
+}
+.sec-head .en{
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--faint); margin-left:auto; align-self:center;
+    white-space:nowrap;
+}
+.data{ margin:22px 0 4px; border-top:1px solid var(--line); }
+.d-row{
+    display:grid; grid-template-columns:min(34%,220px) 1fr; gap:24px;
+    padding:18px 4px 18px 16px; border-bottom:1px solid var(--line-2);
+    border-left:2px solid transparent;
+    transition:border-color .25s ease, background .25s ease;
+}
+.d-row:hover{ border-left-color:rgba(0,0,0,.45); background:rgba(0,0,0,.028); }
+.d-row .k{ display:flex; align-items:baseline; gap:11px; }
+.d-row .k .kv{ color:var(--faint); font-size:9.5px; opacity:.85; font-family:'DM Mono',monospace; padding-top:2px; }
+.d-row .k .kt{ display:inline-flex; flex-direction:column; gap:3px; }
+.d-row .k .kt .ko{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:14px; color:var(--ink); font-weight:600; letter-spacing:.01em; }
+.d-row .k .kt .en-term{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:400; }
+.d-row .val{ color:var(--muted); font-size:13px; line-height:1.85; word-break:keep-all; }
+.d-row .val b{ color:var(--ink); font-weight:500; }
+.note{
+    margin:30px 0 6px; padding:18px 22px; border-radius:8px;
+    background:rgba(0,0,0,.035); border:1px solid rgba(0,0,0,.11);
+    border-left:3px solid var(--accent); font-size:12.5px; line-height:1.75; color:#3a3a3a;
+}
+.note .lbl{ font-family:'Space Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+.note b{ color:var(--ink); font-weight:500; }
+.note a{ color:var(--ink); font-weight:600; text-decoration:underline; text-decoration-color:rgba(0,0,0,.35); text-underline-offset:2px; transition:text-decoration-color .25s ease; }
+.note a:hover{ text-decoration-color:var(--ink); }
+footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
+.foot-grid{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; align-items:flex-end; }
+.foot .sig{ font-family:'Inter',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.02em; }
+.foot .sig .thin{ font-weight:300; color:var(--muted); }
+.foot .meta{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase; line-height:2; text-align:right; }
+.foot .seed{ color:var(--muted); font-style:italic; }
+#prog{ position:fixed; top:0; left:0; height:2px; width:0; background:linear-gradient(90deg,#111,#555); z-index:60; transition:width .1s linear; }
+@media (max-width:860px){
+    .layout{ grid-template-columns:1fr; gap:0; padding-top:20px; }
+    nav.index{ position:static; margin-bottom:30px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+    nav.index .idx-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:2px 16px; }
+    main.body{ max-width:none; }
+    .sec-head .en{ display:none; }
+    .d-row{ grid-template-columns:1fr; gap:8px; }
+}
+@media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    *{ transition:none !important; }
+}
+</style>
+</head>
+<body>
+<a id="back-btn" href="index.html">BACK</a>
+<div id="fixed-top-left">
+    <div id="mode-toggle">
+        <a class="m-btn" href="../index.html" id="btn-cinematic"><span class="m-dot"></span>Cinematic</a>
+        <div class="m-divider"></div>
+        <a class="m-btn active" href="index.html" id="btn-archive"><span class="m-dot"></span>Archive</a>
+    </div>
+</div>
+<script>
+(function(){
+    var btn = document.getElementById('back-btn');
+    if(!btn) return;
+    // 진입 페이지를 URL 파라미터(?from=)로 판별해 그 페이지로 복귀한다.
+    // (file:// 환경에서도 referrer에 의존하지 않고 동작)
+    var from;
+    try { from = new URLSearchParams(location.search).get('from'); } catch(e){ from = null; }
+    if(from === 'guide'){
+        btn.setAttribute('href', '../guide.html');   // 관람 안내에서 진입 → 안내로 복귀
+    } else {
+        btn.setAttribute('href', 'index.html');       // 아카이브·직접 접속 → 아카이브로 복귀
+    }
+})();
+</script>
+<div id="prog"></div>
+
+<div class="shell">
+
+<header class="mast">
+    <div class="eyebrow">심연의 방정식 · 작품 용어 주석</div>
+    <h1 class="codex"><span class="thin">Abyssal</span> Lexicon</h1>
+    <p class="mast-sub">
+        <b>김건우교수 제19회 개인전</b>의 15개 작품 속에 담겨있는 물리·수학·그래픽 용어를 풀어 정리한 <b>주석(Glossary)</b>이다.
+        <br>화면 뒤편의 방정식과 개념을 어려운 수식 대신 <b>쉬운 언어</b>로 옮겼다. 순서는 <b>한글 가나다(ㄱ·ㄴ·ㄷ…)</b> 순으로 배열했다.
+        작품 감상 중 낯선 용어를 만났을 때, 이 페이지에서 찾아보길 바란다.
+    </p>
+    <div class="mast-meta">
+        <span><i class="dot"></i>Equations of the Abyss</span>
+        <span><i class="dot cy"></i> 31 Terms · 가나다순</span>
+        <span><i class="dot"></i> kimgunwoo.kr/19th/</span>
+    </div>
+</header>
+
+<div class="layout">
+
+    <nav class="index">
+        <div class="idx-title">Index</div>
+        <div class="idx-wrap">
+            <a class="idx-row" href="#g0"><span class="n">ㄱ</span><span class="t">가산 혼합 · 간섭무늬 · 강착 원반 · 계수 · 광자 고리</span></a>
+            <a class="idx-row" href="#g1"><span class="n">ㄴ</span><span class="t">나선팔</span></a>
+            <a class="idx-row" href="#g2"><span class="n">ㄷ</span><span class="t">도플러 효과</span></a>
+            <a class="idx-row" href="#g3"><span class="n">ㄹ</span><span class="t">람베르트 W · 레이마칭 · 로렌즈 · 리만</span></a>
+            <a class="idx-row" href="#g4"><span class="n">ㅂ</span><span class="t">베셀 함수 · 블랙홀</span></a>
+            <a class="idx-row" href="#g5"><span class="n">ㅅ</span><span class="t">상대론적 제트 · 소수 인자 · 슈바르츠실트 · 슬릿스캔 · 신시사이저</span></a>
+            <a class="idx-row" href="#g6"><span class="n">ㅆ</span><span class="t">쌍곡선 함수</span></a>
+            <a class="idx-row" href="#g7"><span class="n">ㅇ</span><span class="t">아인슈타인 고리 · 엔트로피 · 이중 은하</span></a>
+            <a class="idx-row" href="#g8"><span class="n">ㅈ</span><span class="t">중력 렌즈</span></a>
+            <a class="idx-row" href="#g9"><span class="n">ㅊ</span><span class="t">차등 회전</span></a>
+            <a class="idx-row" href="#g10"><span class="n">ㅋ</span><span class="t">커 계량 · 커의 프레임 드래깅 · 케플러 회전</span></a>
+            <a class="idx-row" href="#g11"><span class="n">ㅍ</span><span class="t">페르마 나선 · 플라스마</span></a>
+            <a class="idx-row" href="#g12"><span class="n">ㅎ</span><span class="t">호킹 증발 · 황금각</span></a>
+        </div>
+    </nav>
+
+    <main class="body">
+
+        <section class="sec" id="g0">
+            <div class="sec-head"><span class="sn">ㄱ</span><h2>가산 혼합 · 간섭무늬 · 강착 원반 · 계수 · 광자 고리</h2><span class="en">5 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">01</span><span class="kt"><span class="ko">가산 혼합</span><span class="en-term">Additive Blending</span></span></div>
+                    <div class="val">여러 빛이 겹칠수록 색이 <b>더해져 점점 밝아지는</b> 그래픽 합성 방식이다. 화면(스크린)이 색을 표현하는 근본 원리이며, 빨강·초록·파랑(RGB)이 모두 겹치면 흰빛이 된다. 별빛과 성운, 에너지가 쌓이는 발광 효과를 표현할 때 쓰이며, 이 전시에서는 입자가 겹칠수록 광도가 기하급수로 차오르는 장면에 활용된다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">02</span><span class="kt"><span class="ko">간섭무늬</span><span class="en-term">Interference Pattern</span></span></div>
+                    <div class="val">두 개 이상의 파동이 겹칠 때, 서로 <b>보강되거나 상쇄되며</b> 밝고 어두운 줄무늬(또는 색의 무늬)를 만들어내는 현상이다. 물결이 만나 생기는 무늬나 비눗방울 표면의 무지갯빛이 대표적이다. 베셀 블룸에서는 여러 파원(波源)에서 퍼져 나간 물결이 겹치고 부딪히며 빛과 색의 간섭무늬를 짜낸다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">03</span><span class="kt"><span class="ko">강착 원반</span><span class="en-term">Accretion Disk</span></span></div>
+                    <div class="val">블랙홀처럼 강한 중력을 가진 천체 주위를 <b>나선을 그리며 빨려 들어가는</b> 뜨거운 가스와 먼지의 원반이다. 안쪽으로 갈수록 회전이 빨라지고 마찰열로 수백만 도까지 달아올라 강렬한 빛을 낸다. 오디세이·이벤트 호라이즌 계열 작품에서 중심을 감싸고 도는 빛의 고리로 나타난다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">04</span><span class="kt"><span class="ko">계수</span><span class="en-term">Coefficient</span></span></div>
+                    <div class="val">수식에서 변수 앞에 곱해져 그 <b>영향의 크기를 정하는 수</b>다. 같은 방정식이라도 계수를 바꾸면 결과의 형태가 크게 달라진다. 로렌즈 나비에서 흐름의 세기를 정하는 계수(ρ) 하나를 순간적으로 끌어올리면(28→36), 안정적이던 나비 궤도가 통째로 흐트러지는 것이 그 예다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">05</span><span class="kt"><span class="ko">광자 고리</span><span class="en-term">Photon Ring</span></span></div>
+                    <div class="val">블랙홀의 강한 중력에 붙잡힌 빛(광자)이 사건지평선 바로 바깥을 <b>여러 바퀴 돌면서</b> 만들어내는 매우 밝고 얇은 원형 고리다. 블랙홀 그림자의 가장자리를 또렷하게 그려내며, 실제 블랙홀 관측 사진에서 보이는 밝은 테두리가 바로 이것이다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g1">
+            <div class="sec-head"><span class="sn">ㄴ</span><h2>나선팔</h2><span class="en">1 Term</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">06</span><span class="kt"><span class="ko">나선팔</span><span class="en-term">Spiral Arm</span></span></div>
+                    <div class="val">은하에서 별과 가스, 먼지가 <b>나선 모양으로 길게 모여 있는</b> 구조다. 팔을 따라 새로운 별이 활발히 태어나 밝게 빛난다. 태양계도 은하수의 나선팔 중 하나(오리온 팔) 안에 자리하고 있다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g2">
+            <div class="sec-head"><span class="sn">ㄷ</span><h2>도플러 효과</h2><span class="en">1 Term</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">07</span><span class="kt"><span class="ko">도플러 효과</span><span class="en-term">Doppler Effect</span></span></div>
+                    <div class="val">빛이나 소리를 내는 물체가 관측자에게 가까워지거나 멀어질 때, 그 <b>주파수가 달라져 빛은 색이, 소리는 높낮이가 변하는</b> 현상이다. 빛의 경우 가까워지면 파란빛 쪽으로, 멀어지면 붉은빛 쪽으로 치우친다. 강착 원반에서 우리 쪽으로 다가오는 부분이 더 밝고 푸르게 타오르는 이유다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g3">
+            <div class="sec-head"><span class="sn">ㄹ</span><h2>람베르트 W 함수 · 레이마칭 · 로렌즈 방정식 · 리만 가설</h2><span class="en">4 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">08</span><span class="kt"><span class="ko">람베르트 W 함수</span><span class="en-term">Lambert W Function</span></span></div>
+                    <div class="val">변수와 지수가 함께 얽힌 방정식 <b>w·eʷ = x</b>의 해를 구해 주는 특별한 함수다. 일반적인 계산으로는 딱 떨어지지 않는 성장·확산·감쇠 같은 현상을 다룰 때 쓰이며, 하나의 값에 대해 답이 둘일 수 있어 결과가 두 갈래(주된 갈래 W₀·아래 갈래 W₋₁)로 나뉜다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">09</span><span class="kt"><span class="ko">레이마칭</span><span class="en-term">Ray Marching</span></span></div>
+                    <div class="val">화면의 각 픽셀에서 빛의 경로를 따라 <b>한 걸음씩 전진하며</b> 입체 공간과 형상을 계산하는 렌더링 기법이다. 미리 만들어 둔 3D 모델 없이 수식만으로 안개·구름·블랙홀처럼 부피감 있는 형체를 실시간으로 그려낸다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">10</span><span class="kt"><span class="ko">로렌즈 방정식</span><span class="en-term">Lorenz Equation</span></span></div>
+                    <div class="val">대기의 흐름을 단순화한 세 개의 방정식으로, 아주 작은 초기 조건의 차이가 시간이 지나며 완전히 다른 결과로 벌어지는 <b>‘카오스(혼돈)’</b> 현상을 처음 보여 준 수학 모델이다. 그 궤적이 나비의 날개를 닮아 ‘나비 효과’라는 말의 뿌리가 되었다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">11</span><span class="kt"><span class="ko">리만 가설</span><span class="en-term">Riemann Hypothesis</span></span></div>
+                    <div class="val">소수(1과 자기 자신으로만 나뉘는 수)가 <b>어떤 규칙으로 흩어져 있는지</b>를 설명하려는, 현대 수학 최대의 미해결 난제다. 소수의 분포와 깊이 연결된 리만 제타 함수에서, 그 값을 0으로 만드는 특별한 해(‘자명하지 않은 영점’)가 모두 하나의 직선 위에 놓인다는 예측으로, 아직 아무도 증명하지 못했다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g4">
+            <div class="sec-head"><span class="sn">ㅂ</span><h2>베셀 함수 · 블랙홀</h2><span class="en">2 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">12</span><span class="kt"><span class="ko">베셀 함수</span><span class="en-term">Bessel Function</span></span></div>
+                    <div class="val"><b>원형·원통형으로 퍼지는</b> 파동과 진동을 기술하는 수학 함수다. 물 위에 돌을 던졌을 때 동심원으로 퍼지는 물결, 북 가죽의 진동, 원형 렌즈를 통과하는 빛처럼 중심에서 바깥으로 번지는 파동을 계산하는 데 쓰인다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">13</span><span class="kt"><span class="ko">블랙홀</span><span class="en-term">Black Hole</span></span></div>
+                    <div class="val">중력이 너무나 강해 <b>빛조차 빠져나올 수 없는</b> 시공간의 영역이다. 무거운 별이 수명을 다하고 스스로 붕괴하며 태어나며, 경계인 사건지평선 안쪽에서 벌어지는 일은 바깥에서 결코 볼 수 없다. 이 전시 후반부 여러 작품의 중심에 자리한 주인공이다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g5">
+            <div class="sec-head"><span class="sn">ㅅ</span><h2>상대론적 제트 · 소수 인자 · 슈바르츠실트 반지름 · 슬릿스캔 · 신시사이저</h2><span class="en">5 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">14</span><span class="kt"><span class="ko">상대론적 제트</span><span class="en-term">Relativistic Jet</span></span></div>
+                    <div class="val">블랙홀이나 중성자별 주변에서 회전축을 따라 <b>거의 빛의 속도로 뿜어져 나오는</b> 강력한 물질과 에너지의 흐름이다. 수천 광년 밖까지 곧게 뻗으며, 우주에서 가장 격렬한 에너지 현상 중 하나로 꼽힌다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">15</span><span class="kt"><span class="ko">소수 인자</span><span class="en-term">Prime Factor</span></span></div>
+                    <div class="val">어떤 수를 <b>소수(1과 자기 자신으로만 나뉘는 수)들의 곱으로 쪼갰을 때</b> 나오는 각각의 소수다. 예컨대 12는 2×2×3이므로 소수 인자는 2와 3이다. 1보다 큰 모든 자연수는 소수 인자의 곱으로 단 한 가지 방식으로만 표현되며, 퀀텀 싱귤래리티에서는 매 순간의 소수 인자가 화면 한쪽에 새겨진다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">16</span><span class="kt"><span class="ko">슈바르츠실트 반지름</span><span class="en-term">Schwarzschild Radius</span></span></div>
+                    <div class="val">어떤 질량이 이 크기보다 작게 압축되면 <b>블랙홀이 되는 경계</b>의 반지름이다. 이 반지름이 그리는 구면이 곧 ‘사건지평선’으로, 그 안에서는 빛조차 밖으로 빠져나올 수 없다. 질량이 클수록 이 반지름도 커진다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">17</span><span class="kt"><span class="ko">슬릿스캔</span><span class="en-term">Slit-Scan</span></span></div>
+                    <div class="val">매 순간 화면의 <b>가느다란 한 줄(슬릿)만 잘라내어</b> 시간 순서대로 이어 붙이는 영상 기법이다. 서로 다른 시간이 한 화면에 공존하며 공간이 늘어나고 휘어지는 독특한 왜곡이 생겨난다. 시간의 흐름 자체를 시각화하는 데 쓰인다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">18</span><span class="kt"><span class="ko">신시사이저</span><span class="en-term">Synthesizer</span></span></div>
+                    <div class="val">전자 회로나 알고리즘으로 <b>소리를 인공적으로 만들어내는</b> 악기이자 장치다. 미리 녹음된 소리가 아니라 파형을 실시간으로 합성해 음을 빚는다. 이 전시의 여러 작품은 제너러티브 신시사이저로 화면의 붕괴·운동에 맞춰 음향을 스스로 생성한다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g6">
+            <div class="sec-head"><span class="sn">ㅆ</span><h2>쌍곡선 함수</h2><span class="en">1 Term</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">19</span><span class="kt"><span class="ko">쌍곡선 함수</span><span class="en-term">Hyperbolic Function</span></span></div>
+                    <div class="val">지수함수 eˣ를 바탕으로 정의되는 <b>sinh·cosh·tanh</b> 같은 수학 함수들이다. 늘어진 전선이 그리는 곡선, 매끄러운 곡면과 파동, 그리고 상대성이론의 시공간 구조를 기술하는 데 두루 활용된다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g7">
+            <div class="sec-head"><span class="sn">ㅇ</span><h2>아인슈타인 고리 · 엔트로피 · 이중 은하</h2><span class="en">3 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">20</span><span class="kt"><span class="ko">아인슈타인 고리</span><span class="en-term">Einstein Ring</span></span></div>
+                    <div class="val">멀리 있는 천체의 빛이 그 앞을 가로막은 무거운 천체의 강한 중력에 휘어져, <b>원형 고리처럼 보이게 되는</b> 현상이다. 중력이 렌즈처럼 빛을 굴절시키는 ‘중력 렌즈’의 가장 완전한 형태로, 일반상대성이론의 증거로 꼽힌다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">21</span><span class="kt"><span class="ko">엔트로피</span><span class="en-term">Entropy</span></span></div>
+                    <div class="val">어떤 계가 <b>얼마나 무질서한 상태인지</b>를 나타내는 물리량이다. 자연은 늘 질서에서 무질서로, 즉 엔트로피가 커지는 방향으로 흘러간다. 시간이 한쪽으로만 흐르는 이유이자, 블랙 보이지의 마지막에 신호가 흩어져 사라지는 붕괴의 근거다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">22</span><span class="kt"><span class="ko">이중 은하</span><span class="en-term">Binary Galaxy</span></span></div>
+                    <div class="val">두 개의 은하가 <b>서로의 중력에 묶여 함께 도는</b> 구조다. 가까워지면 서로를 일그러뜨리고 끝내 하나로 병합되기도 한다. 듀얼 갤럭시에서는 붉은 팔과 푸른 팔이 하나의 나선 위에서 교차하며 감기는 이중 은하로 표현된다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g8">
+            <div class="sec-head"><span class="sn">ㅈ</span><h2>중력 렌즈</h2><span class="en">1 Term</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">23</span><span class="kt"><span class="ko">중력 렌즈</span><span class="en-term">Gravitational Lens</span></span></div>
+                    <div class="val">무거운 천체의 <b>강한 중력이 그 뒤편에서 오는 빛을 휘게 만들어</b>, 마치 렌즈처럼 상을 확대하거나 여러 겹으로 보이게 하는 현상이다. 일반상대성이론이 예측했고 실제로 관측되었다. 이 전시의 배경 셰이더는 블랙홀 주위를 지나는 빛이 굴절되는 중력 렌즈를 근사해 그린다. 가장 완전한 형태가 아인슈타인 고리다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g9">
+            <div class="sec-head"><span class="sn">ㅊ</span><h2>차등 회전</h2><span class="en">1 Term</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">24</span><span class="kt"><span class="ko">차등 회전</span><span class="en-term">Differential Rotation</span></span></div>
+                    <div class="val">하나의 천체나 원반이라도 <b>위치(중심으로부터의 거리)에 따라 회전 속도가 서로 다른</b> 현상이다. 은하와 강착 원반, 태양처럼 단단하지 않고 유체로 이루어진 대상에서 흔히 나타나며, 나선팔이 감기는 원인이 된다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g10">
+            <div class="sec-head"><span class="sn">ㅋ</span><h2>커 계량 · 커의 프레임 드래깅 · 케플러 회전</h2><span class="en">3 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">25</span><span class="kt"><span class="ko">커 계량</span><span class="en-term">Kerr Metric</span></span></div>
+                    <div class="val"><b>스스로 회전하는 블랙홀</b> 주변의 휘어진 시공간 구조를 정확히 기술하는 일반상대성이론의 수학 모델이다. 회전하지 않는 블랙홀(슈바르츠실트)과 달리, 회전에 의해 주변 시공간이 함께 끌려 도는 효과까지 담아낸다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">26</span><span class="kt"><span class="ko">커의 프레임 드래깅</span><span class="en-term">Kerr Frame Dragging</span></span></div>
+                    <div class="val">회전하는 블랙홀이 <b>주변의 시공간 자체를 함께 끌고 도는</b> 현상이다. 소용돌이가 주변의 물을 함께 돌리듯, 블랙홀 근처에서는 공간이 정지해 있을 수 없고 회전 방향으로 서서히 끌려간다. 커 계량이 예측한 대표적 효과다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">27</span><span class="kt"><span class="ko">케플러 회전</span><span class="en-term">Keplerian Rotation</span></span></div>
+                    <div class="val"><b>중심에 가까울수록 더 빠르게 도는</b> 천체의 회전 운동이다. 태양에 가까운 행성이 더 빨리 공전하듯, 강착 원반의 안쪽 물질도 바깥쪽보다 훨씬 빠르게 중심을 돈다. 케플러의 행성 운동 법칙에서 이름을 따왔다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g11">
+            <div class="sec-head"><span class="sn">ㅍ</span><h2>페르마 나선 · 플라스마</h2><span class="en">2 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">28</span><span class="kt"><span class="ko">페르마 나선</span><span class="en-term">Fermat Spiral</span></span></div>
+                    <div class="val">중심에서 <b>일정한 넓이 간격으로 고르게 퍼져 나가는</b> 나선이다. 해바라기 씨앗이나 솔방울처럼 자연이 공간을 촘촘하고 효율적으로 채우는 성장·확산의 패턴에서 자주 발견된다. 이 전시의 은하 입자 배치에도 쓰였다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">29</span><span class="kt"><span class="ko">플라스마</span><span class="en-term">Plasma</span></span></div>
+                    <div class="val">기체가 더욱 뜨거워져 <b>원자가 전자와 원자핵으로 분리된, 물질의 네 번째 상태</b>다. 태양과 별, 번개, 강착 원반의 뜨거운 가스가 모두 플라스마다. 커 플라스마 성당에서는 소리의 저음이 블랙홀 주위의 플라스마 필라멘트를 밝힌다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="g12">
+            <div class="sec-head"><span class="sn">ㅎ</span><h2>호킹 증발 · 황금각</h2><span class="en">2 Terms</span></div>
+            <div class="data">
+                <div class="d-row">
+                    <div class="k"><span class="kv">30</span><span class="kt"><span class="ko">호킹 증발</span><span class="en-term">Hawking Evaporation</span></span></div>
+                    <div class="val">스티븐 호킹이 예측한 현상으로, 블랙홀이 사건지평선 언저리의 양자 요동(텅 빈 공간에서도 끊임없이 일렁이는 미세한 에너지)에서 아주 희미한 빛(<b>호킹 복사</b>)을 내보내며 <b>오랜 시간에 걸쳐 질량을 잃고 서서히 증발해 사라지는</b> 과정이다. 블랙홀이 작을수록 더 빠르게 증발하며, 영원할 것 같던 블랙홀에도 끝이 있음을 뜻한다. 이 전시의 마지막 — 관측이 멈춘 우주가 침묵 속으로 스러지는 장면의 바탕이 되는 개념이다.</div>
+                </div>
+                <div class="d-row">
+                    <div class="k"><span class="kv">31</span><span class="kt"><span class="ko">황금각</span><span class="en-term">Golden Angle</span></span></div>
+                    <div class="val">원을 황금비로 나눌 때 생기는 약 <b>137.5°의 각도</b>다. 이 각도로 씨앗이나 잎을 차례차례 배치하면 서로 겹치지 않고 공간을 가장 촘촘하게 채울 수 있고, 해바라기·솔방울 등 자연의 나선에서 흔히 나타난다. 퀀텀 싱귤래리티의 입자 정렬에도 이 각도가 쓰였다.</div>
+                </div>
+            </div>
+            <div class="note"><span class="lbl">참고</span>
+                이 주석은 관람의 이해를 돕기 위한 것으로, 각 용어를 <b>직관적으로 풀어 옮긴 설명</b>이다. 더 엄밀한 정의와 유도는 물리학·수학의 정식 문헌을 참고하길 권한다. 작품의 운영·제작 관련 내용은 <a href="operator.html">Operator's Codex</a>에서 다룬다.</div>
+        </section>
+
+    </main>
+</div>
+
+<footer class="foot">
+    <div class="foot-grid">
+        <div class="sig">2026: <span class="thin">a digital odyssey</span></div>
+        <div class="meta">
+            김건우교수 제19회 개인전 · Abyssal Lexicon<br>
+            Equations of the Abyss — 심연의 방정식<br>
+            <span class="seed">Glossary · 작품 용어 주석</span>
+        </div>
+    </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+    var idxRows = Array.prototype.slice.call(document.querySelectorAll('.idx-row'));
+    var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+    var prog = document.getElementById('prog');
+
+    function onScroll(){
+        var h = document.documentElement;
+        var p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+        prog.style.width = (p*100).toFixed(2) + '%';
+    }
+    addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    if('IntersectionObserver' in window){
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if(e.isIntersecting){
+                    var id = e.target.id;
+                    idxRows.forEach(function(r){
+                        r.classList.toggle('active', r.getAttribute('href') === '#'+id);
+                    });
+                }
+            });
+        }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+        secs.forEach(function(s){ io.observe(s); });
+    }
+})();
+</script>
+</body>
+</html>
