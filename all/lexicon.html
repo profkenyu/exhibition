@@ -227,6 +227,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
     try { from = new URLSearchParams(location.search).get('from'); } catch(e){ from = null; }
     if(from === 'guide'){
         btn.setAttribute('href', '../guide.html');   // 관람 안내에서 진입 → 안내로 복귀
+    } else if(from === 'operator'){
+        btn.setAttribute('href', 'operator.html');    // 오퍼레이터(10번 메뉴)에서 진입 → 이전 페이지로 복귀
     } else {
         btn.setAttribute('href', 'index.html');       // 아카이브·직접 접속 → 아카이브로 복귀
     }
@@ -240,9 +242,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
     <div class="eyebrow">심연의 방정식 · 작품 용어 주석</div>
     <h1 class="codex"><span class="thin">Abyssal</span> Lexicon</h1>
     <p class="mast-sub">
-        <b>김건우교수 제19회 개인전</b>의 15개 작품 속에 담겨있는 물리·수학·그래픽 용어를 풀어 정리한 <b>주석(Glossary)</b>이다.
-        <br>화면 뒤편의 방정식과 개념을 어려운 수식 대신 <b>쉬운 언어</b>로 옮겼다. 순서는 <b>한글 가나다(ㄱ·ㄴ·ㄷ…)</b> 순으로 배열했다.
-        작품 감상 중 낯선 용어를 만났을 때, 이 페이지에서 찾아보길 바란다.
+        <b>김건우교수 제19회 개인전</b>의 15개 작품 속에 담겨있는 물리·수학·그래픽 용어를 풀어 정리한 <b>주석(Glossary)</b> 페이지.
+        <br>화면 뒤편의 방정식과 개념을 어려운 수식 대신 알기 쉬운 언어로 옮겼다. 작품 감상 중 낯선 용어를 만났을 때, 이 페이지에서 찾아보길 바란다.
     </p>
     <div class="mast-meta">
         <span><i class="dot"></i>Equations of the Abyss</span>
@@ -315,7 +316,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <div class="data">
                 <div class="d-row">
                     <div class="k"><span class="kv">07</span><span class="kt"><span class="ko">도플러 효과</span><span class="en-term">Doppler Effect</span></span></div>
-                    <div class="val">빛이나 소리를 내는 물체가 관측자에게 가까워지거나 멀어질 때, 그 <b>주파수가 달라져 빛은 색이, 소리는 높낮이가 변하는</b> 현상이다. 빛의 경우 가까워지면 파란빛 쪽으로, 멀어지면 붉은빛 쪽으로 치우친다. 강착 원반에서 우리 쪽으로 다가오는 부분이 더 밝고 푸르게 타오르는 이유다.</div>
+                    <div class="val">빛이나 소리를 내는 물체가 관측자에게 가까워지거나 멀어질 때, 그 <b>주파수가 달라져 빛은 컬러가, 소리는 높낮이가 변하는</b> 현상이다. 빛의 경우 가까워지면 파란빛 쪽으로, 멀어지면 붉은빛 쪽으로 치우친다. 강착 원반에서 우리 쪽으로 다가오는 부분이 더 밝고 푸르게 타오르는 이유다.</div>
                 </div>
             </div>
         </section>
@@ -438,7 +439,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                     <div class="val"><b>스스로 회전하는 블랙홀</b> 주변의 휘어진 시공간 구조를 정확히 기술하는 일반상대성이론의 수학 모델이다. 회전하지 않는 블랙홀(슈바르츠실트)과 달리, 회전에 의해 주변 시공간이 함께 끌려 도는 효과까지 담아낸다.</div>
                 </div>
                 <div class="d-row">
-                    <div class="k"><span class="kv">26</span><span class="kt"><span class="ko">커의 프레임 드래깅</span><span class="en-term">Kerr Frame Dragging</span></span></div>
+                    <div class="k"><span class="kv">26</span><span class="kt"><span class="ko">커 프레임 드래깅</span><span class="en-term">Kerr Frame Dragging</span></span></div>
                     <div class="val">회전하는 블랙홀이 <b>주변의 시공간 자체를 함께 끌고 도는</b> 현상이다. 소용돌이가 주변의 물을 함께 돌리듯, 블랙홀 근처에서는 공간이 정지해 있을 수 없고 회전 방향으로 서서히 끌려간다. 커 계량이 예측한 대표적 효과다.</div>
                 </div>
                 <div class="d-row">
@@ -453,7 +454,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <div class="data">
                 <div class="d-row">
                     <div class="k"><span class="kv">28</span><span class="kt"><span class="ko">페르마 나선</span><span class="en-term">Fermat Spiral</span></span></div>
-                    <div class="val">중심에서 <b>일정한 넓이 간격으로 고르게 퍼져 나가는</b> 나선이다. 해바라기 씨앗이나 솔방울처럼 자연이 공간을 촘촘하고 효율적으로 채우는 성장·확산의 패턴에서 자주 발견된다. 이 전시의 은하 입자 배치에도 쓰였다.</div>
+                    <div class="val">중심에서 <b>일정한 넓이와 간격으로 고르게 퍼져 나가는</b> 나선이다. 해바라기 씨앗이나 솔방울처럼 자연이 공간을 촘촘하고 효율적으로 채우는 성장·확산의 패턴에서 자주 발견된다. 이 전시의 은하 입자 배치에도 쓰였다.</div>
                 </div>
                 <div class="d-row">
                     <div class="k"><span class="kv">29</span><span class="kt"><span class="ko">플라스마</span><span class="en-term">Plasma</span></span></div>
