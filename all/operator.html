@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OPERATOR'S CODEX · 2026: a digital odyssey</title>
 <meta name="description" content="김건우교수 제19회 개인전 홈페이지 사용설명서 — 관람 가이드 및 운영·유지보수 코덱스.">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="../favicon_io/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -276,10 +280,10 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
     <div class="eyebrow">심연의 방정식 · 홈페이지 사용·제작 설명서</div>
     <h1 class="codex"><span class="thin">Operator's</span> Codex</h1>
     <p class="mast-sub">
-        <br><b>김건우교수 제19회 개인전</b> 사이트의 관람과 운영을 위한 통합 안내서.
+        <br><b>김건우교수 제19회 개인전</b> 사이트 관람과 운영을 위한 통합 안내서.
         또한 이 페이지는 작품 관리와 배포 방법까지 포함한 운영 절차를 간단히 정리한 사양서이기도 하다.
         <br>울산대학교 디자인학부 디지털콘텐츠디자인학 전공 학생들의 작품 제작에 참고가 되었으면 한다.
-        <br><br>이 전시용 사이트는 정적 페이지가 아닌 <b>Opening → DEPART → Observatory → Voyage</b>로 흐르는 하나의 시네마틱 시퀀스로 이루어져 있다.
+        <br><br>이 전시용 사이트는 정적 페이지가 아닌 <b>Opening → EMBARK → Observatory → Voyage</b>로 흐르는 하나의 시네마틱 시퀀스로 이루어져 있다.
     </p>
     <div class="mast-meta">
         <span><i class="dot"></i>Equations of the Abyss</span>
@@ -313,7 +317,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <div class="sec-head"><span class="sn">00</span><h2>개요</h2><span class="en">Overview</span></div>
             <p class="lede">보이지 않는 계산은 어떻게 세계를 움직이는가. 
                 <br>이 사이트는 15개의 제너러티브 아트를 하나의 우주로 연결한 <b>디지털 관측소(Observatory)</b>다.</p>
-            <p>방문자는 블랙홀 오프닝에서 <code class="cr">DEPART</code>를 눌러 우주로 진입하고, 원하는 작품을 선택하여 각기 다른 수학적 우주로 <b>항해(Voyage)</b>한다. 모든 화면은 Black 기반 컬러 시스템과 Graphite 계조, Swiss 타이포그래피, Breathing motion이라는 하나의 비주얼 언어를 공유한다.</p>
+            <p>방문자는 블랙홀 오프닝에서 <code class="cr">EMBARK</code>를 눌러 우주로 진입하고, 원하는 작품을 선택하여 각기 다른 수학적 우주로 <b>항해(Voyage)</b>한다. 모든 화면은 Black 기반 컬러 시스템과 Graphite 계조, Swiss 타이포그래피, Breathing motion이라는 하나의 비주얼 언어를 공유한다.</p>
             <div class="data">
                 <div class="d-row head"><div class="k"><span class="kt">항목</span></div><div class="val">값</div></div>
                 <div class="d-row"><div class="k"><span class="kv">◆</span><span class="kt">진입점</span></div><div class="val"><code>index.html</code><small>세션당 1회 오프닝 재생 후 자동 스킵</small></div></div>
@@ -329,8 +333,8 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <p>전체 관람 흐름은 네 개의 단계(Stage)로 구성된다. 
                 <br>모든 화면 상태는 sessionStorage를 기반으로 복원되며, 브라우저 뒤로가기(bfcache)를 지원한다.</p>
             <div class="map">
-                <div class="cell"><span class="arrow">→</span><div class="stage">State 01</div><div class="nm">Opening</div><div class="en2">The Void</div><div class="ds">블랙홀 관문. 제목·부제 페이드인 후 <b>DEPART</b> 트라이앵글이 호흡한다.</div></div>
-                <div class="cell"><span class="arrow">→</span><div class="stage">Transit</div><div class="nm">Depart</div><div class="en2">2.1s Warp</div><div class="ds">레터박스가 닫히며 특이점으로 확대되고, 이후 관측소 화면으로 전환된다.</div></div>
+                <div class="cell"><span class="arrow">→</span><div class="stage">State 01</div><div class="nm">Opening</div><div class="en2">The Void</div><div class="ds">블랙홀 관문. 제목·부제 페이드인 후 <b>EMBARK</b> 트라이앵글이 호흡한다.</div></div>
+                <div class="cell"><span class="arrow">→</span><div class="stage">Transit</div><div class="nm">Embark</div><div class="en2">2.1s Warp</div><div class="ds">레터박스가 닫히며 특이점으로 확대되고, 이후 관측소 화면으로 전환된다.</div></div>
                 <div class="cell"><span class="arrow">→</span><div class="stage">State 02</div><div class="nm">Observatory</div><div class="en2">Worklist + Preview</div><div class="ds">15편의 방정식 목록. 선택 시 우측에 <b>라이브 프리뷰</b> iframe.</div></div>
                 <div class="cell"><div class="stage">State 03</div><div class="nm">Voyage · Coda</div><div class="en2">Enter / ∞</div><div class="ds">작품으로 항해하거나, ∞ 행에서 전시의 마지막 질문 <b>Coda</b>를 연다.</div></div>
             </div>
@@ -358,7 +362,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
             <p><b>키보드</b>만으로도 모든 기능을 사용할 수 있다. 
                 <br>접근성 포커스 링이 표시되며, <code>reduce-motion</code> 사용자에게는 모든 워프 애니메이션이 축약된다.</p>
             <div class="keys">
-                <div class="krow"><span class="kbd"><b>DEPART</b> <b>Enter</b></span><span class="act">오프닝에서 우주로 진입</span></div>
+                <div class="krow"><span class="kbd"><b>EMBARK</b> <b>Enter</b></span><span class="act">오프닝에서 우주로 진입</span></div>
                 <div class="krow"><span class="kbd"><b>↑</b> <b>↓</b></span><span class="act">작품 목록 위/아래 이동(자동 스크롤·프리뷰)</span></div>
                 <div class="krow"><span class="kbd"><b>Enter</b></span><span class="act">선택한 작품으로 항해</span></div>
                 <div class="krow"><span class="kbd"><b>Tab</b></span><span class="act">행·버튼 순차 포커스</span></div>
@@ -376,7 +380,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row head"><div class="k"><span class="kt">기능</span></div><div class="val">동작 방식</div></div>
                 <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">프리뷰 로드 지연</span></div><div class="val">호버 후 <code>220ms</code> 디바운스 — 짧은 호버에는 프리뷰를 로드하지 않음</div></div>
                 <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">프리뷰 소스</span></div><div class="val"><code>파일명 + ?embed=1</code> 로 iframe 삽입</div></div>
-                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">DEPART 워프</span></div><div class="val"><code>2100ms</code> (reduce-motion 시 <code>900ms</code>) → settle</div></div>
+                <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">EMBARK 워프</span></div><div class="val"><code>2100ms</code> (reduce-motion 시 <code>900ms</code>) → settle</div></div>
                 <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">항해 트랜지션</span></div><div class="val">검정 레이어 <code>900ms</code> 페이드 후 페이지 이동</div></div>
                 <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">방문 마커</span></div><div class="val">● 마커 — <code>odyssey_visited</code>에 파일명 누적</div></div>
                 <div class="d-row"><div class="k"><span class="kv">›</span><span class="kt">Universe Seed</span></div><div class="val">세션당 무작위 6자리 HEX — 배경 우주 형상 결정</div></div>
