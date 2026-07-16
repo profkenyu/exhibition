@@ -10,8 +10,8 @@
 <link rel="shortcut icon" href="favicon_io/favicon.ico">
 <meta name="description" content="김건우교수 제19회 개인전 — 수학과 물리의 방정식으로 생성되는 인터랙티브 미디어 아트. 2026.08.24–09.05 갤러리한빛.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="김건우교수 제19회 개인전 — 심연의 방정식">
-<meta property="og:description" content="2026.08.24–09.05 · 갤러리한빛">
+<meta property="og:title" content="2026: a digital odyssey">
+<meta property="og:description" content="김건우교수 제19회 개인전 — 수학과 물리의 방정식으로 생성되는 인터랙티브 미디어 아트.">
 <meta property="og:url" content="https://kimgunwoo.kr/19th/">
 <link rel="canonical" href="https://kimgunwoo.kr/19th/">
 <meta property="og:image" content="https://kimgunwoo.kr/19th/og/index.jpg">
@@ -60,13 +60,15 @@ canvas#space{
 }
 #obs-head{ margin-bottom:clamp(14px,3vh,34px); }
 #obs-head h1{
-            font-family: 'Futura-Bold', Futura, 'Trebuchet MS', Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight:700;
-            font-size: clamp(20px,2.2vw,34px);
-            line-height:1.2;
+            font-size: clamp(26px,3.8vw,46px);
+            line-height:1;
+            letter-spacing:-.045em;
             font-kerning: normal;
             color:var(--fg);
 }
+#obs-head h1 .thin{ font-weight:300; letter-spacing:-.02em; }
 #obs-head .sub{
     margin-top:7px; color:var(--muted); font-size:10.5px;
     letter-spacing:.28em; text-transform:uppercase;
@@ -131,7 +133,6 @@ canvas#space{
 @media (orientation:landscape) and (max-height:520px){
     #obs{ padding:56px 18px 52px; }
     #obs-head{ margin-bottom:8px; }
-    #obs-head h1{ font-size:16px; }
     #obs-head .sub{ font-size:8px; letter-spacing:.16em; margin-top:3px; }
     .row{ padding:3px 6px 3px 2px; }
     #pv-meta{ padding:8px 12px; }
@@ -142,7 +143,6 @@ canvas#space{
     .row .fx{ display:none; }
     .row .line{ gap:10px; }
     .row .poetic{ padding-left:44px; }
-    #obs-head h1{ font-size:19px; }
     #obs-head .sub{ font-size:8.5px; letter-spacing:.18em; }
 }
 #transition-layer{
@@ -427,6 +427,25 @@ body.departing #stage{ opacity:0; transition:opacity 1s ease; }
 #arrive{position:fixed;inset:0;background:#000;z-index:9998;pointer-events:none;opacity:1;transition:opacity .8s ease}
 .row:focus-visible{outline:1px solid rgba(110,220,235,.6);outline-offset:-1px}
 
+/* ===== KIOSK / ATTRACT (무인 전시 자동재생) ===== */
+#attract-hint{
+    position:fixed; left:50%; bottom:60px; transform:translateX(-50%);
+    z-index:600; pointer-events:none; opacity:0;
+    font-size:10px; letter-spacing:.26em; text-transform:uppercase;
+    color:rgba(110,220,235,.85); white-space:nowrap;
+    display:flex; align-items:center; gap:10px;
+    transition:opacity 1s ease;
+}
+body.attracting #attract-hint{ opacity:1; }
+#attract-hint::before{
+    content:''; width:5px; height:5px; border-radius:50%;
+    background:rgba(110,220,235,.9); flex-shrink:0;
+    animation:attractPulse 1.7s ease-in-out infinite;
+}
+@keyframes attractPulse{ 0%,100%{ opacity:.35; transform:scale(1); } 50%{ opacity:1; transform:scale(1.55); } }
+@media (prefers-reduced-motion:reduce){ #attract-hint::before{ animation:none; } }
+@media(max-width:640px){ #attract-hint{ font-size:8.5px; letter-spacing:.16em; bottom:54px; } }
+
 @keyframes obsRise{ from{ opacity:0; transform:translateY(18px); filter:blur(2px); }
                     to{ opacity:1; transform:translateY(0); filter:blur(0); } }
 body.arriving #obs-head{ opacity:0; animation:obsRise 1.3s cubic-bezier(.16,1,.3,1) .9s forwards; }
@@ -460,7 +479,7 @@ body.arriving #preview{ opacity:0; animation:obsRise 1.5s cubic-bezier(.16,1,.3,
 <div id="scrim"></div>
 <div id="obs">
     <div id="obs-head">
-        <h1>2026: a digital odyssey</h1>
+        <h1><span class="thin">2026:</span> a digital odyssey</h1>
         <div class="sub"> Equations of the Abyss — 심연의 방정식</div>
     </div>
     <div id="obs-body">
@@ -489,6 +508,7 @@ body.arriving #preview{ opacity:0; animation:obsRise 1.5s cubic-bezier(.16,1,.3,
 </div>
 
 <div id="hint">* 작품명을 선택한 후 클릭하면 우주로 진입합니다</div>
+<div id="attract-hint">Autoplay · 화면을 터치하면 관람이 시작됩니다</div>
 
 <div id="fixed-top-left">
     <div id="mode-toggle">
@@ -674,6 +694,55 @@ if(arrivedAtCoda){
     buildList();
     setTimeout(showCoda, 600);
 }
+
+/* ===== KIOSK / ATTRACT MODE — 무인 전시 운영 =====
+   진입: index.html?kiosk=1  (해제: index.html?kiosk=0)
+   ATTRACT_MS 무입력 → 프리뷰 자동 순회, RESET_MS 무입력 → 오프닝으로 리셋.
+   관람객이 화면을 만지면 즉시 중단하고 관람권을 넘긴다. */
+(function(){
+    const qs = new URLSearchParams(location.search);
+    if(qs.get('kiosk') === '1') sessionStorage.setItem('odyssey_kiosk','1');
+    else if(qs.get('kiosk') === '0'){ sessionStorage.removeItem('odyssey_kiosk'); return; }
+    if(sessionStorage.getItem('odyssey_kiosk') !== '1') return;
+    document.body.classList.add('kiosk');
+
+    const ATTRACT_MS = 45000;    // 무입력 후 자동 순회 시작
+    const CYCLE_MS   = 9000;     // 작품당 노출 시간
+    const RESET_MS   = 210000;   // 무입력 후 오프닝으로 리셋
+    let idleTimer=null, resetTimer=null, cycleTimer=null, attracting=false;
+
+    function stopAttract(){
+        attracting = false;
+        if(cycleTimer){ clearInterval(cycleTimer); cycleTimer=null; }
+        document.body.classList.remove('attracting');
+    }
+    function startAttract(){
+        if(attracting) return;
+        if(codaOverlay.classList.contains('show')) return;
+        if(opening && !opening.classList.contains('hidden')) return; // 아직 오프닝 화면
+        if(!works.length) return;
+        attracting = true;
+        document.body.classList.add('attracting');
+        let i = sel >= 0 ? sel : 0;
+        select(i, true);
+        cycleTimer = setInterval(() => { i = (i+1) % works.length; select(i, true); }, CYCLE_MS);
+    }
+    function reset(){
+        stopAttract();
+        sessionStorage.removeItem('odyssey_entered');
+        sessionStorage.removeItem('odyssey_visited');
+        location.href = 'index.html?kiosk=1';
+    }
+    function bump(){
+        stopAttract();
+        clearTimeout(idleTimer); clearTimeout(resetTimer);
+        idleTimer  = setTimeout(startAttract, ATTRACT_MS);
+        resetTimer = setTimeout(reset, RESET_MS);
+    }
+    ['pointerdown','pointermove','keydown','wheel','touchstart'].forEach(ev =>
+        addEventListener(ev, bump, {passive:true}));
+    bump();
+})();
 </script>
 
 <script>
@@ -968,7 +1037,7 @@ void main(){
 <script>
 (function(){
   var a=document.createElement('div');a.id='arrive';document.body.appendChild(a);
-  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});}
+  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});setTimeout(function(){a.style.opacity='0';},240);}
   if(document.readyState!=='loading')go();else document.addEventListener('DOMContentLoaded',go);
   window.addEventListener('pageshow',function(e){if(e.persisted)a.style.opacity='0';});
 })();
