@@ -4,15 +4,15 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>김건우교수 제19회 개인전 · Archive</title>
+<title>THE ARCHIVE · 2026: a digital odyssey</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
 <link rel="shortcut icon" href="../favicon_io/favicon.ico">
-<meta name="description" content="김건우교수 제19회 개인전 아카이브 — 15개 작품 전체 목록. 2026.08.24–09.05 갤러리한빛."/>
+<meta name="description" content="김건우교수 제19회 개인전 아카이브 — 15개 작품 전체 목록 및 관람 색인."/>
 <meta property="og:type" content="website"/>
-<meta property="og:title" content="김건우교수 제19회 개인전 — 심연의 방정식">
-<meta property="og:description" content="2026.08.24–09.05 · 갤러리한빛">
+<meta property="og:title" content="THE ARCHIVE · 2026: a digital odyssey">
+<meta property="og:description" content="김건우교수 제19회 개인전 아카이브 — 15개 작품 전체 목록 및 관람 색인.">
 <meta property="og:url" content="https://kimgunwoo.kr/19th/all/"/>
 <link rel="canonical" href="https://kimgunwoo.kr/19th/all/">
 <meta property="og:image" content="https://kimgunwoo.kr/19th/og/all-index.jpg"/>
@@ -77,13 +77,15 @@ header {
   flex-wrap: wrap;
 }
 header h1 {
-  font-family: 'Futura-Bold', Futura, 'Trebuchet MS', Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight:700;
-  font-size: clamp(20px,2.2vw,34px);
-  line-height:1.2;
+  font-size: clamp(26px,3.8vw,46px);
+  line-height:1;
+  letter-spacing:-.045em;
   font-kerning: normal;
   color:var(--text-main);
 }
+header h1 .thin { font-weight:300; letter-spacing:-.02em; }
 
 #fixed-top-left {
   position: fixed;
@@ -348,7 +350,7 @@ footer {
 <header>
 <div class="h-left">
 <div class="title-area">
-<h1>2026: a digital odyssey</h1>
+<h1><span class="thin">2026:</span> a digital odyssey</h1>
 </div>
 <p class="sub">Equations of the Abyss — 심연의 방정식</p> 
 </div>
@@ -446,7 +448,7 @@ footer {
 <span class="card-title">Lorenz Butterfly</span>
 </div>
 <div class="card-formula">ẋ = σ(y−x) · ẏ = x(ρ−z)−y · ż = xy−βz  ·  σ=10, ρ=28, β=8/3</div>
-<div class="card-desc">날씨를 끝내 예측할 수 없게 만든 로렌즈의 방정식을 브라우저 안에서 실시간으로 푼다. 4천개의 결정론적 입자가 나비 날개 모양의 궤도를 그리는 가운데, 화면을 누르면 계수 ρ가 순간 치솟았다(28→36) 서서히 제자리로 돌아오며 궤도 전체를 교란한다. <span class="card-interaction">Click · Chaos Perturbation</span></div>
+<div class="card-desc">날씨를 끝내 예측할 수 없게 만든 로렌즈의 방정식을 브라우저 안에서 실시간으로 푼다. 4천개의 결정론적 입자가 나비 날개 모양의 궤도를 그리는 가운데, 화면을 누르면 계수 ρ가 순간 치솟았다가(28→36) 서서히 제자리로 돌아오며 궤도 전체를 교란한다. <span class="card-interaction">Click · Chaos Perturbation</span></div>
 <div class="card-footer"><span class="tag">Lorenz Attractor</span><span class="tag">Chaotic Flow</span><span class="tag">Dynamical System</span></div>
 </a>
 <a class="card" href="11-Odyssey_Essential.html">
@@ -473,7 +475,7 @@ footer {
 <span class="card-title">Event Horizon</span>
 </div>
 <div class="card-formula">ω ∝ r<sup>−3/2</sup> · dτ = √(1−R<sub>s</sub>/r)·dt  ·  Gravitational Time Dilation · 150,000 pts</div>
-<div class="card-desc">케플러 회전(ω ∝ r^−3/2)으로 도는 15만 개의 강착원반이 슈바르츠실트 블랙홀을 두른다. 다가오는 쪽은 상대론적 도플러 효과로 더 밝게 타오르고, 화면 전체는 중력 렌즈로 휘어진다. 지평선에 가까울수록 입자의 시간은 느려져 붉게 어두워지고, 시점 반지름(R/R<sub>s</sub>)과 시간 지연(dτ/dt), 국면이 실시간으로 기록된다. 드래그로 시선을 끈다. <span class="card-interaction">Drag to Drift Gaze</span></div>
+<div class="card-desc">케플러 회전(ω ∝ r^−3/2)으로 도는 15만개의 강착원반 입자가 슈바르츠실트 블랙홀을 두른다. 다가오는 쪽은 상대론적 도플러 효과로 더 밝게 타오르고, 화면 전체는 중력 렌즈로 휘어진다. 지평선에 가까울수록 입자의 시간은 느려져 붉게 어두워지고, 시점 반지름(R/R<sub>s</sub>)과 시간 지연(dτ/dt), 국면이 실시간으로 기록된다. 드래그로 시선을 끈다. <span class="card-interaction">Drag to Drift Gaze</span></div>
 <div class="card-footer"><span class="tag">Schwarzschild Metric</span><span class="tag">Gravitational Lensing</span><span class="tag">Keplerian Orbit</span></div>
 </a>
 <a class="card" href="14-Black_Voyage.html">
@@ -491,7 +493,7 @@ footer {
 <span class="card-title">Kerr Plasma Cathedral</span>
 </div>
 <div class="card-formula">ds² = −(1 − r<sub>s</sub>r/ρ²)dt² − (2r<sub>s</sub>ra·sin²θ/ρ²)dtdϕ + …  ·  Audio Reactive Raymarching</div>
-<div class="card-desc">회전하는 블랙홀이 시공간을 비트는 방식 — 커 계량(Kerr Metric)을 실시간 레이마칭으로 풀어낸 에필로그다. 드래그하면 시점이 돌아가는 동시에 스핀이 사건지평선과 광자 고리를 비대칭으로 일그러뜨린다. 스피커나 마이크로 들어온 소리는 저음으로 플라스마를, 고음으로 광자 고리를 밝히고, 30초간 입력이 없으면 우주는 서서히 잠들다 호킹 증발로 사라진다. <span class="card-interaction">Drag · Audio / Mic Input · Hawking Evaporation</span></div>
+<div class="card-desc">회전하는 블랙홀이 시공간을 비트는 방식 — 커 계량(Kerr Metric)을 실시간 레이마칭으로 풀어낸 에필로그다. 드래그하면 시점이 돌아가는 동시에 스핀이 사건지평선과 광자 고리를 비대칭으로 일그러뜨린다. 스피커나 마이크로 들어온 소리는 저음으로 플라스마를, 고음으로 광자 고리를 밝히고, 30초간 입력이 없으면 우주는 서서히 잠들다가 호킹 증발로 사라진다. <span class="card-interaction">Drag · Audio / Mic Input · Hawking Evaporation</span></div>
 <div class="card-footer"><span class="tag">Kerr Metric</span><span class="tag">Frame Dragging</span><span class="tag">Hawking Evaporation</span></div>
 </a>
 <a class="card" href="operator.html">
