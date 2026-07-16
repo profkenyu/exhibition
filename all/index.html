@@ -22,14 +22,14 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/all-index.jpg"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&amp;family=Inter:wght@300;400;500;700&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Inter:wght@300;400;500;700&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg-main: #f9f9fb;
   --text-main: #111115;
   --text-muted: #767680;
   --text-light: #76778b;
-  --red-accent: #ce0909;
+  --red-accent: #c0152a;
   --cyan-accent: #0891b2;
   --line-color: #e5e5ea;
   --tag-bg: #f0f0f4;
@@ -40,7 +40,7 @@ html, body {
   overflow:hidden;
   background:var(--bg-main);
   color:var(--text-main);
-  font-family:'DM Mono', 'Noto Sans KR', sans-serif;
+  font-family:'Inter', 'Noto Sans KR', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 #bg {
@@ -177,7 +177,7 @@ header h1 .thin { font-weight:300; letter-spacing:-.02em; }
 .h-left .sub {
   margin-top:10px;
   font-size: clamp(9px,0.75vw,11px);
-  letter-spacing:.28em;
+  letter-spacing:.3em;
   text-transform:uppercase;
   color:var(--text-muted);
 }
@@ -186,6 +186,7 @@ header h1 .thin { font-weight:300; letter-spacing:-.02em; }
   flex-shrink:0;
 }
 .h-right .count {
+  font-family:'DM Mono', monospace;
   font-size: clamp(28px,3.5vw,52px);
   font-weight:300;
   color: var(--red-accent);
@@ -194,6 +195,8 @@ header h1 .thin { font-weight:300; letter-spacing:-.02em; }
 }
 .h-right .count-label {
   margin-top:4px;
+  font-family:'DM Mono', monospace;
+  font-weight:500;
   font-size: clamp(8px,0.7vw,10px);
   letter-spacing:.22em;
   text-transform:uppercase;
@@ -239,7 +242,7 @@ header h1 .thin { font-weight:300; letter-spacing:-.02em; }
   min-width: 22px;
 }
 .card-title {
-  font-family:'Noto Sans KR', sans-serif;
+  font-family:'Inter', 'Noto Sans KR', sans-serif;
   font-weight:400;
   font-size: clamp(14px,1.2vw,19px);
   letter-spacing:-0.01em;
@@ -278,9 +281,9 @@ header h1 .thin { font-weight:300; letter-spacing:-.02em; }
   line-height:1.5;
 }
 .card-desc {
-  font-family:'Noto Sans KR', sans-serif;
-  font-size: clamp(9.5px, 0.8vw, 10.5px);
-  line-height: 1.65;
+  font-family:'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.75;
   letter-spacing: -0.01em;
   color: var(--text-muted);
   margin-bottom: 11px;
@@ -320,6 +323,7 @@ footer {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  font-family:'DM Mono', monospace;
   font-size:9.5px;
   letter-spacing:.22em;
   text-transform:uppercase;

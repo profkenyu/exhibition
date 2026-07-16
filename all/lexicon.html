@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
 <link rel="shortcut icon" href="../favicon_io/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
     --paper:#fefefe;
@@ -33,6 +33,7 @@ body{
     font-weight:300;
     line-height:1.72;
     letter-spacing:.005em;
+    word-break:keep-all;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
 }
@@ -101,8 +102,8 @@ body::after{
 .shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
 header.mast{ padding:clamp(42px,7vh,76px) 0 clamp(40px,6vh,72px); border-bottom:1px solid var(--line); }
 .eyebrow{
-    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
-    letter-spacing:.42em; text-transform:uppercase; color:var(--accent);
+    font-family:'DM Mono',monospace; font-size:9px; font-weight:500;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--accent);
     display:flex; align-items:center; gap:12px;
 }
 .eyebrow::before{ content:''; width:26px; height:1px; background:var(--accent); display:inline-block; }
@@ -129,7 +130,7 @@ h1.codex .thin{ font-weight:300; color:var(--muted); letter-spacing:-.02em; }
 .layout{ display:grid; grid-template-columns:200px 1fr; gap:clamp(30px,5vw,84px); padding:clamp(38px,6vh,64px) 0 140px; align-items:start; }
 nav.index{ position:sticky; top:52px; }
 nav.index .idx-title{
-    font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.32em;
+    font-family:'DM Mono',monospace; font-size:9.5px; font-weight:500; letter-spacing:.3em;
     text-transform:uppercase; color:var(--faint); padding:0 0 16px 14px;
 }
 .idx-row{
@@ -159,7 +160,7 @@ section.sec:last-child{ border-bottom:none; }
     font-size:clamp(13px,1.5vw,16px); line-height:1.4; letter-spacing:-.01em; color:var(--muted);
 }
 .sec-head .en{
-    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em;
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.3em;
     text-transform:uppercase; color:var(--faint); margin-left:auto; align-self:center;
     white-space:nowrap;
 }
@@ -176,14 +177,14 @@ section.sec:last-child{ border-bottom:none; }
 .d-row .k .kt{ display:inline-flex; flex-direction:column; gap:3px; }
 .d-row .k .kt .ko{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:14px; color:var(--ink); font-weight:600; letter-spacing:.01em; }
 .d-row .k .kt .en-term{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:400; }
-.d-row .val{ color:var(--muted); font-size:13px; line-height:1.85; word-break:keep-all; }
+.d-row .val{ color:var(--muted); font-size:13.5px; line-height:1.85; word-break:keep-all; }
 .d-row .val b{ color:var(--ink); font-weight:500; }
 .note{
     margin:30px 0 6px; padding:18px 22px; border-radius:8px;
     background:rgba(0,0,0,.035); border:1px solid rgba(0,0,0,.11);
     border-left:3px solid var(--accent); font-size:12.5px; line-height:1.75; color:#3a3a3a;
 }
-.note .lbl{ font-family:'Space Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+.note .lbl{ font-family:'DM Mono',monospace; font-size:9px; font-weight:500; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
 .note b{ color:var(--ink); font-weight:500; }
 .note a{ color:var(--ink); font-weight:600; text-decoration:underline; text-decoration-color:rgba(0,0,0,.35); text-underline-offset:2px; transition:text-decoration-color .25s ease; }
 .note a:hover{ text-decoration-color:var(--ink); }

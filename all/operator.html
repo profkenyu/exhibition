@@ -6,7 +6,7 @@
 <title>OPERATOR'S CODEX · 2026: a digital odyssey</title>
 <meta name="description" content="김건우교수 제19회 개인전 홈페이지 사용설명서 — 관람 가이드 및 운영·유지보수 코덱스.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
     --paper:#fefefe;
@@ -29,6 +29,7 @@ body{
     font-weight:300;
     line-height:1.72;
     letter-spacing:.005em;
+    word-break:keep-all;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
 }
@@ -97,8 +98,8 @@ body::after{
 .shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
 header.mast{ padding:clamp(42px,7vh,76px) 0 clamp(40px,6vh,72px); border-bottom:1px solid var(--line); }
 .eyebrow{
-    font-family:'Space Mono',monospace; font-size:9px; font-weight:700;
-    letter-spacing:.42em; text-transform:uppercase; color:var(--accent);
+    font-family:'DM Mono',monospace; font-size:9px; font-weight:500;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--accent);
     display:flex; align-items:center; gap:12px;
 }
 .eyebrow::before{ content:''; width:26px; height:1px; background:var(--accent); display:inline-block; }
@@ -125,7 +126,7 @@ h1.codex .thin{ font-weight:300; color:var(--muted); letter-spacing:-.02em; }
 .layout{ display:grid; grid-template-columns:230px 1fr; gap:clamp(30px,5vw,84px); padding:clamp(38px,6vh,64px) 0 140px; align-items:start; }
 nav.index{ position:sticky; top:52px; }
 nav.index .idx-title{
-    font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.32em;
+    font-family:'DM Mono',monospace; font-size:9.5px; font-weight:500; letter-spacing:.3em;
     text-transform:uppercase; color:var(--faint); padding:0 0 16px 14px;
 }
 .idx-row{
@@ -147,7 +148,7 @@ section.sec{ padding:clamp(20px,4vh,40px) 0 clamp(40px,7vh,74px); border-bottom:
 section.sec:last-child{ border-bottom:none; }
 .sec-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:8px; }
 .sec-head .sn{
-    font-family:'Space Mono',monospace; font-size:10.5px; font-weight:700;
+    font-family:'DM Mono',monospace; font-size:10.5px; font-weight:500;
     color:var(--accent); letter-spacing:.1em; flex-shrink:0;
 }
 .sec-head h2{
@@ -155,7 +156,7 @@ section.sec:last-child{ border-bottom:none; }
     font-size:clamp(15px,1.9vw,21px); line-height:1.15; letter-spacing:-.02em;
 }
 .sec-head .en{
-    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em;
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.3em;
     text-transform:uppercase; color:var(--faint); margin-left:auto; align-self:center;
     white-space:nowrap;
 }
@@ -178,9 +179,9 @@ section.sec:last-child{ border-bottom:none; }
 .d-row .val small{ display:block; margin-top:4px; color:var(--faint); font-size:10.5px; }
 .d-row.head{ border-left:none; }
 .d-row.head:hover{ background:none; }
-.d-row.head .k .kt, .d-row.head .val{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--faint); font-weight:400; }
+.d-row.head .k .kt, .d-row.head .val{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--faint); font-weight:400; }
 code, .chip{
-    font-family:'DM Mono','Space Mono',monospace; font-size:.86em;
+    font-family:'DM Mono',monospace; font-size:.86em;
     background:rgba(0,0,0,.06); color:#2b2b2b;
     padding:2px 7px; border-radius:3px; letter-spacing:.02em;
     border:1px solid rgba(0,0,0,.12);
@@ -203,7 +204,7 @@ pre .fn{ color:#6a6a6a; }
 }
 .map .cell{ background:var(--paper-2); padding:20px 18px 22px; position:relative; transition:background .3s ease; }
 .map .cell:hover{ background:#dedede; }
-.map .cell .stage{ font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.24em; color:var(--accent); text-transform:uppercase; }
+.map .cell .stage{ font-family:'DM Mono',monospace; font-weight:500; font-size:9px; letter-spacing:.24em; color:var(--accent); text-transform:uppercase; }
 .map .cell .nm{ margin-top:10px; font-size:13.5px; font-weight:500; color:var(--ink); letter-spacing:.01em; }
 .map .cell .en2{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.14em; color:var(--faint); text-transform:uppercase; margin-top:3px; }
 .map .cell .ds{ margin-top:11px; font-size:11.5px; color:var(--muted); line-height:1.65; }
@@ -224,7 +225,7 @@ pre .fn{ color:#6a6a6a; }
     background:rgba(0,0,0,.035); border:1px solid rgba(0,0,0,.11);
     border-left:3px solid var(--accent); font-size:12.5px; line-height:1.75; color:#3a3a3a;
 }
-.note .lbl{ font-family:'Space Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+.note .lbl{ font-family:'DM Mono',monospace; font-size:9px; font-weight:500; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
 .note.cy{ background:rgba(0,0,0,.025); border-color:rgba(0,0,0,.09); border-left-color:var(--accent-2); color:#3a3a3a; }
 .note.cy .lbl{ color:var(--accent-2); }
 .note b{ color:var(--ink); font-weight:500; }
@@ -447,7 +448,7 @@ footer.foot{ border-top:1px solid var(--line); padding:48px 0 90px; }
                 <div class="d-row"><div class="k"><span class="kt">OG 이미지</span></div><div class="val"><code>og/</code> — 메인 <code>index.jpg</code> · 작품별 <code>01–15.jpg</code> · 아카이브 <code>all-index.jpg</code> (각 1200×630)</div></div>
                 <div class="d-row"><div class="k"><span class="kt">파비콘</span></div><div class="val"><code>favicon_io/</code> (16·32·apple-touch·ico)</div></div>
                 <div class="d-row"><div class="k"><span class="kt">색인</span></div><div class="val"><code>sitemap.xml</code> · <code>robots.txt</code></div></div>
-                <div class="d-row"><div class="k"><span class="kt">폰트</span></div><div class="val">Google Fonts — DM Mono · Space Mono · Inter · Noto Sans KR</div></div>
+                <div class="d-row"><div class="k"><span class="kt">폰트</span></div><div class="val">Google Fonts — DM Mono · Inter · Noto Sans KR</div></div>
             </div>
             <div class="note"><span class="lbl">배포 체크리스트</span>
                 ① 새 작품 파일 업로드 → ② <code>works</code> 배열 갱신 → ③ Archive(<code>all/index.html</code>) 카드 추가 → ④ 해당 작품 OG·<code>sitemap.xml</code> 추가 → ⑤ 브라우저 캐시 무시 후 프리뷰·항해 실제 클릭 검증.</div>
