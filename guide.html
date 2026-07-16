@@ -255,19 +255,19 @@ h1 .thin{ font-weight:300; color:var(--graphite); }
 .quote .q{ font-size:clamp(17px,2.2vw,26px); font-weight:200; line-height:1.55; letter-spacing:-.01em; color:var(--ink); }
 .quote .q .cr{ color:var(--accent-cyan); }
 .quote .qe{ display:block; margin-top:14px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.22em; color:var(--faint); text-transform:uppercase; }
-.depart-cta-wrap{ margin:clamp(50px,9vh,90px) 0; display:flex; justify-content:center; }
+.depart-cta-wrap{ margin:clamp(50px,9vh,90px) 0 clamp(72px,12vh,124px); display:flex; justify-content:center; }
 .depart-cta{
     text-decoration:none; cursor:pointer; -webkit-tap-highlight-color:transparent;
-    display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:11px; padding:10px;
+    display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:15px;
 }
 .depart-cta .depart-label{
     font-family:'DM Mono',monospace;
-    font-size:9px; letter-spacing:.36em; text-indent:.36em;
+    font-size:13.5px; letter-spacing:.36em; text-indent:.36em;
     color:rgba(20,24,30,.42); text-transform:uppercase; line-height:1;
     transition:color .5s ease;
 }
 .depart-cta:hover .depart-label, .depart-cta:focus-visible .depart-label{ color:var(--accent-crimson-lit); }
-.depart-cta .tri{ width:30px; height:22px; display:block; position:relative; }
+.depart-cta .tri{ width:45px; height:33px; display:block; position:relative; }
 .depart-cta .tri::before{ content:''; position:absolute; inset:0;
     background:linear-gradient(180deg, rgba(61,70,83,.55), rgba(61,70,83,.12));
     clip-path:polygon(50% 100%, 0 0, 100% 0);
@@ -278,17 +278,12 @@ h1 .thin{ font-weight:300; color:var(--graphite); }
     filter:drop-shadow(0 0 16px rgba(192,21,42,.55)); transform:translateY(4px); }
 .depart-cta:focus-visible{ outline:1px solid rgba(192,21,42,.6); outline-offset:10px; border-radius:4px; }
 @keyframes triBreath{ 0%,100%{ transform:translateY(0); opacity:.85; } 50%{ transform:translateY(3px); opacity:1; } }
-.info{ margin:20px 0 90px; background:#272e38; color:#eef1f5; border-radius:16px; padding:clamp(30px,5vw,46px); position:relative; overflow:hidden; }
-.info::before{ content:''; position:absolute; inset:0; background:radial-gradient(80% 120% at 100% 0%, rgba(8,145,178,.30), transparent 55%); pointer-events:none; }
-.info .il{ position:relative; }
-.info .ttl{ font-family:'Inter',sans-serif; font-weight:600; font-size:clamp(18px,2.6vw,24px); letter-spacing:-.02em; }
-.info .ttl .thin{ font-weight:300; color:#aeb7c4; }
-.info .sub{ margin-top:6px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#8b95a4; }
-.info .rows{ margin-top:26px; display:flex; flex-wrap:wrap; gap:14px 46px; }
-.info .rows div{ }
-.info .rows .lb{ font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:#7b8593; }
-.info .rows .vv{ margin-top:5px; font-size:14px; font-weight:500; color:#f5f7fa; letter-spacing:.01em; }
-.info .rows .vv .cr{ color:var(--accent-cyan-lit); }
+footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
+.foot-grid{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; align-items:flex-end; }
+.foot .sig{ font-family:'Inter',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.02em; color:#161616; }
+.foot .sig .thin{ font-weight:300; color:#565656; }
+.foot .meta{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:#9a9a9a; text-transform:uppercase; line-height:2; text-align:right; }
+.foot .seed{ color:#565656; font-style:italic; }
 .reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
 .reveal.in{ opacity:1; transform:none; }
 @media (max-width:640px){
@@ -296,7 +291,8 @@ h1 .thin{ font-weight:300; color:var(--graphite); }
     .step{ grid-template-columns:44px 1fr; gap:16px; }
     .steps::before{ left:21px; }
     .step .num{ width:44px; height:44px; font-size:15px; }
-    .info .rows{ gap:16px 30px; }
+    .foot-grid{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .foot .meta{ text-align:left; }
     .shot .hot-label{ left:62%; padding:4px 8px; }
 }
 @media (prefers-reduced-motion:reduce){
@@ -466,17 +462,15 @@ h1 .thin{ font-weight:300; color:var(--graphite); }
             <span class="depart-label">DEPART</span><span class="tri"></span>
         </a>
     </div>
-    <div class="info reveal">
-        <div class="il">
-            <div class="ttl">2026: <span class="thin">a digital odyssey</span></div>
-            <div class="sub">Equations of the Abyss — 심연의 방정식</div>
-            <div class="rows">
-                <div><div class="lb">Exhibition</div><div class="vv">김건우교수 제19회 개인전</div></div>
-                <div><div class="lb">Period</div><div class="vv">2026.08.24 – 09.05</div></div>
-                <div><div class="lb">Venue</div><div class="vv">갤러리한빛</div></div>
+    <footer class="foot reveal">
+        <div class="foot-grid">
+            <div class="sig"><span class="thin">2026:</span> a digital odyssey</div>
+            <div class="meta">
+                김건우교수 제19회 개인전 · 관람 안내<br>
+                <span class="seed">2026.08.24–09.05 · 갤러리한빛</span>
             </div>
         </div>
-    </div>
+    </footer>
 </div>
 <script>
 (function(){
