@@ -170,7 +170,7 @@ window.__THREE_OK=1;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
 camera.position.z = 80;
-const renderer = new THREE.WebGLRenderer({antialias:true});
+const renderer = new THREE.WebGLRenderer({antialias:!LOWP});
 renderer.setPixelRatio(LOWP?1:Math.min(devicePixelRatio,1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -193,7 +193,7 @@ function Wm1(x){
     }
     return w;
 }
-const COUNT = 120000;
+const COUNT = LOWP ? 50000 : 120000;
 const geo = new THREE.BufferGeometry();
 const pos = new Float32Array(COUNT*3);
 const col = new Float32Array(COUNT*3);
@@ -281,7 +281,7 @@ window.addEventListener('resize', ()=>{
   if(location.search.indexOf('embed')>-1){document.body.classList.add('embed');return;}
   var a=document.createElement('div');a.id='arrive';document.body.appendChild(a);
   var d=document.createElement('div');d.id='depart';document.body.appendChild(d);
-  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});}
+  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});setTimeout(function(){a.style.opacity='0';},240);}
   if(document.readyState!=='loading')go();else document.addEventListener('DOMContentLoaded',go);
   window.addEventListener('pageshow',function(e){if(e.persisted){a.style.opacity='0';d.style.opacity='0';}});
   document.addEventListener('click',function(e){
@@ -371,5 +371,20 @@ window.addEventListener('resize', ()=>{
   }catch(e){}
 })();
 </script>
+<script>
+/* ===== KIOSK IDLE-RETURN — 무인 전시: 90s 무입력 시 관측소 복귀 ===== */
+(function(){
+  if(location.search.indexOf('embed')>-1) return;
+  if(sessionStorage.getItem('odyssey_kiosk')!=='1') return;
+  var IDLE=90000, t=null;
+  function go(){ location.href='index.html'; }
+  function bump(){ clearTimeout(t); t=setTimeout(go, IDLE); }
+  ['pointerdown','pointermove','keydown','wheel','touchstart'].forEach(function(ev){
+    addEventListener(ev, bump, {passive:true});
+  });
+  bump();
+})();
+</script>
+<script src="interstitial.js" defer></script>
 </body>
 </html>

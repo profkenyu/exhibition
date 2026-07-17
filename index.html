@@ -485,7 +485,7 @@ body.arriving #preview{ opacity:0; animation:obsRise 1.5s cubic-bezier(.16,1,.3,
     <div id="obs-body">
         <div id="worklist"></div>
         <div id="preview">
-            <div id="pv-hint">작품명 위에 커서를 올리면 라이브 프리뷰가 표시됩니다</div>
+            <div id="pv-hint">가로모드에서 작품명을 선택하면 라이브 프리뷰가 표시됩니다</div>
             <iframe id="pv-frame" title="Live preview" loading="lazy"></iframe>
             <div id="pv-meta">
                 <div id="pv-id">Observatory</div>
@@ -507,7 +507,7 @@ body.arriving #preview{ opacity:0; animation:obsRise 1.5s cubic-bezier(.16,1,.3,
     </div>
 </div>
 
-<div id="hint">* 작품명을 선택한 후 클릭하면 우주로 진입합니다</div>
+<div id="hint">* 작품명을 클릭하면 우주로 진입합니다</div>
 <div id="attract-hint">Autoplay · 화면을 터치하면 관람이 시작됩니다</div>
 
 <div id="fixed-top-left">
@@ -572,6 +572,8 @@ function enterObservatory(){
 window.ODYSSEY_ON_DEPART = enterObservatory;
 
 const isTouch = matchMedia('(pointer:coarse)').matches;
+/* 입력 방식별 안내 문구: 터치 기기(태블릿·스마트폰)는 2탭 진입 방식을 안내 */
+if(isTouch) document.getElementById('hint').textContent = '* 작품명을 선택한 후, 탭하면 우주로 진입합니다';
 const listEl = document.getElementById('worklist');
 const pvFrame = document.getElementById('pv-frame');
 const pvId = document.getElementById('pv-id');
@@ -591,6 +593,17 @@ function markVisited(file){
 let rows = [];
 let sel = -1;
 let pvTimer = null, pvCurrent = '';
+
+/* 프리뷰 패널이 뷰포트에 실제로 보일 때만 iframe(작품 캔버스)을 활성화.
+   로드 시점마다 동기적으로 판정 — 세로 화면 등에서 숨겨지면 로드하지 않는다. */
+function previewOnScreen(){
+    const box = document.getElementById('preview');
+    if(pvFrame.offsetParent === null) return false;
+    const r = box.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 &&
+           r.bottom > 0 && r.right > 0 &&
+           r.top < innerHeight && r.left < innerWidth;
+}
 
 function buildList(){
     listEl.innerHTML = '';
@@ -654,14 +667,24 @@ function select(i, scrollIntoView){
     pvHint.style.display = 'none';
     clearTimeout(pvTimer);
     pvTimer = setTimeout(() => {
-        if(pvFrame.offsetParent === null) return;
-        if(pvCurrent !== w.file){ pvCurrent = w.file; pvFrame.src = w.file + '?embed=1'; }
+        /* 디바운스 후에도 즉시 로드하지 않고 다음 프레임에서 가시성을 재확인 —
+           스쳐 지나가는 호버가 무거운 작품 씬을 곧바로 띄우지 않도록 한다 */
+        requestAnimationFrame(() => {
+            if(!previewOnScreen()){
+                /* 프리뷰가 화면에 없으면(세로 화면 등) 로드하지 않고, 남아있던 씬도 회수 */
+                if(pvCurrent){ pvCurrent = ''; pvFrame.src = 'about:blank'; }
+                return;
+            }
+            if(sel !== i) return;
+            if(pvCurrent !== w.file){ pvCurrent = w.file; pvFrame.src = w.file + '?embed=1'; }
+        });
     }, 220);
     if(scrollIntoView) rows[i].scrollIntoView({block:'nearest'});
 }
 
 function voyage(i){
     markVisited(works[i].file);
+    try{ sessionStorage.setItem('odyssey_interstitial', works[i].file); }catch(e){}
     const layer = document.getElementById('transition-layer');
     layer.classList.add('active');
     setTimeout(() => { location.href = works[i].file; }, 900);
@@ -731,6 +754,7 @@ if(arrivedAtCoda){
         stopAttract();
         sessionStorage.removeItem('odyssey_entered');
         sessionStorage.removeItem('odyssey_visited');
+        sessionStorage.removeItem('odyssey_interstitial');
         location.href = 'index.html?kiosk=1';
     }
     function bump(){
@@ -779,6 +803,7 @@ if(arrivedAtCoda){
         function fallback(now = performance.now()) {
             bgRafId = requestAnimationFrame(fallback);
             if (now - lastFallbackFrame < frameInterval) return;
+            if (!document.body.classList.contains('entered')) return;
             lastFallbackFrame = now;
             ctx.clearRect(0,0,W,H); t += 0.003;
             for (const s of stars) {
@@ -988,6 +1013,8 @@ void main(){
     function render(now = performance.now()) {
         bgRafId = requestAnimationFrame(render);
         if (now - lastFrame < frameInterval) return;
+        /* 오프닝(#void)이 화면을 덮고 있는 동안은 그리지 않는다 — 이중 렌더링 방지 */
+        if (!document.body.classList.contains('entered')) return;
         lastFrame = now - ((now - lastFrame) % frameInterval);
         const t = (now - startTime) * 0.001;
         gl.uniform2f(uRes, canvas.width, canvas.height);
@@ -997,9 +1024,17 @@ void main(){
     }
     render();
 
-    window.addEventListener('resize', resize);
-    window.addEventListener('orientationchange', () => setTimeout(resize, 120));
-    if(window.visualViewport){ window.visualViewport.addEventListener('resize', resize); }
+    /* 모바일 주소창 변화 등으로 연발하는 resize를 프레임당 1회로 병합 —
+       매 이벤트마다 캔버스 백버퍼가 재할당되는 것을 방지 */
+    let resizeQueued = false;
+    function requestResize() {
+        if (resizeQueued) return;
+        resizeQueued = true;
+        requestAnimationFrame(() => { resizeQueued = false; resize(); });
+    }
+    window.addEventListener('resize', requestResize);
+    window.addEventListener('orientationchange', () => setTimeout(requestResize, 120));
+    if(window.visualViewport){ window.visualViewport.addEventListener('resize', requestResize); }
 
     window.addEventListener('pageshow', (e) => {
         if (e.persisted) {
@@ -1207,7 +1242,7 @@ void main(){
   }
 
   let W,H, cx=0.5, cy=0.4, tcx=0.5, tcy=0.4;
-  let raf=null, t0=performance.now();
+  let raf=null, t0=performance.now(), dead=false;
   let phase='idle', dp=0, departStart=0, settleStart=0;
   const DEPART_MS = reduce ? 900 : 2100;
 
@@ -1272,13 +1307,15 @@ void main(){
       });
     }
     document.addEventListener('visibilitychange', ()=>{
-      if(document.visibilityState==='visible'){ if(!raf) raf=requestAnimationFrame(render); }
+      if(document.visibilityState==='visible'){ if(!raf && !dead) raf=requestAnimationFrame(render); }
       else if(raf){ cancelAnimationFrame(raf); raf=null; }
     });
-    window.addEventListener('pageshow', e=>{ if(e.persisted && !raf) raf=requestAnimationFrame(render); });
+    window.addEventListener('pageshow', e=>{ if(e.persisted && !raf && !dead) raf=requestAnimationFrame(render); });
   }
 
+  let usingFallback=false;
   function fallback2D(){
+    usingFallback=true;
     const ctx=cv.getContext('2d');
     function rs(){ W=cv.width=window.innerWidth; H=cv.height=window.innerHeight; }
     rs(); window.addEventListener('resize',rs);
@@ -1297,12 +1334,26 @@ void main(){
 
   function onDepartComplete(){
     if(typeof window.ODYSSEY_ON_DEPART==='function') window.ODYSSEY_ON_DEPART(seed);
+    /* 오프닝이 완전히 사라진 뒤(페이드 1.5s) 렌더 루프를 영구 정지하고
+       GL 컨텍스트를 해제 — 관측소 뒤에서 이중 렌더링되는 것을 차단 */
+    setTimeout(function(){
+      dead = true;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      try{
+        var ext = gl && gl.getExtension('WEBGL_lose_context');
+        if(ext) ext.loseContext();
+      }catch(e){}
+    }, 1700);
   }
   function depart(){
     if(phase!=='idle') return;
     phase='depart'; departStart=performance.now();
     document.body.classList.add('departing');
     sessionStorage.setItem('odyssey_entered','1');
+    /* 2D 폴백에서는 GL 루프가 phase를 진행시키지 못하므로 직접 완료시킨다 */
+    if(usingFallback){
+      setTimeout(function(){ phase='done'; onDepartComplete(); }, DEPART_MS);
+    }
   }
   document.getElementById('depart').addEventListener('click', depart);
 
