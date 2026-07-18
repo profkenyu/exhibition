@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>작품별 관람법 · 2026: a digital odyssey</title>
+<link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="favicon_io/favicon.ico">
+<meta name="description" content="김건우교수 제19회 개인전 — 15개 작품의 관람법과 조작 방법을 정리한 관람자 안내서.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="작품별 관람법 · 2026: a digital odyssey">
+<meta property="og:description" content="김건우교수 제19회 개인전 — 15개 작품의 관람법과 조작 방법 · 2026.08.24–09.05 · 갤러리한빛">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/how.html">
+<link rel="canonical" href="https://kimgunwoo.kr/19th/how.html">
+<meta property="og:image" content="https://kimgunwoo.kr/19th/og/index.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kimgunwoo.kr/19th/og/index.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --paper:#fefefe;
+    --paper-2:#cecece;
+    --card:#ffffff;
+    --ink:#161616;
+    --graphite:#3a3a3a;
+    --muted:#565656;
+    --faint:#9a9a9a;
+    --line:rgba(0,0,0,.13);
+    --line-2:rgba(0,0,0,.06);
+    --accent:#161616;
+    --accent-2:#3a3a3a;
+    --accent-soft:rgba(0,0,0,.05);
+    --panel:rgba(0,0,0,.035);
+    --accent-crimson:#c0152a;
+    --accent-crimson-lit:#e8324a;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.72;
+    letter-spacing:.004em;
+    word-break:keep-all;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+body::before{
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+        radial-gradient(120% 80% at 12% -8%, rgba(0,0,0,.05), transparent 46%),
+        radial-gradient(90% 70% at 108% 4%, rgba(0,0,0,.03), transparent 50%),
+        var(--paper);
+}
+body::after{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    opacity:.045; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+#back-btn{
+    position:fixed; bottom:30px; right:clamp(20px,4vw,56px); z-index:70;
+    background:var(--paper);
+    color:rgba(22,22,22,.6); text-decoration:none;
+    font-size:10px; letter-spacing:.25em;
+    border:1px solid rgba(22,22,22,.2);
+    padding:6px 12px; border-radius:4px;
+    min-width:68px; text-align:center; box-sizing:border-box;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:all .3s ease;
+}
+#back-btn:hover{
+    color:var(--ink); background:#f4f4f4;
+    border-color:rgba(22,22,22,.5);
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+}
+@media (max-width:640px){
+    #back-btn{ bottom:20px; right:16px; padding:5px 10px; font-size:9px; min-width:58px; }
+}
+/* ── 모드 토글 (Cinematic · Archive) — 사이트 공통 좌상단 고정 UI ── */
+#fixed-top-left{
+    position:fixed; top:18px; left:18px; z-index:99999;
+    pointer-events:none; display:flex; align-items:center; gap:14px;
+}
+#mode-toggle{
+    display:inline-flex; align-items:center;
+    border:1px solid rgba(255,255,255,.16); border-radius:3px;
+    background:rgba(2,3,5,.92);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    overflow:hidden; flex-shrink:0; pointer-events:auto;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+#mode-toggle .m-btn{
+    font-size:8px; letter-spacing:.16em; text-transform:uppercase; font-weight:500;
+    font-family:'Inter','Noto Sans KR',sans-serif;
+    padding:5px 11px; border:none; background:transparent; cursor:pointer;
+    color:rgba(255,255,255,.35); transition:all .28s ease-in-out;
+    white-space:nowrap; text-decoration:none;
+    display:inline-flex; align-items:center; gap:5px; line-height:1;
+}
+#mode-toggle .m-btn.active{ background:rgba(255,255,255,.94); color:#020305; border-radius:2px; }
+#mode-toggle .m-btn:not(.active):hover{ color:rgba(255,255,255,.7); }
+#mode-toggle .m-dot{ width:3px; height:3px; border-radius:50%; background:currentColor; flex-shrink:0; opacity:.7; }
+#mode-toggle .m-btn.active .m-dot{ background:#c0152a; opacity:1; }
+#mode-toggle .m-divider{ width:1px; height:13px; background:rgba(255,255,255,.12); flex-shrink:0; }
+@media (max-width:768px){
+    #fixed-top-left{ top:max(14px,env(safe-area-inset-top)); left:14px; }
+    #mode-toggle .m-btn{ padding:4px 8px; font-size:7px; letter-spacing:.1em; }
+    #mode-toggle{ backdrop-filter:none; -webkit-backdrop-filter:none; }
+}
+.shell{ max-width:1240px; margin:0 auto; padding:0 clamp(20px,4vw,56px); }
+header.hero{ padding:clamp(40px,7vh,72px) 0 clamp(34px,5vh,56px); border-bottom:1px solid var(--line); }
+/* ── 좌측 INDEX + 본문 2단 레이아웃 (guide.html과 통일) ── */
+#prog{ position:fixed; top:0; left:0; height:2px; width:0; background:linear-gradient(90deg,#111,#555); z-index:60; transition:width .1s linear; }
+.layout{ display:grid; grid-template-columns:200px 1fr; gap:clamp(30px,5vw,84px); padding:clamp(34px,6vh,60px) 0 40px; align-items:start; }
+nav.index{ position:sticky; top:52px; }
+nav.index .idx-title{
+    font-family:'DM Mono',monospace; font-size:9.5px; font-weight:500; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--faint); padding:0 0 16px 14px;
+}
+.idx-row{
+    display:flex; align-items:baseline; gap:12px;
+    padding:9px 10px 9px 12px; cursor:pointer; text-decoration:none;
+    border-left:2px solid transparent;
+    transition:border-color .28s ease, background .28s ease;
+}
+.idx-row .n{ font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:var(--faint); width:18px; flex-shrink:0; letter-spacing:-.02em; line-height:1; transition:color .28s ease; }
+.idx-row .t{ font-size:12px; color:var(--muted); font-family:'Inter','Noto Sans KR',sans-serif; letter-spacing:.01em; transition:color .28s ease; line-height:1.5; }
+.idx-row:hover{ background:rgba(0,0,0,.045); }
+.idx-row:hover .t{ color:var(--ink); }
+.idx-row.active{ border-left-color:var(--accent); background:rgba(0,0,0,.05); }
+.idx-row.active .n{ color:var(--accent); }
+.idx-row.active .t{ color:var(--ink); }
+.idx-row.idx-embark{ margin-top:12px; padding-top:15px; border-top:1px solid var(--line); }
+.idx-row.idx-embark .n{ color:var(--accent-crimson); }
+.idx-row.idx-embark:hover{ background:rgba(192,21,42,.05); }
+.idx-row.idx-embark:hover .t{ color:var(--accent-crimson); }
+main.body{ min-width:0; max-width:840px; }
+section.sec{ padding:clamp(20px,4vh,36px) 0 clamp(30px,5vh,54px); border-bottom:1px solid var(--line-2); scroll-margin-top:80px; }
+section.sec:first-child{ padding-top:6px; }
+section.sec:last-child{ border-bottom:none; }
+section.sec .stitle{ margin-top:0; }
+.kicker{
+    font-family:'DM Mono',monospace; font-size:9px; font-weight:500;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:12px;
+}
+.kicker::before{ content:''; width:26px; height:1px; background:var(--accent); display:inline-block; }
+h1{
+    margin-top:24px;
+    font-family:'Inter',sans-serif; font-weight:700;
+    font-size:clamp(26px,3.8vw,46px); line-height:1.0; letter-spacing:-.045em;
+    color:var(--ink);
+}
+h1 .thin{ font-weight:300; color:var(--muted); }
+.welcome{
+    margin-top:24px; max-width:52ch; color:var(--graphite);
+    font-size:clamp(13.5px,1.3vw,16px); font-weight:300; line-height:1.9;
+}
+.welcome b{ color:var(--ink); font-weight:500; }
+.lex-link{
+    display:inline-flex; align-items:center; gap:8px; margin-top:22px;
+    color:var(--ink); font-size:clamp(13px,1.2vw,15px); font-weight:600;
+    text-decoration:none; letter-spacing:.01em;
+    border-bottom:1px solid rgba(0,0,0,.35); padding-bottom:2px;
+    transition:color .25s ease, border-color .25s ease;
+}
+.lex-link:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+.lex-link .ar{ font-family:'DM Mono',monospace; font-size:.9em; }
+.stitle{ display:flex; align-items:baseline; gap:16px; margin:clamp(46px,8vh,80px) 0 8px; }
+.stitle .en{
+    font-family:'Inter',sans-serif; font-size:28px; font-weight:700;
+    letter-spacing:-.02em; color:var(--accent); line-height:1; flex-shrink:0;
+}
+.stitle h2{
+    font-family:'Inter','Noto Sans KR',sans-serif; font-weight:600;
+    font-size:clamp(16px,2vw,21px); letter-spacing:-.02em; line-height:1.2; color:var(--ink);
+}
+.sdesc{ color:var(--muted); font-size:13.5px; margin:14px 0 4px; max-width:60ch; }
+/* ── 공통 인터페이스 목록 (guide.html .uilist 문법) ── */
+.uilist{ margin:26px 0 6px; display:flex; flex-direction:column; gap:2px; }
+.uilist .ui{
+    display:grid; grid-template-columns:26px 1fr; gap:14px; align-items:start;
+    padding:13px 4px; border-bottom:1px solid var(--line-2);
+}
+.uilist .ui:last-child{ border-bottom:none; }
+.uilist .ui .n{
+    width:23px; height:23px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:#fff; background:var(--ink);
+}
+.uilist .ui .nm{ font-weight:600; font-size:14px; letter-spacing:-.01em; color:var(--ink); }
+.uilist .ui .nm .en4{ font-family:'DM Mono',monospace; font-size:10px; font-weight:400; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-left:8px; }
+.uilist .ui .ds{ margin-top:4px; font-size:12.5px; color:var(--graphite); line-height:1.75; }
+/* ── 사운드 안내 배너 ── */
+.sound-note{
+    margin:26px 0 6px; background:var(--card); border:1px solid var(--line);
+    border-left:2px solid var(--accent); border-radius:14px;
+    padding:20px 24px; box-shadow:0 8px 30px rgba(0,0,0,.05);
+}
+.sound-note .h{
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--faint);
+}
+.sound-note p{ margin-top:9px; font-size:12.5px; color:var(--graphite); line-height:1.8; }
+.sound-note p b{ color:var(--ink); font-weight:600; }
+/* ── 작품 카드 (guide.html .cc 카드 문법) ── */
+.works{ margin:30px 0 6px; display:flex; flex-direction:column; gap:16px; }
+.wk{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:24px 24px 26px; box-shadow:0 8px 30px rgba(0,0,0,.05);
+    scroll-margin-top:80px;
+}
+.wk-head{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.wk-head .no{
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--faint); flex-shrink:0;
+}
+.wk-head .nm{ font-size:17px; font-weight:600; letter-spacing:-.01em; flex:1; min-width:0; color:var(--ink); }
+.wk-head .nm .sfx{ font-weight:300; color:var(--muted); font-size:.85em; }
+.wk-head .open{
+    font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); text-decoration:none; white-space:nowrap;
+    border:1px solid var(--line); border-radius:20px; padding:4px 12px;
+    transition:all .25s ease;
+}
+.wk-head .open:hover{ color:var(--accent-crimson); border-color:var(--accent-crimson); }
+.wk .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:13px; }
+.wk .tags .tg{
+    font-family:'DM Mono',monospace; font-size:10.5px; letter-spacing:.02em;
+    color:var(--graphite); background:var(--accent-soft);
+    padding:3px 10px; border-radius:20px; white-space:nowrap;
+}
+.wk .tags .tg.act{ color:var(--accent-crimson); background:rgba(192,21,42,.07); }
+.wk ul{ list-style:none; margin-top:17px; display:flex; flex-direction:column; gap:13px; }
+.wk li{ display:grid; grid-template-columns:38px 1fr; gap:14px; align-items:baseline; }
+.wk li .act{
+    font-family:'DM Mono',monospace; font-size:10px; font-weight:500;
+    color:var(--accent); letter-spacing:.06em; white-space:nowrap; padding-top:2px;
+}
+.wk li .tx{ font-size:12.5px; color:var(--graphite); line-height:1.8; }
+.wk li .tx b{ color:var(--ink); font-weight:600; }
+.wk li .tx .key{
+    display:inline-block; font-family:'DM Mono',monospace; font-size:10px;
+    background:var(--accent-soft); border:1px solid var(--line); border-radius:6px;
+    padding:2px 7px; margin:0 2px; color:var(--ink);
+}
+@media (max-width:640px){
+    .wk li{ grid-template-columns:1fr; gap:3px; }
+    .wk li .act{ padding-top:0; }
+}
+.quote{ margin:clamp(50px,9vh,90px) 0; text-align:center; }
+.quote .q{ font-size:clamp(17px,2.2vw,26px); font-weight:200; line-height:1.55; letter-spacing:-.01em; color:var(--ink); }
+.quote .qe{ display:block; margin-top:14px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.22em; color:var(--faint); text-transform:uppercase; }
+.depart-cta-wrap{ margin:clamp(50px,9vh,90px) 0 clamp(72px,12vh,124px); display:flex; justify-content:center; }
+.depart-cta{
+    text-decoration:none; cursor:pointer; -webkit-tap-highlight-color:transparent;
+    display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:15px;
+}
+.depart-cta .depart-label{
+    font-family:'DM Mono',monospace;
+    font-size:13.5px; letter-spacing:.36em; text-indent:.36em;
+    color:rgba(22,22,22,.42); text-transform:uppercase; line-height:1;
+    transition:color .5s ease;
+}
+.depart-cta:hover .depart-label, .depart-cta:focus-visible .depart-label{ color:var(--accent-crimson-lit); }
+.depart-cta .tri{ width:45px; height:33px; display:block; position:relative; }
+.depart-cta .tri::before{ content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(58,58,58,.55), rgba(58,58,58,.12));
+    clip-path:polygon(50% 100%, 0 0, 100% 0);
+    transition:background .5s ease, filter .5s ease, transform .6s cubic-bezier(.16,1,.3,1);
+    animation:triBreath 4.4s ease-in-out infinite; }
+.depart-cta:hover .tri::before, .depart-cta:focus-visible .tri::before{
+    background:linear-gradient(180deg, var(--accent-crimson-lit), var(--accent-crimson));
+    filter:drop-shadow(0 0 16px rgba(192,21,42,.55)); transform:translateY(4px); }
+.depart-cta:focus-visible{ outline:1px solid rgba(192,21,42,.6); outline-offset:10px; border-radius:4px; }
+@keyframes triBreath{ 0%,100%{ transform:translateY(0); opacity:.85; } 50%{ transform:translateY(3px); opacity:1; } }
+footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
+.foot-grid{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; align-items:flex-end; }
+.foot .sig{ font-family:'Inter',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.02em; color:#161616; }
+.foot .sig .thin{ font-weight:300; color:#565656; }
+.foot .meta{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:#9a9a9a; text-transform:uppercase; line-height:2; text-align:right; }
+.foot .seed{ color:#565656; font-style:italic; }
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.reveal.in{ opacity:1; transform:none; }
+@media (max-width:860px){
+    .layout{ grid-template-columns:1fr; gap:0; padding-top:16px; }
+    nav.index{ position:static; margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid var(--line); }
+    nav.index .idx-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:2px 16px; }
+    main.body{ max-width:none; }
+}
+@media (max-width:640px){
+    .foot-grid{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .foot .meta{ text-align:left; }
+}
+@media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .depart-cta .tri::before{ animation:none; }
+}
+</style>
+</head>
+<body>
+<a id="back-btn" href="guide.html">BACK</a>
+<div id="fixed-top-left">
+    <div id="mode-toggle">
+        <a class="m-btn active" href="index.html" id="btn-cinematic"><span class="m-dot"></span>Cinematic</a>
+        <div class="m-divider"></div>
+        <a class="m-btn" href="all/index.html" id="btn-archive"><span class="m-dot"></span>Archive</a>
+    </div>
+</div>
+<div id="prog"></div>
+<div class="shell">
+    <header class="hero reveal">
+        <div class="kicker">작품별 관람법 · How to Experience</div>
+        <h1>15편의 <span class="thin">방정식을 만나는 법</span></h1>
+        <p class="welcome">
+            15개의 작품은 각기 다른 방식으로 관람자의 손에 반응합니다.
+            <br>이 안내서는 작품마다 <b>무엇을 조작할 수 있는지</b>,
+            그리고 <b>어디를 눈여겨보면 좋은지</b>를 정리했습니다.
+            <br>관람 중 언제든 돌아와 참고하세요.
+        </p>
+        <a class="lex-link" href="all/lexicon.html?from=how"><span class="ar">→</span>관람에 도움이 되는 용어집</a>
+    </header>
+
+    <div class="layout">
+
+    <nav class="index">
+        <div class="idx-title">Index</div>
+        <div class="idx-wrap">
+            <a class="idx-row" href="#s-common"><span class="n">A</span><span class="t">공통 인터페이스</span></a>
+            <a class="idx-row" href="#s-sound"><span class="n">B</span><span class="t">사운드 안내</span></a>
+            <a class="idx-row" href="#s-works"><span class="n">C</span><span class="t">작품별 안내 01–15</span></a>
+            <a class="idx-row idx-embark" href="all/index.html"><span class="n">D</span><span class="t">작품 목록</span></a>
+        </div>
+    </nav>
+
+    <main class="body">
+
+    <!-- ═══════════ A · 공통 인터페이스 ═══════════ -->
+    <section class="sec" id="s-common">
+        <div class="stitle reveal"><span class="en">A</span><h2>공통 인터페이스</h2></div>
+        <p class="sdesc reveal">모든 작품에서 똑같이 쓰이는 장치들입니다.
+            <br>이것만 알아 두면 15편 어디서든 길을 잃지 않습니다.</p>
+        <div class="uilist reveal">
+            <div class="ui">
+                <div class="n">1</div>
+                <div>
+                    <div class="nm">BACK · NEXT 버튼<span class="en4">우하단</span></div>
+                    <div class="ds"><b>BACK</b>은 이전 화면으로, <b>NEXT</b>는 다음 작품으로 이동합니다. 마지막 15번 작품에서는 NEXT 대신 <b>FIN</b>이 나타납니다.</div>
+                </div>
+            </div>
+            <div class="ui">
+                <div class="n">2</div>
+                <div>
+                    <div class="nm">보이저 라인<span class="en4">하단 중앙</span></div>
+                    <div class="ds">15개의 눈금이 곧 15개의 작품입니다. 눈금을 누르면 해당 작품으로 바로 이동하고, 맨 왼쪽 <b>지구본 아이콘</b>은 목록(관측소)으로 가는 길입니다. 모바일 세로 화면에서는 왼쪽에 세로로 표시됩니다.</div>
+                </div>
+            </div>
+            <div class="ui">
+                <div class="n">3</div>
+                <div>
+                    <div class="nm">UNIVERSE #XXXXXX<span class="en4">Session Seed</span></div>
+                    <div class="ds">접속할 때마다 새로 생성되는 <b>당신만의 우주 좌표</b>입니다. 같은 우주는 두 번 존재하지 않습니다.</div>
+                </div>
+            </div>
+            <div class="ui">
+                <div class="n">4</div>
+                <div>
+                    <div class="nm">진입 연출<span class="en4">Interstitial</span></div>
+                    <div class="ds">작품 사이를 이동할 때 짧은 영문 문장이 떠올랐다 사라집니다(시네마틱 모드 전용). 서두르지 말고 <b>문장을 읽고 들어가세요</b>.</div>
+                </div>
+            </div>
+            <div class="ui">
+                <div class="n">5</div>
+                <div>
+                    <div class="nm">가장 좋은 관람법<span class="en4">Slow Viewing</span></div>
+                    <div class="ds">모든 장면은 <b>느리게 호흡하도록</b> 설계되어 있습니다. 화면이 변해가는 과정을 기다리며 지켜보는 것이 가장 좋은 관람법입니다.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ B · 사운드 안내 ═══════════ -->
+    <section class="sec" id="s-sound">
+        <div class="stitle reveal"><span class="en">B</span><h2>사운드 안내</h2></div>
+        <div class="sound-note reveal">
+            <div class="h">Sound · 08 · 14 · 15</div>
+            <p><b>08번(마이크) · 14번(앰비언트 사운드) · 15번(사운드 + 마이크)</b>은 소리를 사용합니다.
+            조용한 곳이라면 소리를 켜고 감상해 보세요. 사운드는 <b>버튼을 눌러야만</b> 켜지며, 마이크를 사용할 때는 브라우저가 권한을 물어봅니다.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════ C · 작품별 안내 ═══════════ -->
+    <section class="sec" id="s-works">
+        <div class="stitle reveal"><span class="en">C</span><h2>작품별 안내</h2></div>
+        <p class="sdesc reveal">각 작품의 조작 방법과, 눈여겨보면 좋은 지점입니다.
+            <br>데스크톱 기준이며 모바일에서는 마우스 이동은 터치 드래그, 클릭은 탭으로 대응됩니다.</p>
+
+        <div class="works">
+
+        <article class="wk reveal" id="w01">
+            <div class="wk-head"><span class="no">01</span><span class="nm">RGB Galaxy Engine</span><a class="open" href="01-RGB_Galaxy.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg">자동 공전</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직이면(모바일: 터치 드래그) 시선이 은하 주위를 부드럽게 따라 움직입니다. 별도의 클릭 조작은 없습니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">세 나선팔의 색이 <b>RGB 색상환을 따라 서서히 순환</b>하는 것을 지켜보세요. 화면 가장자리로 시선을 옮기면 은하의 옆모습과 두께가 드러납니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w02">
+            <div class="wk-head"><span class="no">02</span><span class="nm">Hyperbolic Nebula</span><a class="open" href="02-Hyperbolic_Nebula.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">커서를 움직이면 성운이 한 박자 늦게, 시차를 두고 부드럽게 기울어집니다. 별도의 클릭 조작은 없습니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">입자 성운(안쪽)과 노이즈 가스 구름(바깥쪽)이 <b>서로 다른 속도로 회전</b>합니다. 두 겹의 흐름이 어긋나는 지점을 찾아보세요.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w03">
+            <div class="wk-head"><span class="no">03</span><span class="nm">Riemann Dreams</span><a class="open" href="03-Riemann_dream.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg act">클릭 · 탭 = 파문</span><span class="tg">모바일 자이로</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직여 시점을 옮기고, <b>화면을 클릭하면</b> 그 자리에서 소수의 파문이 피어납니다. 모바일에서는 기기를 기울이면 바다도 함께 기울어집니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">파문을 여러 곳에 연달아 만들어 <b>파도가 겹치는 간섭</b>을 만들어 보세요. 소수 바다의 물결은 클릭이 없어도 스스로 출렁입니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w04">
+            <div class="wk-head"><span class="no">04</span><span class="nm">Quantum Singularity</span><a class="open" href="04-Quantum_sing.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg">30분 주기 진화</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직이면 시선이 천천히 따라 흐릅니다. 클릭 조작은 없습니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">좌상단 계기판의 <b>Evolution Phase</b>와 <b>Current Prime Factor</b>를 함께 보세요. 작품은 30분 주기로 <span class="key">ERA OF GENESIS</span> → <span class="key">RIEMANN CHRONICLES</span> → <span class="key">HYPERBOLIC CATHEDRAL</span> → <span class="key">QUANTUM SINGULARITY</span> 네 단계를 진화합니다. <b>오래 머무를수록 다른 우주를 만나는 작품</b>입니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w05">
+            <div class="wk-head"><span class="no">05</span><span class="nm">Dual Galaxy</span><a class="open" href="05-Dual_Galaxy.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동 · 터치</span><span class="tg">자동 항해</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">카메라는 기본적으로 스스로 두 은하 사이를 항해합니다. 마우스나 손끝을 움직이면 그 시점이 조금씩 따라 흔들립니다.</span></li>
+                <li><span class="act">관람</span><span class="tx"><b>두 은하의 색이 만나는 경계면</b>을 주목하세요. 안개의 색도 시간에 따라 함께 순환합니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w06">
+            <div class="wk-head"><span class="no">06</span><span class="nm">Lambert Nebula: Essential</span><a class="open" href="06-Lambert_Essential.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg">자동 공전</span><span class="tg">시리즈 1/3</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직이면 시선이 부드럽게 따라 흐르고, 카메라는 스스로 성운 주위를 돕니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">시리즈(06→07→08)의 첫 편입니다. <b>단일한 나선(W₀)의 형태를 눈에 담아 두세요</b> — 다음 두 작품에서 이 형태가 어떻게 겹쳐지고 소리에 반응하게 되는지 비교하는 재미가 있습니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w07">
+            <div class="wk-head"><span class="no">07</span><span class="nm">Lambert Nebula: Archive</span><a class="open" href="07-Lambert_Archive.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg act">클릭 = 코어 펄스</span><span class="tg">시리즈 2/3</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직여 시선을 옮기고, <b>화면을 클릭하면</b> 중심의 빛나는 핵이 크게 한 번 고동칩니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">두 개의 가지(W₀ ∪ W₋₁)가 겹쳐 만든 <b>이중 나선 구조</b>를 찾아보세요. 코어의 맥동은 클릭 없이도 심장박동처럼 은은하게 반복됩니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w08">
+            <div class="wk-head"><span class="no">08</span><span class="nm">Lambert Nebula <span class="sfx">오디오 리액티브</span></span><a class="open" href="08-Lambert_nebu.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">마이크 입력</span><span class="tg act">클릭 = 코어 펄스</span><span class="tg">분리 모드</span><span class="tg">시리즈 3/3</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx"><span class="key">AUDIO INPUT</span> 버튼으로 마이크를 켜고 끕니다(브라우저가 권한을 물어봅니다). 마이크를 켜면 주변 소리가 성운을 움직입니다. <span class="key">ALL / W₀ / W₋₁</span> 버튼으로 두 가지 중 하나만 떼어내 볼 수 있고, 화면을 클릭하면 중심 핵이 고동칩니다.</span></li>
+                <li><span class="act">관람</span><span class="tx"><b>마이크를 켜고 목소리를 내 보세요</b> — 저음은 성운의 큰 몸을, 고음은 입자의 잔떨림을 흔듭니다. 우측 데이터 모니터에서 BASS/HIGH 수치가 실시간으로 반응하는 것을 확인할 수 있습니다. 조용히 서 있으면 성운도 고요해집니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w09">
+            <div class="wk-head"><span class="no">09</span><span class="nm">Bessel Bloom</span><a class="open" href="09-Bessel_bloom.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">누르기 · 탭 = 물결 생성</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">화면을 누르면 그 자리에서 <b>물결이 태어납니다</b>. 물결은 시간이 지나면 스스로 잦아듭니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">서로 다른 곳을 눌러 물결을 두세 개 만들면 <b>물결끼리 겹쳐 만드는 무늬</b>가 나타납니다. 손을 멈추면 수면이 천천히 고요로 돌아가는데, 그 과정까지가 작품입니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w10">
+            <div class="wk-head"><span class="no">10</span><span class="nm">Lorenz Butterfly</span><a class="open" href="10-Lorenz_butt.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">클릭 · 탭 = 궤도 흔들기</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">화면을 클릭하거나 탭하면 나비의 궤도가 잠시 크게 흔들립니다. 궤도를 정하는 값(ρ)이 28에서 36으로 튀어 올랐다가, 천천히 제자리로 돌아옵니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">클릭 직후 나비의 날개가 흐트러졌다가, 시간이 지나며 다시 <b>본래의 궤도로 돌아오는 과정</b>을 지켜보세요. '카오스 속의 질서'를 손으로 확인하는 순간입니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w11">
+            <div class="wk-head"><span class="no">11</span><span class="nm">Odyssey: Essential</span><a class="open" href="11-Odyssey_Essential.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg">자동 공전</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">마우스를 움직이면 시선이 천천히 따라 흐릅니다. 카메라는 정해진 궤도를 따라 스스로 블랙홀 주위를 돕니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">지평선 가장자리에서 빛나는 <b>광자 고리(Photon Ring)</b>와, 안쪽일수록 빨라지는 <b>별들의 회전 속도 차이</b>를 주목하세요.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w12">
+            <div class="wk-head"><span class="no">12</span><span class="nm">Odyssey: Archive</span><a class="open" href="12-Odyssey_Archive.html">작품 열기</a></div>
+            <div class="tags"><span class="tg">마우스 이동</span><span class="tg">자동 공전</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">11번과 같습니다 — 마우스를 움직이면 시선이 따라 흐르고, 카메라는 스스로 궤도를 돕니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">11번과 짝을 이루는 작품입니다. 광자 고리 바깥에 푸르게 떠 있는 <b>아인슈타인 링</b>, 그리고 중심에 가까울수록 뒤틀리는 좌표계 끌림(Kerr Drift)을 <b>11번과 비교하며</b> 보세요.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w13">
+            <div class="wk-head"><span class="no">13</span><span class="nm">Event Horizon</span><a class="open" href="13-Event_Horizon.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">드래그 = 시선 돌리기</span><span class="tg">자동 접근 · 이탈</span><span class="tg">계기판</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">화면을 누른 채 움직이면(드래그) 시선을 돌릴 수 있습니다. 블랙홀에 다가갔다가 멀어지는 항해는 자동으로 반복됩니다.</span></li>
+                <li><span class="act">관람</span><span class="tx"><b>하단 계기판이 이 작품의 핵심입니다.</b><br>
+                    <span class="key">R/Rs</span> 지평선까지의 거리 — 1에 가까울수록 위험합니다.<br>
+                    <span class="key">dτ/dt</span> 나의 시간이 흐르는 속도 — 지평선에 가까울수록 느려집니다.<br>
+                    <span class="key">PHASE</span> APPROACH(접근) → HORIZON SKIM(지평선 스침) → DEPARTURE(이탈)<br>
+                    HORIZON SKIM 순간, 시간 지연 수치가 곤두박질치는 것을 확인해 보세요.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w14">
+            <div class="wk-head"><span class="no">14</span><span class="nm">Black Hole Voyage</span><a class="open" href="14-Black_Voyage.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">사운드 권장</span><span class="tg act">드래그 = 시선 돌리기</span><span class="tg">180초 자동 항해</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">사운드 버튼을 누르면 은은한 앰비언트 사운드가 켜집니다 <b>(권장)</b>. 화면을 누른 채 움직이면 시선을 돌릴 수 있습니다. 나머지는 모두 자동 — 180초의 항해가 끝없이 반복됩니다.</span></li>
+                <li><span class="act">관람</span><span class="tx"><b>한 사이클(3분)을 처음부터 끝까지</b> 보는 것을 권합니다. 성운 표류 → 아인슈타인 링 → 지평선 진입 → 시간의 파편화(108–138초) → 대붕괴(145–180초) → 재생성으로 이어집니다. 화면의 DESCENT(하강률)와 한글 문구가 현재 악장을 알려주고, 사운드를 켜면 하강에 따라 소리도 함께 무너집니다.</span></li>
+            </ul>
+        </article>
+
+        <article class="wk reveal" id="w15">
+            <div class="wk-head"><span class="no">15</span><span class="nm">Kerr Plasma Cathedral <span class="sfx">피날레</span></span><a class="open" href="15-Kerr_Plasma.html">작품 열기</a></div>
+            <div class="tags"><span class="tg act">드래그 = 스핀</span><span class="tg act">사운드</span><span class="tg act">마이크</span><span class="tg act">FIN 버튼</span></div>
+            <ul>
+                <li><span class="act">조작</span><span class="tx">화면을 누른 채 좌우로 끌면 <b>블랙홀의 스핀이 손끝을 따라 걸립니다.</b> 사운드 버튼으로 소리를 켜고 끌 수 있고, 마이크 버튼을 켜면 주변 소리가 플라스마의 울림으로 흘러듭니다(브라우저가 권한을 물어봅니다). <span class="key">FIN</span> 버튼은 마지막 의식(儀式)입니다 — 플라스마가 서서히 침묵으로 승천한 뒤, 전시의 마지막 질문으로 이어집니다.</span></li>
+                <li><span class="act">관람</span><span class="tx">아무것도 하지 않으면 우주가 천천히 잠듭니다. 화면을 건드려 다시 깨워 보세요. 관측과 존재의 관계를 손으로 경험한 뒤, 준비가 되었을 때 FIN을 누르세요. 되돌릴 수 없는 버튼은 아니니 안심하셔도 됩니다 — 코다에서 언제든 처음으로 돌아올 수 있습니다.</span></li>
+            </ul>
+        </article>
+
+        </div>
+    </section>
+
+    <div class="quote reveal">
+        <div class="q">관측이 멈추면, 우주는 잠든다.</div>
+        <span class="qe">When observation ceases, the universe sleeps</span>
+    </div>
+
+    <div class="depart-cta-wrap reveal">
+        <a class="depart-cta" href="all/index.html">
+            <span class="depart-label">Observatory</span>
+            <span class="tri"></span>
+        </a>
+    </div>
+
+    </main>
+    </div>
+
+    <footer class="foot reveal">
+        <div class="foot-grid">
+            <div class="sig"><span class="thin">2026:</span> a digital odyssey</div>
+            <div class="meta">
+                김건우교수 제19회 개인전 · 작품별 관람법<br>
+                <span class="seed">2026.08.24–09.05 · 갤러리한빛</span>
+            </div>
+        </div>
+    </footer>
+</div>
+<script>
+(function(){
+    var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if(reduce || !('IntersectionObserver' in window)){
+        els.forEach(function(e){ e.classList.add('in'); });
+        return;
+    }
+    var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:.08 });
+    els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+<script>
+/* 진행 바 + 좌측 INDEX 활성 표시 (guide.html과 통일) */
+(function(){
+    var idxRows = Array.prototype.slice.call(document.querySelectorAll('.idx-row'));
+    var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+    var prog = document.getElementById('prog');
+
+    function onScroll(){
+        var h = document.documentElement;
+        var p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+        if(prog) prog.style.width = (p*100).toFixed(2) + '%';
+    }
+    addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    if('IntersectionObserver' in window){
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if(e.isIntersecting){
+                    var id = e.target.id;
+                    idxRows.forEach(function(r){
+                        r.classList.toggle('active', r.getAttribute('href') === '#'+id);
+                    });
+                }
+            });
+        }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+        secs.forEach(function(s){ io.observe(s); });
+    }
+})();
+</script>
+</body>
+</html>
