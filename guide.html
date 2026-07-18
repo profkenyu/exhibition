@@ -218,24 +218,35 @@ h1 .thin{ font-weight:300; color:var(--muted); }
 .shot-frame img{ width:100%; height:auto; display:block; }
 .shot .hot{
     position:absolute; left:50%; top:84%; width:clamp(72px,11%,118px); aspect-ratio:1;
-    transform:translate(-50%,-50%); border:2px solid var(--accent-crimson-lit); border-radius:50%;
+    transform:translate(-50%,-50%); pointer-events:none;
+}
+.shot .hot::before{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--accent-crimson-lit);
     box-shadow:0 0 0 4px rgba(232,50,74,.16), 0 0 22px rgba(232,50,74,.5);
-    animation:hotPulse 2.4s ease-in-out infinite; pointer-events:none;
+    animation:hotPulse 2.4s ease-in-out infinite;
 }
 @keyframes hotPulse{
-    0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.9; }
-    50%{ transform:translate(-50%,-50%) scale(1.12); opacity:1; }
+    0%,100%{ transform:scale(1); opacity:.9; }
+    50%{ transform:scale(1.12); opacity:1; }
 }
 .shot .hot-label{
-    position:absolute; left:63%; top:84%; transform:translateY(-50%);
-    font-family:'DM Mono',monospace; font-size:clamp(9px,1.3vw,11px); font-weight:500;
-    letter-spacing:.06em; color:#fff; background:var(--accent-crimson);
-    padding:5px 11px; border-radius:20px; white-space:nowrap;
-    box-shadow:0 4px 14px rgba(192,21,42,.4); pointer-events:none;
+    position:absolute; left:50%; bottom:100%; margin-bottom:16px;
+    transform:translateX(-50%);
+    font-family:'Inter',sans-serif; font-size:clamp(11px,1.5vw,13px); font-weight:600;
+    letter-spacing:-.01em; line-height:1.45; color:#fff; background:var(--accent-crimson);
+    padding:7px 14px; border-radius:8px; white-space:nowrap;
+    box-shadow:0 6px 18px rgba(192,21,42,.45); pointer-events:none;
+    animation:hotBob 2.4s ease-in-out infinite;
 }
-.shot .hot-label::before{
-    content:''; position:absolute; left:-6px; top:50%; transform:translateY(-50%);
-    border:5px solid transparent; border-right-color:var(--accent-crimson);
+.shot .hot-label::after{
+    content:''; position:absolute; left:50%; top:100%; transform:translateX(-50%);
+    width:0; height:0; border:8px solid transparent;
+    border-top-color:var(--accent-crimson); border-bottom:0;
+}
+@keyframes hotBob{
+    0%,100%{ transform:translate(-50%,0); }
+    50%{ transform:translate(-50%,-5px); }
 }
 .shot figcaption{
     margin-top:13px; color:var(--muted); font-size:12.5px; line-height:1.75; text-align:center;
@@ -331,12 +342,13 @@ footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
     .step .num{ width:44px; height:44px; font-size:15px; }
     .foot-grid{ flex-direction:column; align-items:flex-start; gap:10px; }
     .foot .meta{ text-align:left; }
-    .shot .hot-label{ left:62%; padding:4px 8px; }
+    .shot .hot-label{ padding:5px 10px; margin-bottom:12px; }
 }
 @media (prefers-reduced-motion:reduce){
     html{ scroll-behavior:auto; }
     .reveal{ opacity:1; transform:none; transition:none; }
-    .shot .hot{ animation:none; }
+    .shot .hot::before{ animation:none; }
+    .shot .hot-label{ animation:none; }
     .depart-cta .tri::before{ animation:none; }
 }
 </style>
@@ -386,8 +398,7 @@ footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
     <figure class="shot reveal">
         <div class="shot-frame">
             <img src="img/guide-opening.jpg" alt="첫 화면 — 블랙홀과 제목 아래에 놓인 EMBARK 버튼" loading="lazy" decoding="async">
-            <span class="hot"></span>
-            <span class="hot-label">여기를 누르세요</span>
+            <span class="hot"><span class="hot-label">여기를 누르세요</span></span>
         </div>
         <figcaption>
             처음 만나는 화면입니다. 제목 아래 <b>▽ EMBARK</b> 버튼을 누르면 여정이 시작됩니다.(아래 Step 1)
@@ -443,7 +454,7 @@ footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
 
         <section class="sec" id="s-screen">
     <div class="stitle reveal"><span class="en">B</span><h2>작품 화면 설명</h2></div>
-    <p class="sdesc reveal">작품에 들어서면 화면 가장자리에 옅은 안내가 떠오릅니다.
+    <p class="sdesc reveal">작품에 들어서면 화면 가장자리에 안내가 떠오릅니다.
         <br>감상을 방해하지 않도록 흐리게 표시되니, 여정을 옮기고 싶을 때만 살펴보면 됩니다.</p>
     <figure class="shot reveal" id="ui-shot">
         <div class="shot-frame">
@@ -455,7 +466,7 @@ footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
             <span class="pin" style="left:92%;top:90%">5</span>
         </div>
         <figcaption>
-            작품 화면에 표시되는 다섯 가지 안내 (위 Step 4)
+            작품 화면마다 표시되는 다섯 가지 안내
             <span class="en3">Lambert Nebula: Archive — interface</span>
         </figcaption>
     </figure>
@@ -483,15 +494,15 @@ footer.foot{ border-top:1px solid rgba(0,0,0,.13); padding:48px 0 90px; }
         </div></div>
         <div class="ui reveal"><span class="n">5</span><div>
             <div class="nm">우주 번호<span class="en4">Universe #ID</span></div>
-            <div class="ds">오른쪽 아래 <b>UNIVERSE #</b>는 이 감상만의 우주 좌표입니다. 
-                <br>접속할 때마다 새로 생성되며, 모든 작품이 같은 번호의 우주를 공유합니다.</div>
+            <div class="ds">오른쪽 아래 <b>UNIVERSE #</b>는 이 감상만의 우주 지문입니다. 
+                <br>접속할 때마다 새로운 우주가 생성되며, 같은 우주는 존재하지 않습니다.</div>
         </div></div>
     </div>
         </section>
 
         <section class="sec" id="s-controls">
     <div class="stitle reveal"><span class="en">C</span><h2>조작 요령</h2></div>
-    <p class="sdesc reveal">사용하는 기기에 맞춰 자동으로 변환됩니다. 기기에 익숙한 방식으로 편하게 둘러보세요.</p>
+    <p class="sdesc reveal">사용하는 기기에 맞춰 자동으로 변환됩니다. 스트레스없이 익숙한 방식으로 둘러보세요.</p>
     <div class="ctrls">
         <div class="cc reveal">
             <div class="h"><span class="ico"></span>Desktop</div>
