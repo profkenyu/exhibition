@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TECHNICAL SPECIFICATIONS · 2026: a digital odyssey</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
+<link rel="shortcut icon" href="../favicon_io/favicon.ico">
+<meta name="description" content="김건우교수 제19회 개인전 — 15개 작품의 렌더링·수학·물리 구현을 기술적으로 정리한 사양 문서."/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="TECHNICAL SPECIFICATIONS · 2026: a digital odyssey">
+<meta property="og:description" content="김건우교수 제19회 개인전 — 15개 작품의 렌더링·수학·물리 구현을 기술적으로 정리한 사양 문서.">
+<meta property="og:url" content="https://kimgunwoo.kr/19th/all/technical.html"/>
+<link rel="canonical" href="https://kimgunwoo.kr/19th/all/technical.html">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Nanum+Gothic+Coding:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  background:#f9f9fb;
+  color:#111115;
+  font-family:'DM Mono','Nanum Gothic Coding','Menlo','Courier New',monospace;
+  font-size:13px;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap {
+  max-width:860px;
+  margin:0 auto;
+  padding:80px 24px 120px;
+}
+hr.rule {
+  border:none;
+  border-top:1px solid #111115;
+  margin:0;
+}
+.doc-head { padding:18px 0 22px; }
+.doc-head h1 {
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:.08em;
+}
+.doc-head .sub {
+  margin-top:4px;
+  font-size:12px;
+  color:#767680;
+}
+section { margin-top:44px; }
+section h2 {
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.06em;
+  border-bottom:1px solid #c9c9d0;
+  padding-bottom:6px;
+  margin-bottom:14px;
+}
+section h2 .no { color:#c0152a; margin-right:8px; }
+.row {
+  display:grid;
+  grid-template-columns:96px 1fr;
+  gap:0 16px;
+  padding:2px 0;
+}
+.row dt {
+  color:#767680;
+  white-space:nowrap;
+}
+.row dt::after { content:":"; margin-left:6px; color:#c9c9d0; }
+.row dd { word-break:keep-all; overflow-wrap:break-word; }
+.row dd .f { color:#0891b2; }
+@media (max-width:560px) {
+  .row { grid-template-columns:1fr; }
+  .row dt::after { content:""; }
+  .row dd { padding-left:14px; margin-bottom:4px; }
+}
+.foot-note {
+  margin-top:60px;
+  padding-top:14px;
+  border-top:1px solid #111115;
+  font-size:11px;
+  color:#767680;
+}
+#back-btn {
+  position:fixed;
+  bottom:28px; right:28px;
+  z-index:9999;
+  font-family:inherit;
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:#111115;
+  background:#f9f9fb;
+  border:1px solid #111115;
+  padding:7px 14px;
+}
+#back-btn:hover { background:#111115; color:#f9f9fb; }
+#fixed-top-left {
+  position:fixed;
+  top:18px; left:18px;
+  z-index:99999;
+}
+#mode-toggle {
+  display:inline-flex;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:3px;
+  background:rgba(2,3,5,.92);
+  overflow:hidden;
+}
+#mode-toggle .m-btn {
+  font-size:8px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:500;
+  padding:5px 11px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  color:rgba(255,255,255,.35);
+  white-space:nowrap;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  line-height:1;
+  font-family:inherit;
+}
+#mode-toggle .m-btn.active {
+  background:rgba(255,255,255,.94);
+  color:#020305;
+  border-radius:2px;
+}
+#mode-toggle .m-btn:not(.active):hover { color:rgba(255,255,255,.7); }
+#mode-toggle .m-dot {
+  width:3px; height:3px; border-radius:50%;
+  background:currentColor; flex-shrink:0; opacity:.7;
+}
+#mode-toggle .m-btn.active .m-dot { background:#c0152a; opacity:1; }
+#mode-toggle .m-divider { width:1px; height:13px; background:rgba(255,255,255,.12); }
+@media (max-width:768px) {
+  .wrap { padding-top:72px; }
+  #back-btn { bottom:20px; right:16px; padding:5px 10px; font-size:9px; }
+}
+</style>
+</head>
+<body>
+<a id="back-btn" href="index.html">BACK</a>
+<div id="fixed-top-left">
+  <div id="mode-toggle">
+    <a class="m-btn" href="../index.html"><span class="m-dot"></span>Cinematic</a>
+    <div class="m-divider"></div>
+    <a class="m-btn active" href="index.html"><span class="m-dot"></span>Archive</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<hr class="rule">
+<div class="doc-head">
+  <h1>2026: a digital odyssey — 심연의 방정식</h1>
+  <div class="sub">작품별 기술 해설 · TECHNICAL SPECIFICATIONS</div>
+</div>
+<hr class="rule">
+
+<section>
+<h2>■ 공통 기술 스택</h2>
+<dl>
+<div class="row"><dt>렌더링</dt><dd>Three.js 0.160.0 (01~14번, jsDelivr CDN 로드) / 15번은 라이브러리 없는 순수 WebGL 1.0</dd></div>
+<div class="row"><dt>형식</dt><dd>각 작품은 외부 의존성이 거의 없는 단일 HTML 파일 (셰이더·기하·로직 모두 인라인)</dd></div>
+<div class="row"><dt>최적화</dt><dd>LOWP(저전력) 자동 감지 — 모바일 UA, 화면폭 768px 이하, CPU 코어 4개 이하, 메모리 4GB 이하 중 하나라도 해당하면 파티클 수 감소, 안티앨리어싱 해제, pixelRatio 1로 고정</dd></div>
+<div class="row"><dt>공통 장치</dt><dd>백그라운드 탭에서 rAF 큐잉(전력 절약), 화면 회전/뷰포트 변화 재동기화(vp-resync), CDN 로드 실패 감지 워치독(7초 후 재시도 안내), 세션 기반 UNIVERSE # 시드, 방문 기록(sessionStorage), 키오스크 무인 모드(90초 무입력 시 관측소 복귀), bfcache/pageshow 대응</dd></div>
+<div class="row"><dt>사운드</dt><dd>Web Audio API — 08번(마이크 FFT 분석), 14번(절차적 합성: 화이트노이즈+드론+스월), 15번(합성+마이크 분석)</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">01</span>RGB GALAXY ENGINE</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>250,000개 (LOWP/모바일 60,000개), THREE.Points</dd></div>
+<div class="row"><dt>은하 생성</dt><dd><span class="f">r = √i × 1.6, θ = i × 0.013 + arm × 2π/3</span> — 페르마 나선 3개를 120°씩 회전 배치. 거듭제곱 난수(pow 2.2)로 팔 주변 난류 산포, 반지름에 비례한 수직 두께</dd></div>
+<div class="row"><dt>셰이더</dt><dd>커스텀 ShaderMaterial — 정점별 시드/팔 번호 속성으로 RGB 색상환(cos 팔레트)을 시간에 따라 순환</dd></div>
+<div class="row"><dt>후처리</dt><dd>WebGLRenderTarget 1패스 → 직접 작성한 GLSL 블룸(6방향 글로우 샘플링 + 임계값), 방사형 색수차(chroma offset), 비네트, 감마 보정(pow 0.85)</dd></div>
+<div class="row"><dt>블렌딩</dt><dd>AdditiveBlending + depthWrite off + FogExp2</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">02</span>HYPERBOLIC NEBULA</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>55,000개 (LOWP 25,000개)</dd></div>
+<div class="row"><dt>형태 수학</dt><dd><span class="f">z = sinh(0.6u)·0.12·cosh(0.45v) − 1.4·tanh(r)</span> — 쌍곡함수로 높이장을 만들고 θ 기반 나선 위상(spiral = 3θ + 1.1r)으로 비틀어 배치. 색은 z·r·θ 각각의 사인파로 RGB 매핑</dd></div>
+<div class="row"><dt>가스 구름</dt><dd>반지름 60의 구체 내벽에 ShaderMaterial — 해시 기반 3D value noise 3옥타브 FBM, 시간 애니메이션, pow(n,3)로 희박화한 알파</dd></div>
+<div class="row"><dt>카메라</dt><dd>포인터 위치로 lerp(0.03) 추적하는 패럴랙스</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">03</span>RIEMANN DREAMS</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>60,000개 (LOWP 25,000개)</dd></div>
+<div class="row"><dt>형태 수학</dt><dd>소수 300개를 순환 인덱스로 사용, <span class="f">θ = 0.045i + 2sin(p), r = 0.55√i + 0.08p</span> — 소수가 나선의 위상을 교란하는 '소수 바다(Prime Ocean)' 격자</dd></div>
+<div class="row"><dt>애니메이션</dt><dd>CPU에서 매 프레임 위치 버퍼 갱신 — 반지름 파동 sin(0.08r − 2.5t)과 소수 파동 cos(0.4p + 1.5t)의 합성</dd></div>
+<div class="row"><dt>상호작용</dt><dd>클릭 → 카메라 광선을 y=0 평면에 역투영(unproject)해 해당 좌표에 파문 트리거 / DeviceOrientation API로 모바일 자이로 시차</dd></div>
+<div class="row"><dt>파문</dt><dd>triggerBloom(x,z) — 클릭 지점 중심의 감쇠 파동을 높이장에 가산</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">04</span>QUANTUM SINGULARITY</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>성운 400,000개 (LOWP 150,000개) + 소수 나선 3,000개 + 배경 별</dd></div>
+<div class="row"><dt>형태 수학</dt><dd>소수 p마다 <span class="f">θ = p·2π/137.507</span> (황금각 배치), <span class="f">r = √p × 12</span> — 해바라기 씨앗 패턴의 소수 필로택시스. h = sin(0.8·해시)로 반지름 요동</dd></div>
+<div class="row"><dt>진화 시스템</dt><dd>1,800초(30분) 주기 상태기계 — 진행률에 따라 ERA OF GENESIS(~20%) → RIEMANN CHRONICLES(~45%) → HYPERBOLIC CATHEDRAL(~70%) → QUANTUM SINGULARITY. DOM 계기판(evo-phase, prime-factor)을 0.5초마다 갱신</dd></div>
+<div class="row"><dt>셰이더</dt><dd>성운용 + 중심 블랙홀용 ShaderMaterial 2종, masterGroup 단위 회전</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">05</span>DUAL GALAXY</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>120,000개 (모바일 60,000개) — 두 은하에 절반씩 배분</dd></div>
+<div class="row"><dt>형태 수학</dt><dd><span class="f">r = √i × 1.2, θ = 0.015i</span> 나선 2개를 서로 다른 중심·색상 팔레트로 배치, 별도의 배경 별 Points</dd></div>
+<div class="row"><dt>연출</dt><dd>카메라가 (500cos 0.2t, 120sin 0.13t, 500sin 0.2t) 리사주 궤도로 자율 항해, FogExp2 색상도 RGB 사인파로 시간 순환 — '안개마저 작품의 일부'</dd></div>
+<div class="row"><dt>중심체</dt><dd>블랙홀 Mesh + 가산혼합 글로우</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">06</span>LAMBERT NEBULA: ESSENTIAL</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>95,000개 (모바일 45,000개) + 배경 별</dd></div>
+<div class="row"><dt>형태 수학</dt><dd>람베르트 W 함수 주가지 <span class="f">W₀(x)</span> 곡선을 반지름-각도 공간에 매핑, spread 계수로 방사 산포</dd></div>
+<div class="row"><dt>안개</dt><dd>FogExp2(density 0.0025) — 제목에 명시된 만큼 짙은 지수 안개가 형태의 경계를 지움</dd></div>
+<div class="row"><dt>카메라</dt><dd>반지름 260의 원 궤도 자율 공전(0.3 rad/s) + 포인터 표류</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">07</span>LAMBERT NEBULA: ARCHIVE</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>120,000개 (LOWP 50,000개)</dd></div>
+<div class="row"><dt>형태 수학</dt><dd><span class="f">W₀</span>와 <span class="f">W₋₁</span> 두 가지(branch)의 나선을 서로 다른 중심(center[])에서 겹쳐 생성 — t 매개변수 나선 X = cx + cos(t)·spiral</dd></div>
+<div class="row"><dt>코어</dt><dd>발광 Mesh — sin(10t) 펄스로 상시 맥동, 클릭 시 scale 2배로 확대 후 감쇠 복원</dd></div>
+<div class="row"><dt>카메라</dt><dd>반지름 260 원 궤도 자율 공전 + 포인터 표류</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">08</span>LAMBERT NEBULA (오디오 리액티브)</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>60,000개 (LOWP 30,000개), 원본 위치 백업 배열(originalPositions)을 기준으로 변위 계산</dd></div>
+<div class="row"><dt>오디오</dt><dd>getUserMedia(마이크) → AudioContext + AnalyserNode FFT — 저역(bass)/고역(high) 대역 에너지를 분리 추출해 성운 전체 변형(저역)과 입자 지터(고역)에 각각 매핑. 데이터 모니터(val-bass/high/vis)에 실시간 수치 표시</dd></div>
+<div class="row"><dt>분리 모드</dt><dd>ALL / W₀ / W₋₁ 세 버튼 — 파티클의 가지 소속 속성으로 표시 여부 전환(setIsolationMode)</dd></div>
+<div class="row"><dt>UI</dt><dd>HUD 컨테이너 + 가이드 오버레이 + 컨트롤 패널 — 시리즈 중 가장 완전한 계기형 인터페이스</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">09</span>BESSEL BLOOM</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>12,000개 (LOWP 7,000개) — 평면 격자형 수면</dd></div>
+<div class="row"><dt>형태 수학</dt><dd>베셀 함수 1종 J₀를 점근 근사 <span class="f">J₀(x) ≈ √(2/πx)·cos(x−π/4)</span> 로 직접 구현. 각 파원까지의 거리 dₙ에 대해 <span class="f">z = Σ J₀(0.7dₙ − 3t)·amp</span> — 다중 파원 중첩 간섭</dd></div>
+<div class="row"><dt>상호작용</dt><dd>pointerdown → 화면 좌표를 월드로 변환해 파원 추가 + 링 이펙트(RingGeometry, 가산혼합) 스폰. 파원 진폭은 시간 감쇠(Sources Fade)</dd></div>
+<div class="row"><dt>특징</dt><dd>GPU 셰이더가 아닌 CPU 높이장 갱신 — 파원 배열을 자유롭게 넣고 빼는 유연함을 택한 설계</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">10</span>LORENZ BUTTERFLY</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>4,000개 (LOWP 2,500개) — 각 입자가 독립적인 초기값</dd></div>
+<div class="row"><dt>수치 적분</dt><dd>로렌츠 계 <span class="f">ẋ=σ(y−x), ẏ=x(ρ−z)−y, ż=xy−βz (σ=10, ρ=28, β=8/3)</span>를 매 프레임 오일러 적분 — 4,000개의 궤적이 동시에 끌개를 그림</dd></div>
+<div class="row"><dt>상호작용</dt><dd>클릭 → ρ를 36으로 점프시켜 섭동, 이후 매 프레임 ρ += (28−ρ)·0.01 로 지수 복원 — 카오스의 민감성과 끌개의 안정성을 동시에 시연</dd></div>
+<div class="row"><dt>표현</dt><dd>잔상형 반투명 렌더링 + 가산혼합으로 궤적의 밀도가 곧 밝기가 되는 구조</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">11</span>ODYSSEY: ESSENTIAL</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>320,000개 (LOWP 110,000개)</dd></div>
+<div class="row"><dt>물리 모델</dt><dd>케플러 회전 <span class="f">v(r) = 35/r</span> — 반지름별 각속도 차이가 만드는 차등 회전(GPU 셰이더에서 계산)</dd></div>
+<div class="row"><dt>광자 고리</dt><dd>TorusGeometry(135, 6) + MeshBasicMaterial — 상대론적 광자 궤도의 상징, z축 회전 애니메이션</dd></div>
+<div class="row"><dt>셰이더</dt><dd>ShaderMaterial — 정점 셰이더에서 궤도 위상 갱신, 중심 근접 입자의 도플러풍 색 변화</dd></div>
+<div class="row"><dt>카메라</dt><dd>자율 공전 궤도 + 포인터 시선 표류(pTX/pTY lerp)</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">12</span>ODYSSEY: ARCHIVE</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>420,000개 (LOWP 140,000개) — 전시 최다 파티클</dd></div>
+<div class="row"><dt>물리 모델</dt><dd>슈바르츠실트 반지름 <span class="f">Rs = 2GM/c²</span> 개념 골격 위에 커 좌표계 끌림 <span class="f">Δθ ∝ exp(−r/450)</span> — 중심에 가까울수록 방위각이 추가 회전(frame dragging)</dd></div>
+<div class="row"><dt>구조물</dt><dd>광자 고리 Torus(155, 8) + 아인슈타인 링 Torus(260, 2, 반투명 청색) — 중력렌즈 허상의 기하학적 재현</dd></div>
+<div class="row"><dt>카메라</dt><dd>자율 공전 + 포인터 표류 (11번과 동일 문법으로 연작 구성)</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">13</span>EVENT HORIZON</h2>
+<dl>
+<div class="row"><dt>파티클</dt><dd>강착원반 150,000개 (LOWP 50,000개) — ISCO(최내곽 안정궤도)부터 외곽까지 반지름별 온도 그라데이션(diskColor)</dd></div>
+<div class="row"><dt>물리 모델</dt><dd>케플러 각속도 <span class="f">ω ∝ r^(−3/2)</span> (KEPLER_VERTEX 셰이더), 중력 시간 지연 <span class="f">dτ = √(1 − Rs/r)·dt</span> 를 실시간 계산해 계기판(R/Rs, dτ/dt)에 표시</dd></div>
+<div class="row"><dt>항해 로직</dt><dd>카메라 거리 r의 증감으로 PHASE 판정 — dr&lt;0이면 APPROACH, 근접도&gt;0.78이면 HORIZON SKIM, 그 외 DEPARTURE. 지평선 스침 시 플래시 오버레이</dd></div>
+<div class="row"><dt>후처리</dt><dd>풀스크린 post ShaderMaterial — 중력렌즈풍 화면 왜곡</dd></div>
+<div class="row"><dt>조작</dt><dd>pointerdown+move 드래그 시선(isTargeting)</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">14</span>BLACK HOLE VOYAGE</h2>
+<dl>
+<div class="row"><dt>규모</dt><dd>단일 HTML 1,200여 줄 — 전시 최대 작품. ShaderMaterial 4종(성운/강착원반/렌즈/포스트)</dd></div>
+<div class="row"><dt>항해 구조</dt><dd>CYCLE=180초 무한 루프, PHASE_BOUNDS 10단계 [0,22,40,58,78,96,110,145,162,180]. 각 단계마다 영문 서사 + 한글 문구 + 수식 라벨(math-label) 전환</dd></div>
+<div class="row"><dt>핵심 연출</dt><dd>좌표계 끌림 — 셰이더에서 <span class="f">θ += uFrameDrag·e^(−r/260)·t</span> / 아인슈타인 링 — mix(Colorstd, Colorein, uEinstein) / 슬릿-스캔(108–138초) — smoothstep 강도로 시간 축 파편화 / 대붕괴(145–180초) — collapseIntensity 봉우리 함수</dd></div>
+<div class="row"><dt>사운드</dt><dd>Web Audio 절차 합성 — 화이트노이즈 버퍼(2초 루프) + 저주파 드론(45→28Hz) + 스월. 하강 진행률에 따라 주파수/음량을 setTargetAtTime으로 연속 보간, 붕괴 시 전체 게인 소멸</dd></div>
+<div class="row"><dt>계기판</dt><dd>DESCENT %(145초 기준), R/Rs(152초 후 0.000 고정), 한글 악장 문구 페이드 전환</dd></div>
+<div class="row"><dt>최적화</dt><dd>이 작품만 LOWP 대신 자체 isMobile 분기 사용</dd></div>
+</dl>
+</section>
+
+<section>
+<h2><span class="no">15</span>KERR PLASMA CATHEDRAL (순수 WebGL)</h2>
+<dl>
+<div class="row"><dt>렌더링</dt><dd>Three.js 없이 WebGL 1.0 직접 구동 — 풀스크린 삼각형 2개(drawArrays TRIANGLES, 6정점)에 프래그먼트 셰이더 하나로 전체 장면을 레이마칭</dd></div>
+<div class="row"><dt>물리 모델</dt><dd>커 계량(Kerr metric) ds² 전개식을 제목에 명시 — 셰이더 내부에서 사건의 지평선 <span class="f">rE = M(1+√(1−a²cos²θ))</span> (외부 지평선/에르고스피어)을 계산해 막(membrane) 발광으로 시각화. 볼류메트릭 FBM 플라스마 밀도 exp(−|r−2.1|·3)·fbm, 투과율 누적(transmittance)</dd></div>
+<div class="row"><dt>유니폼</dt><dd>u_spin(드래그 스핀), u_bass/u_treble(오디오 대역), u_wake(관측 상태), u_fin(피날레 진행률), mouse, time</dd></div>
+<div class="row"><dt>관측/수면</dt><dd>마지막 입력 시각 기반 wake 감쇠 — u_wake가 0에 가까워지면 색이 잿불(ember)로 식고 별 레이어가 떠오름. 입력 시 재점화. 색수차도 wake에 비례</dd></div>
+<div class="row"><dt>오디오</dt><dd>절차 합성(오실레이터+필터, FIN 시 필터 컷오프 140→5,340Hz 상승) + 마이크 입력 FFT(bass/treble 추출)</dd></div>
+<div class="row"><dt>피날레</dt><dd>FIN 클릭 → u_fin 0→1 진행(FIN_DUR), 질량 손실 mLoss = 1−0.9·uFin으로 플라스마 소산 → 완료 시 코다(시네마틱)/관측소(아카이브)로 자동 이동</dd></div>
+</dl>
+</section>
+
+<div class="foot-note">
+문서 생성: 2026-07-18 · 파티클 수는 데스크톱 기준, 괄호는 저전력 모드. 모든 수치는 소스 코드에서 직접 확인한 값입니다.<br>
+김건우교수 제19회 개인전 · 2026.08.24–09.05 · 갤러리한빛
+</div>
+
+</div>
+</body>
+</html>
