@@ -185,7 +185,7 @@ window.__THREE_OK=1;
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x000003, 0.0003);
 const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 8000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+const renderer = new THREE.WebGLRenderer({ antialias: !LOWP, powerPreference: "high-performance" });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(LOWP?1:Math.min(window.devicePixelRatio,1.5));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -422,7 +422,7 @@ window.addEventListener('resize', () => {
   if(location.search.indexOf('embed')>-1){document.body.classList.add('embed');return;}
   var a=document.createElement('div');a.id='arrive';document.body.appendChild(a);
   var d=document.createElement('div');d.id='depart';document.body.appendChild(d);
-  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});}
+  function go(){requestAnimationFrame(function(){requestAnimationFrame(function(){a.style.opacity='0';});});setTimeout(function(){a.style.opacity='0';},240);}
   if(document.readyState!=='loading')go();else document.addEventListener('DOMContentLoaded',go);
   window.addEventListener('pageshow',function(e){if(e.persisted){a.style.opacity='0';d.style.opacity='0';}});
   document.addEventListener('click',function(e){
@@ -510,6 +510,20 @@ window.addEventListener('resize', () => {
     var v=JSON.parse(sessionStorage.getItem('odyssey_visited')||'[]');
     if(v.indexOf(f)<0){v.push(f);sessionStorage.setItem('odyssey_visited',JSON.stringify(v));}
   }catch(e){}
+})();
+</script>
+<script>
+/* ===== KIOSK IDLE-RETURN — 무인 전시: 90s 무입력 시 관측소 복귀 ===== */
+(function(){
+  if(location.search.indexOf('embed')>-1) return;
+  if(sessionStorage.getItem('odyssey_kiosk')!=='1') return;
+  var IDLE=90000, t=null;
+  function go(){ location.href='index.html'; }
+  function bump(){ clearTimeout(t); t=setTimeout(go, IDLE); }
+  ['pointerdown','pointermove','keydown','wheel','touchstart'].forEach(function(ev){
+    addEventListener(ev, bump, {passive:true});
+  });
+  bump();
 })();
 </script>
 </body>
