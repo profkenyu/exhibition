@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://profkenyu.github.io/exhibition/sitemap.xml
-
