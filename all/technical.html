@@ -213,7 +213,7 @@ section h2 .no { color:#c0152a; margin-right:8px; }
 <dl>
 <div class="row"><dt>파티클</dt><dd>성운 400,000개 (LOWP 150,000개) + 소수 나선 3,000개 + 배경 별</dd></div>
 <div class="row"><dt>형태 수학</dt><dd>소수 p마다 <span class="f">θ = p·2π/137.507</span> (황금각 배치), <span class="f">r = √p × 12</span> — 해바라기 씨앗 패턴의 소수 필로택시스. h = sin(0.8·해시)로 반지름 요동</dd></div>
-<div class="row"><dt>진화 시스템</dt><dd>1,800초(30분) 주기 상태기계 — 진행률에 따라 ERA OF GENESIS(~20%) → RIEMANN CHRONICLES(~45%) → HYPERBOLIC CATHEDRAL(~70%) → QUANTUM SINGULARITY. DOM 계기판(evo-phase, prime-factor)을 0.5초마다 갱신</dd></div>
+<div class="row"><dt>진화 시스템</dt><dd>1,800초(30분) 주기 상태기계 — 진행률에 따라 ERA OF GENESIS(~20%) → RIEMANN CHRONICLES(~45%) → HYPERBOLIC CATHEDRAL(~70%) → QUANTUM SINGULARITY(~90%) → THERMODYNAMIC DEATH의 다섯 국면 순환. DOM 계기판(evo-phase, prime-factor)을 0.5초마다 갱신</dd></div>
 <div class="row"><dt>셰이더</dt><dd>성운용 + 중심 블랙홀용 ShaderMaterial 2종, masterGroup 단위 회전</dd></div>
 </dl>
 </section>
@@ -262,7 +262,7 @@ section h2 .no { color:#c0152a; margin-right:8px; }
 <h2><span class="no">09</span>BESSEL BLOOM</h2>
 <dl>
 <div class="row"><dt>파티클</dt><dd>12,000개 (LOWP 7,000개) — 평면 격자형 수면</dd></div>
-<div class="row"><dt>형태 수학</dt><dd>베셀 함수 1종 J₀를 점근 근사 <span class="f">J₀(x) ≈ √(2/πx)·cos(x−π/4)</span> 로 직접 구현. 각 파원까지의 거리 dₙ에 대해 <span class="f">z = Σ J₀(0.7dₙ − 3t)·amp</span> — 다중 파원 중첩 간섭</dd></div>
+<div class="row"><dt>형태 수학</dt><dd>제1종 베셀 함수 J₀를 직접 구현 — 중심 근방(|x|&lt;3)은 급수 전개 <span class="f">1 − x²/4 + x⁴/64 − x⁶/2304 + x⁸/147456</span>, 그 밖은 점근 근사 <span class="f">J₀(x) ≈ √(2/πx)·cos(x−π/4)</span>. 각 파원까지의 거리 dₙ에 대해 <span class="f">z = Σ J₀(0.7dₙ − 3t)·amp</span> — 다중 파원 중첩 간섭</dd></div>
 <div class="row"><dt>상호작용</dt><dd>pointerdown → 화면 좌표를 월드로 변환해 파원 추가 + 링 이펙트(RingGeometry, 가산혼합) 스폰. 파원 진폭은 시간 감쇠(Sources Fade)</dd></div>
 <div class="row"><dt>특징</dt><dd>GPU 셰이더가 아닌 CPU 높이장 갱신 — 파원 배열을 자유롭게 넣고 빼는 유연함을 택한 설계</dd></div>
 </dl>
@@ -272,7 +272,7 @@ section h2 .no { color:#c0152a; margin-right:8px; }
 <h2><span class="no">10</span>LORENZ BUTTERFLY</h2>
 <dl>
 <div class="row"><dt>파티클</dt><dd>4,000개 (LOWP 2,500개) — 각 입자가 독립적인 초기값</dd></div>
-<div class="row"><dt>수치 적분</dt><dd>로렌츠 계 <span class="f">ẋ=σ(y−x), ẏ=x(ρ−z)−y, ż=xy−βz (σ=10, ρ=28, β=8/3)</span>를 매 프레임 오일러 적분 — 4,000개의 궤적이 동시에 끌개를 그림</dd></div>
+<div class="row"><dt>수치 적분</dt><dd>로렌즈 계 <span class="f">ẋ=σ(y−x), ẏ=x(ρ−z)−y, ż=xy−βz (σ=10, ρ=28, β=8/3)</span>를 매 프레임 오일러 적분 — 4,000개의 궤적이 동시에 끌개를 그림</dd></div>
 <div class="row"><dt>상호작용</dt><dd>클릭 → ρ를 36으로 점프시켜 섭동, 이후 매 프레임 ρ += (28−ρ)·0.01 로 지수 복원 — 카오스의 민감성과 끌개의 안정성을 동시에 시연</dd></div>
 <div class="row"><dt>표현</dt><dd>잔상형 반투명 렌더링 + 가산혼합으로 궤적의 밀도가 곧 밝기가 되는 구조</dd></div>
 </dl>
@@ -282,7 +282,7 @@ section h2 .no { color:#c0152a; margin-right:8px; }
 <h2><span class="no">11</span>ODYSSEY: ESSENTIAL</h2>
 <dl>
 <div class="row"><dt>파티클</dt><dd>320,000개 (LOWP 110,000개)</dd></div>
-<div class="row"><dt>물리 모델</dt><dd>케플러 회전 <span class="f">v(r) = 35/r</span> — 반지름별 각속도 차이가 만드는 차등 회전(GPU 셰이더에서 계산)</dd></div>
+<div class="row"><dt>물리 모델</dt><dd>차등 회전 <span class="f">ω(r) = 35/r</span> — 반지름에 반비례하는 각속도가 만드는 회전 속도 차이(GPU 정점 셰이더에서 계산)</dd></div>
 <div class="row"><dt>광자 고리</dt><dd>TorusGeometry(135, 6) + MeshBasicMaterial — 상대론적 광자 궤도의 상징, z축 회전 애니메이션</dd></div>
 <div class="row"><dt>셰이더</dt><dd>ShaderMaterial — 정점 셰이더에서 궤도 위상 갱신, 중심 근접 입자의 도플러풍 색 변화</dd></div>
 <div class="row"><dt>카메라</dt><dd>자율 공전 궤도 + 포인터 시선 표류(pTX/pTY lerp)</dd></div>
